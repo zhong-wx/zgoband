@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>resouces/ps.png</file>
+        <file>resouces/djdy.png</file>
+        <file>resouces/syts.png</file>
+        <file>resouces/qpps.png</file>
+    </qresource>
+</RCC>
