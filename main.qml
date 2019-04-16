@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
+import "./FlatUI/element" as FlatUI
 
 Window {
     visible: true
@@ -14,9 +15,6 @@ Window {
             id: timeModel
             ListElement {text:"time1"}
             ListElement {text:"time2"}
-        }
-        Component.onCompleted: {
-            console.log(timeModel.rowCount())
         }
         Row {
             id: timeShowRow
@@ -52,6 +50,26 @@ Window {
                 id: chessboardImage
                 anchors.centerIn: parent
                 source: "qrc:/resouces/qpps.png"
+            }
+        }
+        Row {
+            id: buttonRow
+            anchors.top: chessboard
+            anchors.topMargin: 5
+            anchors.left: parent.left
+            anchors.horizontalCenter: parent.Center
+            spacing: 50
+            FlatUI.FlatButton {
+                id: takeBackBtn
+                text: "悔棋"
+            }
+            FlatUI.FlatButton {
+                id: wantDrawBtn
+                text: "和棋"
+            }
+            FlatUI.FlatButton {
+                id: giveUpBtn
+                text: "认输"
             }
         }
     }

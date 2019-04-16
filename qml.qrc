@@ -5,5 +5,7 @@
         <file>resouces/djdy.png</file>
         <file>resouces/syts.png</file>
         <file>resouces/qpps.png</file>
+        <file>FlatUI/element/FlatButton.qml</file>
+        <file>main.cpp</file>
     </qresource>
 </RCC>
