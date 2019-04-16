@@ -7,5 +7,6 @@
         <file>resouces/qpps.png</file>
         <file>FlatUI/element/FlatButton.qml</file>
         <file>main.cpp</file>
+        <file>gameComponent/TimerRect.qml</file>
     </qresource>
 </RCC>

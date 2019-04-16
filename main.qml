@@ -1,11 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import "./FlatUI/element" as FlatUI
+import FlatUI 2.0
 
 Window {
     visible: true
-    width: 1000
-    height: 105 + chessboardImage.height
+    width: 20 + chessboardImage.width + rightItem.width
+    height: 120 + chessboardImage.height + takeBackBtn.height
     title: qsTr("zgoband")
     Item {
         id:leftItem
@@ -26,7 +26,6 @@ Window {
                 id: timeShowRepeater
                 model: timeModel
                 anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
 
                 Rectangle{
                     width: 125
@@ -54,22 +53,25 @@ Window {
         }
         Row {
             id: buttonRow
-            anchors.top: chessboard
+            anchors.top: chessboard.bottom
             anchors.topMargin: 5
-            anchors.left: parent.left
-            anchors.horizontalCenter: parent.Center
+            anchors.horizontalCenter: parent.horizontalCenter
             spacing: 50
-            FlatUI.FlatButton {
+            FlatButton {
                 id: takeBackBtn
                 text: "悔棋"
             }
-            FlatUI.FlatButton {
+            FlatButton {
                 id: wantDrawBtn
                 text: "和棋"
             }
-            FlatUI.FlatButton {
+            FlatButton {
                 id: giveUpBtn
                 text: "认输"
+            }
+            FlatButton {
+                id: quitBtn
+                text: "退出"
             }
         }
     }
@@ -80,7 +82,7 @@ Window {
         anchors.topMargin: 105
         anchors.leftMargin: 5
         height: parent.height
-        width: 300
+        width: 250
         Rectangle {
             id: playerInfoRec
             width: 250
