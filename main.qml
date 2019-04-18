@@ -1,55 +1,46 @@
-import QtQuick 2.9
+import QtQuick 2.7
 import QtQuick.Window 2.2
 import FlatUI 2.0
+import "./gameComponent"
 
 Window {
     visible: true
     width: 20 + chessboardImage.width + rightItem.width
     height: 120 + chessboardImage.height + takeBackBtn.height
     title: qsTr("zgoband")
+    Component.onCompleted: {
+        console.log("chessboard:"+chessboard.width)
+        console.log("chessboardImage:"+chessboardImage.width)
+    }
     Item {
         id:leftItem
         height: parent.height
         width: chessboardImage.width+10
-        ListModel {
-            id: timeModel
-            ListElement {text:"time1"}
-            ListElement {text:"time2"}
-        }
         Row {
             id: timeShowRow
             spacing: 100
             anchors.top: parent.top
             anchors.topMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
-            Repeater {
-                id: timeShowRepeater
-                model: timeModel
-                anchors.top: parent.top
-
-                Rectangle{
-                    width: 125
-                    height: 95
-                    color: "red"
-                    Text {
-                        text: index
-                    }
-                }
+            TimerRect {
+                id: user1Timer
+                username: "user1"
+                gameTimeMin: 10
+                gameTimeSec: 0
+            }
+            TimerRect {
+                id: user2Timer
+                username: "user2"
+                gameTimeMin: 10
+                gameTimeSec: 0
             }
         }
-        Item {
+        ChessBoard {
             id: chessboard
             anchors.top: timeShowRow.bottom
             anchors.topMargin: 5
             anchors.left: parent.left
             anchors.leftMargin: 5
-            width: chessboardImage.width
-            height: chessboardImage.height
-            Image {
-                id: chessboardImage
-                anchors.centerIn: parent
-                source: "qrc:/resouces/qpps.png"
-            }
         }
         Row {
             id: buttonRow

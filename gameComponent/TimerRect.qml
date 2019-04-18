@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     color: "black"
-    property string username
+    property string username: "username"
     property int gameTimeMin
     property int gameTimeSec
     property int min
@@ -38,14 +38,20 @@ Rectangle {
 
         Text {
             id: usernameText
+            font.bold: true
+            color: "white"
             text: username
         }
         Text {
             id: gameTimeText
+            font.bold: true
+            color: "white"
             text: "局时：\t" + gameTimeMin + ":" + gameTimeSec
         }
         Text {
             id: countDownText
+            font.bold: true
+            color: "white"
             text: "倒计时：\t" + min + ":" + sec
         }
     }
