@@ -5,17 +5,16 @@ import "./gameComponent"
 
 Window {
     visible: true
-    width: 20 + chessboardImage.width + rightItem.width
-    height: 120 + chessboardImage.height + takeBackBtn.height
+    width: 20 + chessboard.width + rightItem.width
+    height: 120 + chessboard.height + takeBackBtn.height
     title: qsTr("zgoband")
     Component.onCompleted: {
         console.log("chessboard:"+chessboard.width)
-        console.log("chessboardImage:"+chessboardImage.width)
     }
     Item {
         id:leftItem
         height: parent.height
-        width: chessboardImage.width+10
+        width: chessboard.width+10
         Row {
             id: timeShowRow
             spacing: 100

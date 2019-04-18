@@ -4,11 +4,11 @@ Item {
     width: chessboardImage.width
     height: chessboardImage.height
 
-    property bool inYourTurn
+    property bool inYourTurn: true
     // 第几个位置是否可以下棋，第二行第一个记为为第16个位置
     property var noClick: []
     // 上一步棋下的位置
-    property int lastClickCell: null
+    property var lastClickCell: null
     // 上一此鼠标放置的位置
     property var lastMouseCell: null
     readonly property int cellSize: 36
@@ -33,14 +33,16 @@ Item {
         property bool isBlack
 
         onPaint: {
-            ctx = getContext("2d")
+            var ctx = getContext("2d")
             if(isBlack) {
-                ctx.drawImage("", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
-                ctx.drawImage("", region.x, region.y, cellSize, cellSize)
+                if(lastClickCell != null)
+                    ctx.drawImage("qrc:/resouces/bq.png", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
+                ctx.drawImage("qrc:/resouces/hq.png", region.x, region.y, cellSize, cellSize)
             }
             else {
-                ctx.drawImage("", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
-                ctx.drawImage("", region.x, region.y, cellSize, cellSize)
+                if(lastClickCell != null)
+                    ctx.drawImage("qrc:/resouces/hq.png", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
+                ctx.drawImage("qrc:/resouces/bq.png", region.x, region.y, cellSize, cellSize)
             }
 
             ctx.strokeStyle = "red"
@@ -61,7 +63,7 @@ Item {
         anchors.fill: parent
 
         onPaint: {
-            ctx = getContext("2d")
+            var ctx = getContext("2d")
             if(lastMouseCell != null) {
                 ctx.clearRect(lastMouseCell)
             }
@@ -83,26 +85,27 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: {
-            if (canClick(point(mouseX, mouseY)))
+            if (canClick(Qt.point(mouseX, mouseY)))
                 return Qt.ArrowCursor
             return Qt.ForbiddenCursor
         }
         acceptedButtons: {
-            if (canClick(point(mouseX, mouseY)))
+            if (canClick(Qt.point(mouseX, mouseY)))
                 return Qt.LeftButton
             return Qt.NoButton
         }
 
         onClicked: {
-            number = getCellNumber(point(mouse.x, mouse.y))
+            var number = getCellNumber(Qt.point(mouse.x, mouse.y))
             var x = number%15 * cellSize
             var y = number/15 * cellSize
             pieceCanvas.markDirty(Qt.rect(x, y, cellSize, cellSize))
             noClick[number] = true
         }
         onPositionChanged: {
-            number = getCellNumber(point(mouse.x, mouse.y))
-            if (lastMousePosition == number)
+            var number = getCellNumber(Qt.point(mouse.x, mouse.y))
+            var cellRect = getCellRect(Qt.point(mouse.x, mouse.y))
+            if (lastMouseCell == cellRect)
                 return
             if (noClick[number])
                 return
@@ -110,7 +113,6 @@ Item {
             var x = number%15 * cellSize
             var y = number/15 * cellSize
 
-            traceCanvas.fromMoveEvent = true
             traceCanvas.markDirty(Qt.rect(x, y, cellSize, cellSize))
         }
 
@@ -119,7 +121,7 @@ Item {
                 return false
             }
 
-            number = getCellNumber(p)
+            var number = getCellNumber(p)
             if (noClick[number]) {
                 return false
             }
@@ -130,6 +132,12 @@ Item {
             var line = p.x / cellSize
             var column = p.y / cellSize
             return line * 15 + column + 1
+        }
+
+        function getCellRect(p) {
+            var line = p.x / cellSize
+            var column = p.y / cellSize
+            return Qt.rect(line*cellSize, column*cellSize, cellSize, cellSize)
         }
     }
 }
