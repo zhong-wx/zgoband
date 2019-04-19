@@ -18,8 +18,8 @@ SOURCES += \
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML2_IMPORT_PATH += D:\works\qtCreatorWorks\zgoband
-QML_IMPORT_PATH += D:\works\qtCreatorWorks\zgoband
+QML2_IMPORT_PATH += $$PWD
+QML_IMPORT_PATH += $$PWD
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =

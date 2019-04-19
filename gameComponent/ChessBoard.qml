@@ -8,14 +8,14 @@ Item {
     // 第几个位置是否可以下棋，第二行第一个记为为第16个位置
     property var noClick: []
     // 上一步棋下的位置
-    property var lastClickCell: null
+    property var lastClickCellPoint: null
     // 上一此鼠标放置的位置
-    property var lastMouseCell: null
+    property var lastMouseCellPoint: null
     readonly property int cellSize: 36
 
     Component.onCompleted: {
         for(var i=0; i<226; i++) {
-            noClick[i] = true
+            noClick[i] = false
         }
     }
 
@@ -31,53 +31,77 @@ Item {
         anchors.fill: parent
 
         property bool isBlack
+        property bool isFirstPaint: true
 
         onPaint: {
+            if(isFirstPaint) {
+                isFirstPaint = !isFirstPaint
+                return
+            }
+
             var ctx = getContext("2d")
+
             if(isBlack) {
-                if(lastClickCell != null)
-                    ctx.drawImage("qrc:/resouces/bq.png", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
+                if(lastClickCellPoint != null) {
+                    ctx.clearRect(lastClickCellPoint.x, lastClickCellPoint.y, cellSize, cellSize)
+                    ctx.drawImage("qrc:/resouces/bq.png", lastClickCellPoint.x, lastClickCellPoint.y, cellSize, cellSize)
+                }
                 ctx.drawImage("qrc:/resouces/hq.png", region.x, region.y, cellSize, cellSize)
             }
             else {
-                if(lastClickCell != null)
-                    ctx.drawImage("qrc:/resouces/hq.png", lastClickCell.x, lastClickCell.y, cellSize, cellSize)
+                if(lastClickCellPoint != null) {
+                    ctx.clearRect(lastClickCellPoint.x, lastClickCellPoint.y, cellSize, cellSize)
+                    ctx.drawImage("qrc:/resouces/hq.png", lastClickCellPoint.x, lastClickCellPoint.y, cellSize, cellSize)
+                }
                 ctx.drawImage("qrc:/resouces/bq.png", region.x, region.y, cellSize, cellSize)
             }
 
             ctx.strokeStyle = "red"
             ctx.lineWidth = 2
             ctx.beginPath()
-            ctx.moveTo(region.x + cellSize/2, region.y + 3*cellSize/8)
-            ctx.lineTo(region.x + cellSize/2, region.y + 5*cellSize/8)
-            ctx.moveTo(region.x + 3*cellSize/8, region.y + cellSize/2)
-            ctx.lineTo(region.x + 5*cellSize/8, region.y + cellSize/2)
+            ctx.moveTo(region.x + parseInt(cellSize/2), region.y + parseInt(3*cellSize/8))
+            ctx.lineTo(region.x + parseInt(cellSize/2), region.y + parseInt(5*cellSize/8))
+            ctx.moveTo(region.x + parseInt(3*cellSize/8), region.y + parseInt(cellSize/2))
+            ctx.lineTo(region.x + parseInt(5*cellSize/8), region.y + parseInt(cellSize/2))
             ctx.stroke()
-            ctx.clearRect(region.x + cellSize/2, region.y + cellSize/2, 2, 2)
 
+            lastClickCellPoint = Qt.point(region.x, region.y)
             isBlack = !isBlack
+        }
+
+        Component.onCompleted: {
+            loadImage("qrc:/resouces/hq.png")
+            loadImage("qrc:/resouces/bq.png")
         }
     }
     Canvas {
         id: traceCanvas
         anchors.fill: parent
+        property bool isFirstPaint: true
 
         onPaint: {
-            var ctx = getContext("2d")
-            if(lastMouseCell != null) {
-                ctx.clearRect(lastMouseCell)
+            if (isFirstPaint) {
+                isFirstPaint = !isFirstPaint
+                return
             }
 
-            x = region.x + cellSize/4
-            y = region.y + cellSize/4
+            var ctx = getContext("2d")
+            if(lastMouseCellPoint != null) {
+                ctx.clearRect(lastMouseCellPoint.x-1, lastMouseCellPoint.y-1, cellSize+2, cellSize+2)
+            }
+
+            var x = region.x
+            var y = region.y
 
             ctx.strokeStyle = "red"
             ctx.lineWidth = 1
-            ctx.strokeRect(x, y, cellSize/2, cellSize/2)
-            ctx.clearRect(x, y+cellSize/8, cellSize/2, cellSize/4)
-            ctx.clearRect(x+cellSize/8, y, cellSize/2, cellSize/4)
+            ctx.beginPath()
+            ctx.strokeRect(x, y, cellSize, cellSize)
+            ctx.stroke()
+            ctx.clearRect(x-1, y+parseInt(cellSize/4), cellSize+2, parseInt(cellSize/2))
+            ctx.clearRect(x+parseInt(cellSize/4), y-1, parseInt(cellSize/2), cellSize+2)
 
-            lastMouseCell = region
+            lastMouseCellPoint = Qt.point(region.x, region.y)
         }
     }
     MouseArea {
@@ -96,24 +120,24 @@ Item {
         }
 
         onClicked: {
+            if (!canClick(Qt.point(mouse.x, mouse.y)))
+                return false
             var number = getCellNumber(Qt.point(mouse.x, mouse.y))
-            var x = number%15 * cellSize
-            var y = number/15 * cellSize
-            pieceCanvas.markDirty(Qt.rect(x, y, cellSize, cellSize))
+            var point = getCellPoint(Qt.point(mouse.x, mouse.y))
+
+            pieceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
             noClick[number] = true
         }
         onPositionChanged: {
             var number = getCellNumber(Qt.point(mouse.x, mouse.y))
-            var cellRect = getCellRect(Qt.point(mouse.x, mouse.y))
-            if (lastMouseCell == cellRect)
+
+            var point = getCellPoint(Qt.point(mouse.x, mouse.y))
+            if (lastMouseCellPoint == point)
                 return
             if (noClick[number])
                 return
 
-            var x = number%15 * cellSize
-            var y = number/15 * cellSize
-
-            traceCanvas.markDirty(Qt.rect(x, y, cellSize, cellSize))
+            traceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
         }
 
         function canClick(p) {
@@ -129,15 +153,15 @@ Item {
         }
 
         function getCellNumber(p) {
-            var line = p.x / cellSize
-            var column = p.y / cellSize
+            var line = parseInt(p.y / cellSize)
+            var column = parseInt(p.x / cellSize)
             return line * 15 + column + 1
         }
 
-        function getCellRect(p) {
-            var line = p.x / cellSize
-            var column = p.y / cellSize
-            return Qt.rect(line*cellSize, column*cellSize, cellSize, cellSize)
+        function getCellPoint(p) {
+            var line = parseInt(p.x / cellSize)
+            var column = parseInt(p.y / cellSize)
+            return Qt.point(line*cellSize, column*cellSize)
         }
     }
 }
