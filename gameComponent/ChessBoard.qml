@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 Item {
+    id: root
     width: chessboardImage.width
     height: chessboardImage.height
 
@@ -13,10 +14,63 @@ Item {
     property var lastMouseCellPoint: null
     readonly property int cellSize: 36
 
+    property point computerStrategy
+
+    signal clicked(int line, int column)
+
     Component.onCompleted: {
         for(var i=0; i<226; i++) {
             noClick[i] = false
         }
+    }
+
+    Timer {
+        id: t
+        interval: 500
+        repeat: false
+        onTriggered: {
+            pieceCanvas.markDirty(Qt.rect(computerStrategy.x, computerStrategy.y, cellSize, cellSize))
+        }
+    }
+
+    function putAPiece(line, column) {
+        var y = (line-1) * cellSize
+        var x = (column-1) * cellSize
+        computerStrategy = Qt.point(x, y)
+        t.start()
+        var number = (line-1)*15 + column
+        noClick[number] = true
+    }
+
+    function canClick(p) {
+        if(!inYourTurn) {
+            return false
+        }
+
+        var number = getCellNumber(p)
+        if (noClick[number]) {
+            return false
+        }
+        return true
+    }
+
+    function getCellNumber(p) {
+        var line = parseInt(p.y / cellSize)
+        var column = parseInt(p.x / cellSize)
+        return line * 15 + column + 1
+    }
+
+    function getCellPoint(p) {
+        var line = parseInt(p.x / cellSize)
+        var column = parseInt(p.y / cellSize)
+        return Qt.point(line*cellSize, column*cellSize)
+    }
+
+    function sleep(delay) {
+      var start = (new Date()).getTime();
+      while ((new Date()).getTime() - start < delay) {
+        continue;
+      }
     }
 
     Image {
@@ -34,6 +88,7 @@ Item {
         property bool isFirstPaint: true
 
         onPaint: {
+            console.log("region.x:", region.x, "region.y:", region.y)
             if(isFirstPaint) {
                 isFirstPaint = !isFirstPaint
                 return
@@ -127,41 +182,21 @@ Item {
 
             pieceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
             noClick[number] = true
+
+            var lineNumber = parseInt(number/15) + 1
+            var columnNumber = number%15
+            root.clicked(lineNumber, columnNumber)
         }
         onPositionChanged: {
             var number = getCellNumber(Qt.point(mouse.x, mouse.y))
 
             var point = getCellPoint(Qt.point(mouse.x, mouse.y))
-            if (lastMouseCellPoint == point)
+            if (lastMouseCellPoint === point)
                 return
             if (noClick[number])
                 return
 
             traceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
-        }
-
-        function canClick(p) {
-            if(!inYourTurn) {
-                return false
-            }
-
-            var number = getCellNumber(p)
-            if (noClick[number]) {
-                return false
-            }
-            return true
-        }
-
-        function getCellNumber(p) {
-            var line = parseInt(p.y / cellSize)
-            var column = parseInt(p.x / cellSize)
-            return line * 15 + column + 1
-        }
-
-        function getCellPoint(p) {
-            var line = parseInt(p.x / cellSize)
-            var column = parseInt(p.y / cellSize)
-            return Qt.point(line*cellSize, column*cellSize)
         }
     }
 }

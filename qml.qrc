@@ -1,12 +1,16 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>resouces/ps.png</file>
         <file>resouces/djdy.png</file>
         <file>resouces/syts.png</file>
         <file>resouces/qpps.png</file>
         <file>FlatUI/element/FlatButton.qml</file>
         <file>main.cpp</file>
         <file>gameComponent/TimerRect.qml</file>
+        <file>gameComponent/ChessBoard.qml</file>
+        <file>resouces/bq.png</file>
+        <file>resouces/hq.png</file>
+        <file>js/humanWithComputerAlgorithm.js</file>
+        <file>js/utils.js</file>
     </qresource>
 </RCC>

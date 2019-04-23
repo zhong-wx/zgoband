@@ -2,15 +2,16 @@ import QtQuick 2.7
 import QtQuick.Window 2.2
 import FlatUI 2.0
 import "./gameComponent"
+import "qrc:/js/humanWithComputerAlgorithm.js" as Code
 
 Window {
     visible: true
     width: 20 + chessboard.width + rightItem.width
     height: 120 + chessboard.height + takeBackBtn.height
     title: qsTr("zgoband")
-    Component.onCompleted: {
-        console.log("chessboard:"+chessboard.width)
-    }
+
+    property string gameType: "humanWithComputer"
+
     Item {
         id:leftItem
         height: parent.height
@@ -40,6 +41,16 @@ Window {
             anchors.topMargin: 5
             anchors.left: parent.left
             anchors.leftMargin: 5
+
+            onClicked: {
+                if (gameType === "humanWithComputer") {
+                    var strategy = Code.getComputerStrategy(line, column)
+                    console.log("5")
+                    console.log("line:", strategy.line, "column:", strategy.column)
+                    chessboard.putAPiece(strategy.line, strategy.column)
+                    console.log("6")
+                }
+            }
         }
         Row {
             id: buttonRow
