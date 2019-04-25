@@ -5,6 +5,9 @@ Item {
     width: chessboardImage.width
     height: chessboardImage.height
 
+    readonly property int player1: 1
+    readonly property int player2: -1
+
     property bool inYourTurn: true
     // 第几个位置是否可以下棋，第二行第一个记为为第16个位置
     property var noClick: []
@@ -16,30 +19,148 @@ Item {
 
     property point computerStrategy
 
+    property var chessBoard
+
     signal clicked(int line, int column)
 
     Component.onCompleted: {
         for(var i=0; i<226; i++) {
             noClick[i] = false
         }
+
+        chessBoard = new Array
+        for(var i=1; i<=15; i++) {
+            chessBoard[i] = new Array
+            for(var j=1; j<=15; j++) {
+                chessBoard[i][j] = 0
+            }
+        }
     }
 
     Timer {
         id: t
-        interval: 500
+        interval: 10
         repeat: false
         onTriggered: {
             pieceCanvas.markDirty(Qt.rect(computerStrategy.x, computerStrategy.y, cellSize, cellSize))
         }
     }
 
-    function putAPiece(line, column) {
+    function reset() {
+        inYourTurn = false
+        pieceCanvas.requestPaint()
+        traceCanvas.requestPaint()
+        noClick = []
+        lastClickCellPoint = null
+        lastMouseCellPoint = null
+    }
+
+    function checkWiner(line, column) {
+        var which = chessBoard[line][column]
+
+        var repeatCount = 1
+        var columnIndex = column + 1
+        while(columnIndex<=15 && chessBoard[line][columnIndex]===which) {
+            repeatCount++
+            columnIndex++
+        }
+        columnIndex = column - 1
+        while(columnIndex>=1 && chessBoard[line][columnIndex]===which) {
+            repeatCount++
+            columnIndex--
+        }
+        if(repeatCount >= 5) {
+            return true
+        }
+
+        repeatCount = 1
+        var lineIndex = line + 1
+        while(lineIndex<=15 && chessBoard[lineIndex][column]===which) {
+            repeatCount++
+            lineIndex++
+        }
+        lineIndex = line - 1
+        while(lineIndex>=1 && chessBoard[lineIndex][column]===which) {
+            repeatCount++
+            lineIndex--
+        }
+        if(repeatCount >= 5) {
+            return true
+        }
+
+        repeatCount = 1
+        lineIndex = line + 1
+        columnIndex = column + 1
+        while(lineIndex<=15 && columnIndex<=15 && chessBoard[lineIndex][columnIndex]) {
+            repeatCount++
+            lineIndex++
+            columnIndex++
+        }
+        lineIndex = line - 1
+        columnIndex = column - 1
+        while(lineIndex>=1 && columnIndex>=1 && chessBoard[lineIndex][columnIndex]===which) {
+            repeatCount++
+            lineIndex--
+            columnIndex--
+        }
+        if(repeatCount >= 5) {
+            return true
+        }
+
+        lineIndex = line - 1
+        columnIndex = column + 1
+        repeatCount = 1
+        while(lineIndex>=1 && columnIndex<=15 && chessBoard[lineIndex][columnIndex]===which) {
+            repeatCount++
+            lineIndex--
+            columnIndex++
+        }
+        lineIndex = line + 1
+        columnIndex = columnIndex - 1
+        while(lineIndex<=15 && columnIndex>=1 && chessBoard[lineIndex][columnIndex]===which) {
+            repeatCount++
+            lineIndex++
+            columnIndex--
+        }
+        if(repeatCount >= 5) {
+            return true
+        }
+
+        return false
+    }
+
+    function player2PutAPiece(line, column) {
         var y = (line-1) * cellSize
         var x = (column-1) * cellSize
         computerStrategy = Qt.point(x, y)
         t.start()
+
+        chessBoard[line][column] = player2
+
         var number = (line-1)*15 + column
         noClick[number] = true
+
+        if(checkWiner(line, column)) {
+            var title = "本局游戏结束"
+            var message = "本局"
+            root.parent.showOkMessageDialog()
+        }
+    }
+
+    function player1PutAPiece(p) {
+        var number = getCellNumber(p)
+        var point = getCellPoint(p)
+
+        pieceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
+        noClick[number] = true
+
+        var line = parseInt(number/15) + 1
+        var column = number%15
+
+        chessBoard[line][column] = player1
+        console.log("put a piece on " + line + "," +column)
+        checkWiner(line, column)
+        root.clicked(line, column)
     }
 
     function canClick(p) {
@@ -66,13 +187,6 @@ Item {
         return Qt.point(line*cellSize, column*cellSize)
     }
 
-    function sleep(delay) {
-      var start = (new Date()).getTime();
-      while ((new Date()).getTime() - start < delay) {
-        continue;
-      }
-    }
-
     Image {
         id: chessboardImage
         width: 540
@@ -88,7 +202,6 @@ Item {
         property bool isFirstPaint: true
 
         onPaint: {
-            console.log("region.x:", region.x, "region.y:", region.y)
             if(isFirstPaint) {
                 isFirstPaint = !isFirstPaint
                 return
@@ -145,6 +258,9 @@ Item {
                 ctx.clearRect(lastMouseCellPoint.x-1, lastMouseCellPoint.y-1, cellSize+2, cellSize+2)
             }
 
+            if(!inYourTurn)
+                return
+
             var x = region.x
             var y = region.y
 
@@ -177,15 +293,8 @@ Item {
         onClicked: {
             if (!canClick(Qt.point(mouse.x, mouse.y)))
                 return false
-            var number = getCellNumber(Qt.point(mouse.x, mouse.y))
-            var point = getCellPoint(Qt.point(mouse.x, mouse.y))
 
-            pieceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
-            noClick[number] = true
-
-            var lineNumber = parseInt(number/15) + 1
-            var columnNumber = number%15
-            root.clicked(lineNumber, columnNumber)
+            player1PutAPiece(Qt.point(mouse.x, mouse.y))
         }
         onPositionChanged: {
             var number = getCellNumber(Qt.point(mouse.x, mouse.y))

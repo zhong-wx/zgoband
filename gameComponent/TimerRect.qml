@@ -13,6 +13,11 @@ Rectangle {
     width: 125
     height: 95
 
+    Component.onCompleted: {
+        min = gameTimeMin
+        sec = gameTimeSec
+    }
+
     Timer {
         id: countDownTimer
         interval: 1000
@@ -24,7 +29,7 @@ Rectangle {
             }
             sec--
             if(sec < 0) {
-                sec = 0
+                sec = 59
                 min--
             }
         }
@@ -60,4 +65,8 @@ Rectangle {
         countDownTimer.start()
     }
 
+    function timerStop() {
+        countDownTimer.stop()
+    }
 }
+

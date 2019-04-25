@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Window 2.2
 import FlatUI 2.0
+import QtQuick.Dialogs 1.1
 import "./gameComponent"
 import "qrc:/js/humanWithComputerAlgorithm.js" as Code
 
@@ -11,6 +12,15 @@ Window {
     title: qsTr("zgoband")
 
     property string gameType: "humanWithComputer"
+    property string player1: "player1"
+    property string player2: "player2"
+
+    MessageDialog {
+        id: okMessageDialog
+        title: ""
+        text: ""
+        standardButtons: StandardButton.Ok
+    }
 
     Item {
         id:leftItem
@@ -23,14 +33,14 @@ Window {
             anchors.topMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
             TimerRect {
-                id: user1Timer
-                username: "user1"
+                id: player1Timer
+                username: "player1"
                 gameTimeMin: 10
                 gameTimeSec: 0
             }
             TimerRect {
-                id: user2Timer
-                username: "user2"
+                id: player2Timer
+                username: "player2"
                 gameTimeMin: 10
                 gameTimeSec: 0
             }
@@ -41,14 +51,16 @@ Window {
             anchors.topMargin: 5
             anchors.left: parent.left
             anchors.leftMargin: 5
+            inYourTurn: false
 
             onClicked: {
+                inYourTurn = false
+                player1Timer.timerStop()
                 if (gameType === "humanWithComputer") {
-                    var strategy = Code.getComputerStrategy(line, column)
-                    console.log("5")
-                    console.log("line:", strategy.line, "column:", strategy.column)
-                    chessboard.putAPiece(strategy.line, strategy.column)
-                    console.log("6")
+                    var strategy = Code.getComputerStrategy(chessboard.chessBoard, line, column)
+                    chessboard.player2PutAPiece(strategy.line, strategy.column)
+                    inYourTurn = true
+                    player1Timer.timerStart()
                 }
             }
         }
@@ -58,6 +70,15 @@ Window {
             anchors.topMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 50
+            FlatButton {
+                id: getReadyBtn
+                text: "准备"
+                checkable: false
+                onClicked: {
+                    getReadyBtn.checkable = false
+                    getReady()
+                }
+            }
             FlatButton {
                 id: takeBackBtn
                 text: "悔棋"
@@ -122,5 +143,25 @@ Window {
                 anchors.centerIn: parent.Center
             }
         }
+    }
+
+    function getReady() {
+        player1Timer.timerStart()
+        chessboard.inYourTurn = true
+    }
+
+    function gameEnd(winner) {
+        okMessageDialog.title = "本局游戏结束"
+        if(winner === 0) {
+            okMessageDialog.text = "本局游戏" + player1 + "胜出"
+        }
+        else if(winner === 1){
+            okMessageDialog.text = "本局游戏" + player2 + "胜出"
+        }
+        else {
+            okMessageDialog.text = "unkownPlayer" + " 胜出"
+        }
+        okMessageDialog.open()
+        chessboard.reset()
     }
 }

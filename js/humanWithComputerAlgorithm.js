@@ -15,31 +15,15 @@ function newObjectArray(i, p, value) {
     return tArray
 }
 
-
-function initChessBoard() {
-    chessBoard = new Array
-    for (var i=0; i<16; i++) {
-        chessBoard[i] = new Array
-        for (var j=0; j<16; j++)
-            chessBoard[i][j] = empty
-    }
-}
-
-var isFirstCall = true
-function getComputerStrategy(lineNumber, columnNumber) {
+function getComputerStrategy(cb, lineNumber, columnNumber) {
+    chessBoard = cb
     console.log("enter getComputerStrategy, line:", lineNumber, "column:", columnNumber)
-    if (isFirstCall) {
-        isFirstCall = !isFirstCall
-        initChessBoard()
-    }
-    chessBoard[lineNumber][columnNumber] = human
 
     var humanConBoard = calcConBoard(human)
     var computerConBoard = calcConBoard(computer)
 
     var humanConCountBoard = calConCount(humanConBoard)
     var computerConCountBoard = calConCount(computerConBoard)
-
 
     var offScore = calcScore(computerConCountBoard)
     var defScore = calcScore(humanConCountBoard)
@@ -96,6 +80,9 @@ function choose(offScore, defScore) {
     console.log("maxOffScore",maxOffScore)
     console.log("maxDefScore",maxDefScore)
     var choose
+    if(maxOffScore > 80 && maxDefScore > 80) {
+        return maxOffValArr[0]
+    }
     if(maxOffScore > maxDefScore) {
         var maxDefVal = -1
         for(var i=0; i<maxOffValArr.length; i++) {
