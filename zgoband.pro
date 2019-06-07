@@ -1,11 +1,11 @@
 QT += quick
 CONFIG += c++11
-
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS \
+#            IN_DEBUG
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -13,13 +13,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    gen-cpp/GameHall.cpp \
+    gen-cpp/GameOperator.cpp \
+    gen-cpp/LoginAndReg.cpp \
+    gen-cpp/zgobandServerThrift_constants.cpp \
+    gen-cpp/zgobandServerThrift_types.cpp \
+    RPC/_gamehall.cpp \
+    RPC/_loginandreg.cpp \
+    test.cpp \
+    recvclient.cpp \
+    windows/GetTimeOfDay.cpp \
+    windows/OverlappedSubmissionThread.cpp \
+    windows/SocketPair.cpp \
+    windows/TWinsockSingleton.cpp \
+    windows/WinFcntl.cpp \
+    RPC/_gameoperator.cpp \
+    utils.cpp
+
+LIBS += -L$$PWD \
+        -lthrift \
+        -lboost_system-mgw53-mt-d-1_53 \
+        -lthriftz \
+        -lws2_32
 
 RESOURCES += qml.qrc
 
+INCLUDEPATH += C:\Users\Administrator\Downloads\thrift-0.12.0\lib\cpp\src \
+               C:\Users\Administrator\Downloads\boost_1_53_0.tar\Sources\boost\snapshots\boost_1_53_0_rc1\boost_1_53_0
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML2_IMPORT_PATH += $$PWD
-QML_IMPORT_PATH += $$PWD
+QML2_IMPORT_PATH += D:\qt works\zgoband
+QML_IMPORT_PATH += D:\qt works\zgoband
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -98,7 +123,6 @@ DISTFILES += \
     FlatUI/component/ErrorDialog.qml \
     FlatUI/component/FolderDialog.qml \
     FlatUI/component/VideoPlayer.qml \
-    FlatUI/element/FlatButton.qml \
     FlatUI/element/FlatCheckBox.qml \
     FlatUI/element/FlatComboBox.qml \
     FlatUI/element/FlatDialog.qml \
@@ -116,4 +140,31 @@ DISTFILES += \
     FlatUI/Private/ActiveColor.qml \
     FlatUI/Private/FlatIconName.qml \
     FlatUI/Private/Separator.qml \
-    FlatUI/FlatGlobal.qml
+    FlatUI/FlatGlobal.qml \
+    zgobandServerThrift.thrift \
+    tmp \
+    libboost_system-mgw53-mt-d-1_53.a \
+    libthrift.a \
+    main.py \
+    msgPush.thrift \
+    FlatUI/element/FlatButton.qml
+
+HEADERS += \
+    gen-cpp/GameHall.h \
+    gen-cpp/GameOperator.h \
+    gen-cpp/LoginAndReg.h \
+    gen-cpp/zgobandServerThrift_constants.h \
+    gen-cpp/zgobandServerThrift_types.h \
+    RPC/_loginandreg.h \
+    RPC/_gamehall.h \
+    recvclient.h \
+    windows/config.h \
+    windows/GetTimeOfDay.h \
+    windows/Operators.h \
+    windows/OverlappedSubmissionThread.h \
+    windows/SocketPair.h \
+    windows/Sync.h \
+    windows/TWinsockSingleton.h \
+    windows/WinFcntl.h \
+    RPC/_gameoperator.h \
+    utils.h

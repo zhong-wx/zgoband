@@ -17,7 +17,6 @@ function newObjectArray(i, p, value) {
 
 function getComputerStrategy(cb, lineNumber, columnNumber) {
     chessBoard = cb
-    console.log("enter getComputerStrategy, line:", lineNumber, "column:", columnNumber)
 
     var humanConBoard = calcConBoard(human)
     var computerConBoard = calcConBoard(computer)
@@ -27,23 +26,19 @@ function getComputerStrategy(cb, lineNumber, columnNumber) {
 
     var offScore = calcScore(computerConCountBoard)
     var defScore = calcScore(humanConCountBoard)
-    console.log("offScore:")
+
     for(var i=1; i<=15; i++) {
         var str = ""
         for(var j=1; j<=15; j++) {
             str += offScore[i][j] + ","
         }
-        console.log(str)
     }
-    console.log("defScore:")
     for(var i=1; i<=15; i++) {
         var str = ""
         for(var j=1; j<=15; j++) {
             str += defScore[i][j] + ","
         }
-        console.log(str)
     }
-    console.log("4")
 
     var strategy = choose(offScore, defScore)
     chessBoard[strategy.line][strategy.column] = computer
@@ -77,8 +72,6 @@ function choose(offScore, defScore) {
         }
     }
 
-    console.log("maxOffScore",maxOffScore)
-    console.log("maxDefScore",maxDefScore)
     var choose
     if(maxOffScore > 80 && maxDefScore > 80) {
         return maxOffValArr[0]

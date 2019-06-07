@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Item {
-    id: root
+    id: chessBoardRoot
     width: chessboardImage.width
     height: chessboardImage.height
 
@@ -9,17 +9,20 @@ Item {
     readonly property int player2: -1
 
     property bool inYourTurn: true
-    // 第几个位置是否可以下棋，第二行第一个记为为第16个位置
-    property var noClick: []
+    // 棋盘
+    property var chessBoard
+    // 1 mean humanwithcomputor, 2 mean humanwithhuman
+
+    property point computerStrategy
     // 上一步棋下的位置
     property var lastClickCellPoint: null
     // 上一此鼠标放置的位置
     property var lastMouseCellPoint: null
+    // 第几个位置是否可以下棋，第二行第一个记为为第16个位置
+    property var noClick: []
     readonly property int cellSize: 36
 
-    property point computerStrategy
 
-    property var chessBoard
 
     signal clicked(int line, int column)
 
@@ -48,11 +51,14 @@ Item {
 
     function reset() {
         inYourTurn = false
-        pieceCanvas.requestPaint()
-        traceCanvas.requestPaint()
+        pieceCanvas.isFirstPaint = true
+        traceCanvas.isFirstPaint = true
+        pieceCanvas.markDirty(Qt.rect(0, 0, pieceCanvas.width, pieceCanvas.height))
+        traceCanvas.markDirty(Qt.rect(0, 0, traceCanvas.width, traceCanvas.height))
         noClick = []
         lastClickCellPoint = null
         lastMouseCellPoint = null
+        pieceCanvas.isBlack = true
     }
 
     function checkWiner(line, column) {
@@ -129,21 +135,23 @@ Item {
         return false
     }
 
-    function player2PutAPiece(line, column) {
-        var y = (line-1) * cellSize
+    function player2PutAPiece(row, column, result) {
+        var y = (row-1) * cellSize
         var x = (column-1) * cellSize
         computerStrategy = Qt.point(x, y)
         t.start()
 
-        chessBoard[line][column] = player2
+        chessBoard[row][column] = player2
 
-        var number = (line-1)*15 + column
+        var number = (row-1)*15 + column
         noClick[number] = true
 
-        if(checkWiner(line, column)) {
+        if(root.gameType===1 && checkWiner(row, column)) {
             var title = "本局游戏结束"
             var message = "本局"
             root.parent.showOkMessageDialog()
+        } else if(root.gameType===2 && result > 0) {
+            root.gameEnd(root.seatID===1?2:1, result)
         }
     }
 
@@ -154,13 +162,36 @@ Item {
         pieceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))
         noClick[number] = true
 
-        var line = parseInt(number/15) + 1
+        var row = parseInt(number/15) + 1
         var column = number%15
 
-        chessBoard[line][column] = player1
-        console.log("put a piece on " + line + "," +column)
-        checkWiner(line, column)
-        root.clicked(line, column)
+        chessBoard[row][column] = player1
+        if(root.gameType===1 && checkWiner(row, column)) {
+            return
+        } else if(root.gameType != 3) {
+            chessBoardRoot.clicked(row, column)
+        }
+    }
+
+    function takeBack(row, column) {
+        var y = (row-1) * cellSize
+        var x = (column-1) * cellSize
+        pieceCanvas.toClear.push(Qt.point(x, y))
+        pieceCanvas.requestPaint()
+        var number = (row-1)*15 + column
+        noClick[number] = false
+        pieceCanvas.isBlack = !pieceCanvas.isBlack
+    }
+
+    function setLastPos(row, column) {
+        if (row<0 || column<0) {
+            lastClickCellPoint = null
+            return
+        }
+        var y = (row-1) * cellSize
+        var x = (column-1) * cellSize
+        pieceCanvas.lastPos = Qt.point(x, y)
+        pieceCanvas.requestPaint()
     }
 
     function canClick(p) {
@@ -176,15 +207,15 @@ Item {
     }
 
     function getCellNumber(p) {
-        var line = parseInt(p.y / cellSize)
+        var row = parseInt(p.y / cellSize)
         var column = parseInt(p.x / cellSize)
-        return line * 15 + column + 1
+        return row * 15 + column + 1
     }
 
     function getCellPoint(p) {
-        var line = parseInt(p.x / cellSize)
+        var row = parseInt(p.x / cellSize)
         var column = parseInt(p.y / cellSize)
-        return Qt.point(line*cellSize, column*cellSize)
+        return Qt.point(row*cellSize, column*cellSize)
     }
 
     Image {
@@ -198,16 +229,42 @@ Item {
         id: pieceCanvas
         anchors.fill: parent
 
-        property bool isBlack
+        property bool isBlack: true
         property bool isFirstPaint: true
+        property var toClear: []
+        property var lastPos: null
+
+        function drawLastClickPos(ctx, region) {
+            ctx.strokeStyle = "red"
+            ctx.lineWidth = 2
+            ctx.beginPath()
+            ctx.moveTo(region.x + parseInt(cellSize/2), region.y + parseInt(3*cellSize/8))
+            ctx.lineTo(region.x + parseInt(cellSize/2), region.y + parseInt(5*cellSize/8))
+            ctx.moveTo(region.x + parseInt(3*cellSize/8), region.y + parseInt(cellSize/2))
+            ctx.lineTo(region.x + parseInt(5*cellSize/8), region.y + parseInt(cellSize/2))
+            ctx.stroke()
+
+            lastClickCellPoint = Qt.point(region.x, region.y)
+        }
 
         onPaint: {
+            console.log("pieceCanvas draw")
+            var ctx = getContext("2d")
             if(isFirstPaint) {
+                ctx.clearRect(region.x, region.y, region.width, region.height)
                 isFirstPaint = !isFirstPaint
                 return
             }
-
-            var ctx = getContext("2d")
+            if(toClear.length > 0 || lastPos !== null) {
+                for(var i=0; i<toClear.length; i++)
+                    ctx.clearRect(toClear[i].x, toClear[i].y, cellSize, cellSize)
+                if(lastPos !== null) {
+                    drawLastClickPos(ctx, lastPos)
+                }
+                lastPos = null
+                toClear = []
+                return
+            }
 
             if(isBlack) {
                 if(lastClickCellPoint != null) {
@@ -224,16 +281,7 @@ Item {
                 ctx.drawImage("qrc:/resouces/bq.png", region.x, region.y, cellSize, cellSize)
             }
 
-            ctx.strokeStyle = "red"
-            ctx.lineWidth = 2
-            ctx.beginPath()
-            ctx.moveTo(region.x + parseInt(cellSize/2), region.y + parseInt(3*cellSize/8))
-            ctx.lineTo(region.x + parseInt(cellSize/2), region.y + parseInt(5*cellSize/8))
-            ctx.moveTo(region.x + parseInt(3*cellSize/8), region.y + parseInt(cellSize/2))
-            ctx.lineTo(region.x + parseInt(5*cellSize/8), region.y + parseInt(cellSize/2))
-            ctx.stroke()
-
-            lastClickCellPoint = Qt.point(region.x, region.y)
+            drawLastClickPos(ctx, region)
             isBlack = !isBlack
         }
 
@@ -242,18 +290,22 @@ Item {
             loadImage("qrc:/resouces/bq.png")
         }
     }
+    //画鼠标移动轨迹
     Canvas {
         id: traceCanvas
         anchors.fill: parent
         property bool isFirstPaint: true
 
         onPaint: {
+            console.log("traceCanvas draw")
+            var ctx = getContext("2d")
             if (isFirstPaint) {
+                ctx.clearRect(region.x, region.y, region.width, region.height)
                 isFirstPaint = !isFirstPaint
                 return
             }
 
-            var ctx = getContext("2d")
+
             if(lastMouseCellPoint != null) {
                 ctx.clearRect(lastMouseCellPoint.x-1, lastMouseCellPoint.y-1, cellSize+2, cellSize+2)
             }
@@ -297,12 +349,10 @@ Item {
             player1PutAPiece(Qt.point(mouse.x, mouse.y))
         }
         onPositionChanged: {
-            var number = getCellNumber(Qt.point(mouse.x, mouse.y))
-
             var point = getCellPoint(Qt.point(mouse.x, mouse.y))
             if (lastMouseCellPoint === point)
                 return
-            if (noClick[number])
+            if (!canClick(Qt.point(mouse.x, mouse.y)))
                 return
 
             traceCanvas.markDirty(Qt.rect(point.x, point.y, cellSize, cellSize))

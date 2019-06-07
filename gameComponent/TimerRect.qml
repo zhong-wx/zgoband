@@ -18,6 +18,20 @@ Rectangle {
         sec = gameTimeSec
     }
 
+    function timerStart() {
+        countDownTimer.start()
+    }
+
+    function timerStop() {
+        countDownTimer.stop()
+    }
+
+    function reset() {
+        min = gameTimeMin
+        sec = gameTimeSec
+        timerStop()
+    }
+
     Timer {
         id: countDownTimer
         interval: 1000
@@ -61,12 +75,6 @@ Rectangle {
         }
     }
 
-    function timerStart() {
-        countDownTimer.start()
-    }
 
-    function timerStop() {
-        countDownTimer.stop()
-    }
 }
 

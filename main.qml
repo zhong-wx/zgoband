@@ -1,167 +1,132 @@
-import QtQuick 2.7
-import QtQuick.Window 2.2
+import QtQuick 2.1
+import QtQuick.Window 2.11
 import FlatUI 2.0
-import QtQuick.Dialogs 1.1
 import "./gameComponent"
-import "qrc:/js/humanWithComputerAlgorithm.js" as Code
 
 Window {
+    id: rootWindow
+    width: gameWindow.width
+    height: gameWindow.height
     visible: true
-    width: 20 + chessboard.width + rightItem.width
-    height: 120 + chessboard.height + takeBackBtn.height
-    title: qsTr("zgoband")
 
-    property string gameType: "humanWithComputer"
-    property string player1: "player1"
-    property string player2: "player2"
+    property var selfInfo
 
-    MessageDialog {
-        id: okMessageDialog
-        title: ""
-        text: ""
-        standardButtons: StandardButton.Ok
-    }
-
-    Item {
-        id:leftItem
-        height: parent.height
-        width: chessboard.width+10
-        Row {
-            id: timeShowRow
-            spacing: 100
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.horizontalCenter: parent.horizontalCenter
-            TimerRect {
-                id: player1Timer
-                username: "player1"
-                gameTimeMin: 10
-                gameTimeSec: 0
-            }
-            TimerRect {
-                id: player2Timer
-                username: "player2"
-                gameTimeMin: 10
-                gameTimeSec: 0
-            }
-        }
-        ChessBoard {
-            id: chessboard
-            anchors.top: timeShowRow.bottom
-            anchors.topMargin: 5
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-            inYourTurn: false
-
-            onClicked: {
-                inYourTurn = false
-                player1Timer.timerStop()
-                if (gameType === "humanWithComputer") {
-                    var strategy = Code.getComputerStrategy(chessboard.chessBoard, line, column)
-                    chessboard.player2PutAPiece(strategy.line, strategy.column)
-                    inYourTurn = true
-                    player1Timer.timerStart()
-                }
-            }
-        }
-        Row {
-            id: buttonRow
-            anchors.top: chessboard.bottom
-            anchors.topMargin: 5
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 50
-            FlatButton {
-                id: getReadyBtn
-                text: "准备"
-                checkable: false
-                onClicked: {
-                    getReadyBtn.checkable = false
-                    getReady()
-                }
-            }
-            FlatButton {
-                id: takeBackBtn
-                text: "悔棋"
-            }
-            FlatButton {
-                id: wantDrawBtn
-                text: "和棋"
-            }
-            FlatButton {
-                id: giveUpBtn
-                text: "认输"
-            }
-            FlatButton {
-                id: quitBtn
-                text: "退出"
-            }
+    function recvJsonObj(jsonObj) {
+        switch (jsonObj["messageType"]) {
+        case 0:
+            gameHall.addPlayer(jsonObj["deskID"], jsonObj["seatID"], jsonObj["account"])
+            // account=="" mean leave seat
+            if(jsonObj["account"]!=="")
+                gameWindow.addTheOtherSide(jsonObj["deskID"], jsonObj["seatID"], jsonObj["playerInfo"])
+            else
+                gameWindow.removeTheOtherSide(jsonObj["deskID"], jsonObj["seatID"])
+            break;
+        case 1:
+            gameHall.setReady(jsonObj["deskID"], jsonObj["seatID"], jsonObj["isReady"])
+            gameWindow.setOtherSideReady(jsonObj["deskID"], jsonObj["seatID"], jsonObj["isReady"])
+            break;
+        case 2:
+            gameWindow.putChess(jsonObj["row"], jsonObj["column"], jsonObj["result"])
+            break;
+        case 3:
+            //接受到请求悔棋消息
+            gameWindow.reqestTackBack()
+            break;
+        case 4:
+            // 执行悔棋操作
+            gameWindow.takeBack(jsonObj["resp"], jsonObj["whoReq"], jsonObj["whoResp"], jsonObj["lastSteps"])
+            break
+        case 5:
+            // 收到对方认输消息
+            gameWindow.recvLoseReq()
+            break
         }
     }
-    Item {
-        id: rightItem
+
+    function netWorkError(err) {
+        console.log("call netWorkError")
+        console.log(err)
+    }
+
+    GameWindow {
+        id: gameWindow
+        visible: false
+    }
+    GameHall {
+        id: gameHall
+        visible: false
+        anchors.fill: parent
+    }
+    LoginWindow {
+        id: loginWindow
+        visible: false
+        anchors.centerIn: parent
+        onLogined: {
+            detailPlayerInfo.addPlayerInfo(playerInfo["account"], playerInfo["nickname"]
+                                           , playerInfo["score"], playerInfo["winRound"]
+                                           , playerInfo["loseRound"], playerInfo["drawRound"]
+                                           , playerInfo["escapeRound"])
+            detailPlayerInfo.display(playerInfo["account"])
+            selfInfo = playerInfo
+            //detailPlayerInfo.visible = true
+            gameHallBtn.type = FlatGlobal.typePrimary
+        }
+    }
+    RegisterWindow {
+        id: registerWindow
+        visible: false
+        anchors.centerIn: parent
+    }
+    DetailPlayerInfo {
+        width: 130
+        anchors.right: parent.right
         anchors.top: parent.top
-        anchors.left: leftItem.right
-        anchors.topMargin: 105
-        anchors.leftMargin: 5
-        height: parent.height
-        width: 250
-        Rectangle {
-            id: playerInfoRec
-            width: 250
-            height: 180
-            anchors.top: parent.top
+        id: detailPlayerInfo
+        visible: false
+    }
+
+    Item {
+        id: rootRect
+        anchors.fill: parent
+        Column {
             anchors.left: parent.left
-            color: "blue"
-            Text {
-                text: "玩家详细信息"
-                anchors.centerIn: parent.Center
-            }
-        }
-        Rectangle {
-            id: playersRec
-            width: 250
-            height: 180
-            anchors.top: playerInfoRec.bottom
-            anchors.left: playerInfoRec.left
-            anchors.topMargin: 5
-            color: "blue"
-            Text {
-                text: "桌上玩家"
-                anchors.centerIn: parent.Center
-            }
-        }
-        Rectangle {
-            width: 250
-            anchors.top: playersRec.bottom
-            anchors.left: playersRec.left
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
-            anchors.topMargin: 5
-            color: "blue"
-            Text {
-                text: "对话框"
-                anchors.centerIn: parent.Center
+            anchors.leftMargin: 15
+            anchors.rightMargin: 15
+            anchors.bottomMargin: 25
+            spacing: 25
+
+
+            FlatButton {
+                text: "登录"
+                onClicked: {
+                    rootRect.visible = false
+                    loginWindow.visible = true
+                }
+            }
+            FlatButton {
+                text: "注册"
+                onClicked: {
+                    rootRect.visible = false
+                    registerWindow.visible = true
+                }
+            }
+            FlatButton {
+                text: "人机对弈"
+                onClicked: {
+                    rootRect.visible = false
+                    gameWindow.visible = true
+                }
+            }
+            FlatButton {
+                id: gameHallBtn
+                text: "网络对弈"
+                type: FlatGlobal.typeDisabled
+                onClicked: {
+                    rootRect.visible = false
+                    gameHall.visible = true
+                }
             }
         }
-    }
-
-    function getReady() {
-        player1Timer.timerStart()
-        chessboard.inYourTurn = true
-    }
-
-    function gameEnd(winner) {
-        okMessageDialog.title = "本局游戏结束"
-        if(winner === 0) {
-            okMessageDialog.text = "本局游戏" + player1 + "胜出"
-        }
-        else if(winner === 1){
-            okMessageDialog.text = "本局游戏" + player2 + "胜出"
-        }
-        else {
-            okMessageDialog.text = "unkownPlayer" + " 胜出"
-        }
-        okMessageDialog.open()
-        chessboard.reset()
     }
 }
