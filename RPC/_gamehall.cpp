@@ -149,3 +149,28 @@ QJsonObject GameHall::getSeatInfo(int deskID, int seatID) {
     }
     return jo;
 }
+
+QJsonObject GameHall::autoMatch(const QString &account) {
+    int failType = 0;
+    QString errInfo = "";
+    map<string, int> ret;
+    try {
+        transport->open();
+        client->autoMatch(ret, account.toStdString());
+        transport->close();
+    } catch(TTransportException e) {
+        failType = -1;
+        errInfo = e.what();
+    } catch(TApplicationException e) {
+        failType = -2;
+        errInfo = e.what();
+    }
+
+    QJsonObject jo;
+    jo["failType"] = failType;
+    jo["errInfo"] = errInfo;
+    jo["isFound"] = ret["isFound"];
+    jo["deskID"] = ret["deskID"];
+    jo["seatID"] = ret["seatID"];
+    return jo;
+}

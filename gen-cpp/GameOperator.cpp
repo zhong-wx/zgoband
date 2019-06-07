@@ -987,6 +987,22 @@ uint32_t GameOperator_drawReq_args::read(::apache::thrift::protocol::TProtocol* 
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->otherSide);
+          this->__isset.otherSide = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->seatID);
+          this->__isset.seatID = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1008,6 +1024,14 @@ uint32_t GameOperator_drawReq_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeString(this->account);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("otherSide", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->otherSide);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 3);
+  xfer += oprot->writeByte(this->seatID);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1025,6 +1049,14 @@ uint32_t GameOperator_drawReq_pargs::write(::apache::thrift::protocol::TProtocol
 
   xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->account)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("otherSide", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->otherSide)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 3);
+  xfer += oprot->writeByte((*(this->seatID)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1082,6 +1114,414 @@ GameOperator_drawReq_presult::~GameOperator_drawReq_presult() throw() {
 
 
 uint32_t GameOperator_drawReq_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+GameOperator_drawResponse_args::~GameOperator_drawResponse_args() throw() {
+}
+
+
+uint32_t GameOperator_drawResponse_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->player1);
+          this->__isset.player1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->player2);
+          this->__isset.player2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->deskID);
+          this->__isset.deskID = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->seatID);
+          this->__isset.seatID = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->resp);
+          this->__isset.resp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_drawResponse_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_drawResponse_args");
+
+  xfer += oprot->writeFieldBegin("player1", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->player1);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("player2", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->player2);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("deskID", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->deskID);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 4);
+  xfer += oprot->writeByte(this->seatID);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("resp", ::apache::thrift::protocol::T_BOOL, 5);
+  xfer += oprot->writeBool(this->resp);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_drawResponse_pargs::~GameOperator_drawResponse_pargs() throw() {
+}
+
+
+uint32_t GameOperator_drawResponse_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_drawResponse_pargs");
+
+  xfer += oprot->writeFieldBegin("player1", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->player1)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("player2", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->player2)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("deskID", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((*(this->deskID)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 4);
+  xfer += oprot->writeByte((*(this->seatID)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("resp", ::apache::thrift::protocol::T_BOOL, 5);
+  xfer += oprot->writeBool((*(this->resp)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_drawResponse_result::~GameOperator_drawResponse_result() throw() {
+}
+
+
+uint32_t GameOperator_drawResponse_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_drawResponse_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameOperator_drawResponse_result");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_drawResponse_presult::~GameOperator_drawResponse_presult() throw() {
+}
+
+
+uint32_t GameOperator_drawResponse_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+GameOperator_sendChatText_args::~GameOperator_sendChatText_args() throw() {
+}
+
+
+uint32_t GameOperator_sendChatText_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->toAccount);
+          this->__isset.toAccount = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->account);
+          this->__isset.account = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->text);
+          this->__isset.text = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_sendChatText_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_sendChatText_args");
+
+  xfer += oprot->writeFieldBegin("toAccount", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->toAccount);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->account);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("text", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->text);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_sendChatText_pargs::~GameOperator_sendChatText_pargs() throw() {
+}
+
+
+uint32_t GameOperator_sendChatText_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_sendChatText_pargs");
+
+  xfer += oprot->writeFieldBegin("toAccount", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->toAccount)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->account)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("text", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->text)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_sendChatText_result::~GameOperator_sendChatText_result() throw() {
+}
+
+
+uint32_t GameOperator_sendChatText_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_sendChatText_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameOperator_sendChatText_result");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_sendChatText_presult::~GameOperator_sendChatText_presult() throw() {
+}
+
+
+uint32_t GameOperator_sendChatText_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1508,19 +1948,21 @@ void GameOperatorClient::recv_loseReq()
   return;
 }
 
-void GameOperatorClient::drawReq(const std::string& account)
+void GameOperatorClient::drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID)
 {
-  send_drawReq(account);
+  send_drawReq(account, otherSide, seatID);
   recv_drawReq();
 }
 
-void GameOperatorClient::send_drawReq(const std::string& account)
+void GameOperatorClient::send_drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("drawReq", ::apache::thrift::protocol::T_CALL, cseqid);
 
   GameOperator_drawReq_pargs args;
   args.account = &account;
+  args.otherSide = &otherSide;
+  args.seatID = &seatID;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1554,6 +1996,118 @@ void GameOperatorClient::recv_drawReq()
     iprot_->getTransport()->readEnd();
   }
   GameOperator_drawReq_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  return;
+}
+
+void GameOperatorClient::drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp)
+{
+  send_drawResponse(player1, player2, deskID, seatID, resp);
+  recv_drawResponse();
+}
+
+void GameOperatorClient::send_drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("drawResponse", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_drawResponse_pargs args;
+  args.player1 = &player1;
+  args.player2 = &player2;
+  args.deskID = &deskID;
+  args.seatID = &seatID;
+  args.resp = &resp;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void GameOperatorClient::recv_drawResponse()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("drawResponse") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  GameOperator_drawResponse_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  return;
+}
+
+void GameOperatorClient::sendChatText(const std::string& toAccount, const std::string& account, const std::string& text)
+{
+  send_sendChatText(toAccount, account, text);
+  recv_sendChatText();
+}
+
+void GameOperatorClient::send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("sendChatText", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_sendChatText_pargs args;
+  args.toAccount = &toAccount;
+  args.account = &account;
+  args.text = &text;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void GameOperatorClient::recv_sendChatText()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("sendChatText") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  GameOperator_sendChatText_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1874,7 +2428,7 @@ void GameOperatorProcessor::process_drawReq(int32_t seqid, ::apache::thrift::pro
 
   GameOperator_drawReq_result result;
   try {
-    iface_->drawReq(args.account);
+    iface_->drawReq(args.account, args.otherSide, args.seatID);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "GameOperator.drawReq");
@@ -1901,6 +2455,112 @@ void GameOperatorProcessor::process_drawReq(int32_t seqid, ::apache::thrift::pro
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "GameOperator.drawReq", bytes);
+  }
+}
+
+void GameOperatorProcessor::process_drawResponse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameOperator.drawResponse", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.drawResponse");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameOperator.drawResponse");
+  }
+
+  GameOperator_drawResponse_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameOperator.drawResponse", bytes);
+  }
+
+  GameOperator_drawResponse_result result;
+  try {
+    iface_->drawResponse(args.player1, args.player2, args.deskID, args.seatID, args.resp);
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameOperator.drawResponse");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("drawResponse", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameOperator.drawResponse");
+  }
+
+  oprot->writeMessageBegin("drawResponse", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameOperator.drawResponse", bytes);
+  }
+}
+
+void GameOperatorProcessor::process_sendChatText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameOperator.sendChatText", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.sendChatText");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameOperator.sendChatText");
+  }
+
+  GameOperator_sendChatText_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameOperator.sendChatText", bytes);
+  }
+
+  GameOperator_sendChatText_result result;
+  try {
+    iface_->sendChatText(args.toAccount, args.account, args.text);
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameOperator.sendChatText");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("sendChatText", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameOperator.sendChatText");
+  }
+
+  oprot->writeMessageBegin("sendChatText", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameOperator.sendChatText", bytes);
   }
 }
 
@@ -2311,13 +2971,13 @@ void GameOperatorConcurrentClient::recv_loseReq(const int32_t seqid)
   } // end while(true)
 }
 
-void GameOperatorConcurrentClient::drawReq(const std::string& account)
+void GameOperatorConcurrentClient::drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID)
 {
-  int32_t seqid = send_drawReq(account);
+  int32_t seqid = send_drawReq(account, otherSide, seatID);
   recv_drawReq(seqid);
 }
 
-int32_t GameOperatorConcurrentClient::send_drawReq(const std::string& account)
+int32_t GameOperatorConcurrentClient::send_drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2325,6 +2985,8 @@ int32_t GameOperatorConcurrentClient::send_drawReq(const std::string& account)
 
   GameOperator_drawReq_pargs args;
   args.account = &account;
+  args.otherSide = &otherSide;
+  args.seatID = &seatID;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2374,6 +3036,168 @@ void GameOperatorConcurrentClient::recv_drawReq(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       GameOperator_drawReq_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void GameOperatorConcurrentClient::drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp)
+{
+  int32_t seqid = send_drawResponse(player1, player2, deskID, seatID, resp);
+  recv_drawResponse(seqid);
+}
+
+int32_t GameOperatorConcurrentClient::send_drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("drawResponse", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_drawResponse_pargs args;
+  args.player1 = &player1;
+  args.player2 = &player2;
+  args.deskID = &deskID;
+  args.seatID = &seatID;
+  args.resp = &resp;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void GameOperatorConcurrentClient::recv_drawResponse(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("drawResponse") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      GameOperator_drawResponse_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void GameOperatorConcurrentClient::sendChatText(const std::string& toAccount, const std::string& account, const std::string& text)
+{
+  int32_t seqid = send_sendChatText(toAccount, account, text);
+  recv_sendChatText(seqid);
+}
+
+int32_t GameOperatorConcurrentClient::send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("sendChatText", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_sendChatText_pargs args;
+  args.toAccount = &toAccount;
+  args.account = &account;
+  args.text = &text;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void GameOperatorConcurrentClient::recv_sendChatText(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("sendChatText") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      GameOperator_sendChatText_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

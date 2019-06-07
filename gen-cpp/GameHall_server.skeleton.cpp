@@ -40,7 +40,7 @@ class GameHallHandler : virtual public GameHallIf {
     printf("leaveSeat\n");
   }
 
-  int32_t autoMatch(const std::string& account) {
+  void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account) {
     // Your implementation goes here
     printf("autoMatch\n");
   }

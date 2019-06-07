@@ -40,6 +40,17 @@ Window {
             // 收到对方认输消息
             gameWindow.recvLoseReq()
             break
+        case 6:
+            // 收到对方和棋请求
+            gameWindow.recvDrawReq()
+            break
+        case 7:
+            // 收到请求和棋的回复
+            gameWindow.recvDrawRespond(jsonObj["resp"])
+            break;
+        case 8:
+            //收到聊天消息
+            gameWindow.addChatTextMessage(jsonObj["text"])
         }
     }
 

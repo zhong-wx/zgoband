@@ -40,9 +40,19 @@ class GameOperatorHandler : virtual public GameOperatorIf {
     printf("loseReq\n");
   }
 
-  void drawReq(const std::string& account) {
+  void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID) {
     // Your implementation goes here
     printf("drawReq\n");
+  }
+
+  void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp) {
+    // Your implementation goes here
+    printf("drawResponse\n");
+  }
+
+  void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text) {
+    // Your implementation goes here
+    printf("sendChatText\n");
   }
 
   void saveGame(const std::string& account) {

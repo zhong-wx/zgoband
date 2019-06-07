@@ -159,6 +159,11 @@ Rectangle {
         players.addPlayerInfo(playerInfo["nickname"], playerInfo["account"], isReady)
     }
 
+    // 收到对方发送的聊天消息
+    function addChatTextMessage(text) {
+        chatRect.addChatData(other["nickname"], text)
+    }
+
     function recvLoseReq() {
         gameEnd(-1, 5)
     }
@@ -176,6 +181,20 @@ Rectangle {
     // 接受请求悔棋
     function reqestTackBack() {
         takeBackRespDialog.open()
+    }
+
+    function recvDrawReq() {
+        drawRespDialog.open()
+    }
+
+    // 和棋请求回复
+    function recvDrawRespond(resp) {
+        if(resp) {
+            gameEnd(-1, 2)
+        } else {
+            gameWindowMsgDialog.text = "对方拒绝你的和棋请求"
+            gameWindowMsgDialog.visible = true
+        }
     }
 
     // 悔棋操作
@@ -287,6 +306,7 @@ Rectangle {
             playerInfoRec.updatePlayerInfo(1, me["account"])
             playerInfoRec.updatePlayerInfo(-1, other["account"])
             gameHall.updatePlayerInfo(1, me["account"])
+            gameWindowMsgDialog.text = "对方认输，本局游戏你获得胜利"
         }
 
         gameWindowMsgDialog.visible = true
@@ -327,8 +347,8 @@ Rectangle {
         gameHall.visible = true
     }
 
-    function responseTackBack(agree) {
-        var ret = GameOperatorRPC.takeBackResp(player1["account"], player2["account"], root.seatID, agree)
+    function requestTackBack() {
+        var ret = GameOperatorRPC.takeBackReq(me["account"], other["account"], root.seatID)
         if(ret["failType"] !== 0) {
             switch(ret["failType"]) {
             case -1:
@@ -341,6 +361,60 @@ Rectangle {
             gameWindowMsgDialog.visible = true
             return
         }
+        if(ret["result"] === false) {
+            gameWindowMsgDialog.text = "当前不能悔棋"
+            gameWindowMsgDialog.visible = true
+        }
+    }
+
+    function requestDraw() {
+        var ret = GameOperatorRPC.drawReq(me["account"], other["account"], root.seatID)
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameWindowMsgDialog.text = "网络出现异常，请求和棋失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameWindowMsgDialog.text = "服务器出现异常，请求和棋失败，详情："+ret["errInfo"]
+                break
+            }
+            gameWindowMsgDialog.visible = true
+            return
+        }
+    }
+
+    function responseTackBack(agree) {
+        var ret = GameOperatorRPC.takeBackResp(player1["account"], player2["account"], root.seatID, agree)
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameWindowMsgDialog.text = "网络出现异常，悔棋失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameWindowMsgDialog.text = "服务器出现异常，悔棋失败，详情："+ret["errInfo"]
+                break
+            }
+            gameWindowMsgDialog.visible = true
+            return
+        }
+    }
+
+    function responseDraw(agree) {
+        var ret = GameOperatorRPC.drawResponse(player1["account"], player2["account"], root.deskID, root.seatID, agree)
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameWindowMsgDialog.text = "网络出现异常，和棋失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameWindowMsgDialog.text = "服务器出现异常，和棋失败，详情："+ret["errInfo"]
+                break
+            }
+            gameWindowMsgDialog.visible = true
+            return
+        }
+        if(agree)
+            gameEnd(-1, 2)
     }
 
     MessageDialog {
@@ -349,11 +423,26 @@ Rectangle {
     }
     MessageDialog {
         id: takeBackRespDialog
-        title: "悔棋提示"
-        text: "是否同意对方悔棋"
+        title: "请求悔棋提示"
+        text: "对方请求悔棋，是否同意对方悔棋"
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: root.responseTackBack(true)
         onNo: root.responseTackBack(false)
+    }
+    MessageDialog {
+        id: drawRespDialog
+        title: "请求和棋提示"
+        text: "对方请求和棋，是否同意对方和棋"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: root.responseDraw(true)
+        onNo: root.responseDraw(false)
+    }
+    MessageDialog {
+        id: drawReqDialog
+        title: "请求和棋提示"
+        text: "是否请求和棋？"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: root.requestDraw()
     }
 
     MessageDialog {
@@ -362,23 +451,7 @@ Rectangle {
         text: "是否请求悔棋？"
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes: {
-            var ret = GameOperatorRPC.takeBackReq(me["account"], other["account"], root.seatID)
-            if(ret["failType"] !== 0) {
-                switch(ret["failType"]) {
-                case -1:
-                    gameWindowMsgDialog.text = "网络出现异常，请求悔棋失败，详情："+ret["errInfo"]
-                    break
-                case -2:
-                    gameWindowMsgDialog.text = "服务器出现异常，请求悔棋失败，详情："+ret["errInfo"]
-                    break
-                }
-                gameWindowMsgDialog.visible = true
-                return
-            }
-            if(ret["result"] === false) {
-                gameWindowMsgDialog.text = "当前不能悔棋"
-                gameWindowMsgDialog.visible = true
-            }
+            requestTackBack()
         }
     }
 
@@ -547,6 +620,9 @@ Rectangle {
             FlatButton {
                 id: wantDrawBtn
                 text: "和棋"
+                onClicked: {
+                    requestDraw()
+                }
             }
             FlatButton {
                 id: giveUpBtn
@@ -596,6 +672,9 @@ Rectangle {
             }
         }
         ChatRect {
+            id: chatRect
+            me: me["nickname"]
+            opponent: other["nickname"]
             width: 250
             height: root.height - 480
             anchors.top: players.bottom
@@ -605,6 +684,4 @@ Rectangle {
             globalY: root.y
         }
     }
-
-
 }

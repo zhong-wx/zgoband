@@ -102,3 +102,66 @@ QJsonObject GameOperator::reqLose(const QString &player1, const QString &player2
     jo["errInfo"] = errInfo;
     return jo;
 }
+
+QJsonObject GameOperator::drawReq(const QString &me, const QString &otherSide, int seatID) {
+    int failType = 0;
+    QString errInfo = "";
+    try {
+        transport->open();
+        client->drawReq(me.toStdString(), otherSide.toStdString(), int8_t(seatID));
+        transport->close();
+    } catch(TTransportException e) {
+        failType = -1;
+        errInfo = e.what();
+    } catch(TApplicationException e ) {
+        failType = -2;
+        errInfo = e.what();
+    }
+
+    QJsonObject jo;
+    jo["failType"] = failType;
+    jo["errInfo"] = errInfo;
+    return jo;
+}
+
+QJsonObject GameOperator::drawResponse(const QString &player1, const QString &player2, int deskID, int seatID, bool resp) {
+    int failType = 0;
+    QString errInfo = "";
+    try {
+        transport->open();
+        client->drawResponse(player1.toStdString(), player2.toStdString(), deskID, int8_t(seatID), resp);
+        transport->close();
+    } catch(TTransportException e) {
+        failType = -1;
+        errInfo = e.what();
+    } catch(TApplicationException e ) {
+        failType = -2;
+        errInfo = e.what();
+    }
+
+    QJsonObject jo;
+    jo["failType"] = failType;
+    jo["errInfo"] = errInfo;
+    return jo;
+}
+
+QJsonObject GameOperator::sendChatText(const QString &toAccount, const QString &account, const QString &text) {
+    int failType = 0;
+    QString errInfo = "";
+    try {
+        transport->open();
+        client->sendChatText(toAccount.toStdString(), account.toStdString(), text.toStdString());
+        transport->close();
+    } catch(TTransportException e) {
+        failType = -1;
+        errInfo = e.what();
+    } catch(TApplicationException e ) {
+        failType = -2;
+        errInfo = e.what();
+    }
+
+    QJsonObject jo;
+    jo["failType"] = failType;
+    jo["errInfo"] = errInfo;
+    return jo;
+}

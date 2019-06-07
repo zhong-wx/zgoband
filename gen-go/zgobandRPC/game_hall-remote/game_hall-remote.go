@@ -26,7 +26,7 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "  PlayerInfo getSeatInfo(i32 deskID, i32 seatID)")
   fmt.Fprintln(os.Stderr, "  void setReady(string account, i32 deskID, i32 seatID, bool isReady)")
   fmt.Fprintln(os.Stderr, "  i32 leaveSeat(string account, i32 deskID, i32 seatID)")
-  fmt.Fprintln(os.Stderr, "  i32 autoMatch(string account)")
+  fmt.Fprintln(os.Stderr, "   autoMatch(string account)")
   fmt.Fprintln(os.Stderr, "  string getSavedGame(string account, string savedGameName)")
   fmt.Fprintln(os.Stderr, "   getSavedGameList(string account)")
   fmt.Fprintln(os.Stderr, "   getDeskList()")
@@ -158,15 +158,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err32 := (strconv.Atoi(flag.Arg(2)))
-    if err32 != nil {
+    tmp1, err34 := (strconv.Atoi(flag.Arg(2)))
+    if err34 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err33 := (strconv.Atoi(flag.Arg(3)))
-    if err33 != nil {
+    tmp2, err35 := (strconv.Atoi(flag.Arg(3)))
+    if err35 != nil {
       Usage()
       return
     }
@@ -180,15 +180,15 @@ func main() {
       fmt.Fprintln(os.Stderr, "GetSeatInfo requires 2 args")
       flag.Usage()
     }
-    tmp0, err34 := (strconv.Atoi(flag.Arg(1)))
-    if err34 != nil {
+    tmp0, err36 := (strconv.Atoi(flag.Arg(1)))
+    if err36 != nil {
       Usage()
       return
     }
     argvalue0 := int32(tmp0)
     value0 := argvalue0
-    tmp1, err35 := (strconv.Atoi(flag.Arg(2)))
-    if err35 != nil {
+    tmp1, err37 := (strconv.Atoi(flag.Arg(2)))
+    if err37 != nil {
       Usage()
       return
     }
@@ -204,15 +204,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err37 := (strconv.Atoi(flag.Arg(2)))
-    if err37 != nil {
+    tmp1, err39 := (strconv.Atoi(flag.Arg(2)))
+    if err39 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err38 := (strconv.Atoi(flag.Arg(3)))
-    if err38 != nil {
+    tmp2, err40 := (strconv.Atoi(flag.Arg(3)))
+    if err40 != nil {
       Usage()
       return
     }
@@ -230,15 +230,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err41 := (strconv.Atoi(flag.Arg(2)))
-    if err41 != nil {
+    tmp1, err43 := (strconv.Atoi(flag.Arg(2)))
+    if err43 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err42 := (strconv.Atoi(flag.Arg(3)))
-    if err42 != nil {
+    tmp2, err44 := (strconv.Atoi(flag.Arg(3)))
+    if err44 != nil {
       Usage()
       return
     }

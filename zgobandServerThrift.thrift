@@ -30,7 +30,7 @@ service GameHall {
     PlayerInfo getSeatInfo(2:i32 deskID, 3:i32 seatID),
     void setReady(1:string account, 2:i32 deskID, 3:i32 seatID, 4:bool isReady),
     i32 leaveSeat(1:string account, 2:i32 deskID, 3:i32 seatID),
-    i32 autoMatch(1:string account),
+    map<string, i32> autoMatch(1:string account),
     string getSavedGame(1:string account, 2:string savedGameName),
     list<string> getSavedGameList(1:string account),
     list<Desk> getDeskList()
@@ -46,6 +46,8 @@ service GameOperator {
     bool takeBackReq(1:string account, 2:string otherSide, 3:i8 seatID),
     bool takeBackRespond(1:string player1, 2:string player2, 3:i8 seatID, 4:bool resp),
     void loseReq(1:string player1, 2:string player2, 3:i32 deskID, 4:i8 seatID),
-    void drawReq(1:string account),
+    void drawReq(1:string account, 2:string otherSide, 3:i8 seatID),
+    void drawResponse(1:string player1, 2:string player2, 3:i32 deskID, 4:i8 seatID, 5:bool resp),
+    void sendChatText(1:string toAccount, 2:string account, 3:string text),
     void saveGame(1:string account)
 }

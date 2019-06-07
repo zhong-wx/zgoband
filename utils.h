@@ -1,11 +1,13 @@
 #ifndef UTILS_H
 #define UTILS_H
+#include <QByteArray>
 
-
-class utils
+enum Endian
 {
-public:
-    utils();
+    LittileEndian,
+    BigEndian
 };
+
+int byteAraryToInt(QByteArray arr,  Endian endian = BigEndian);
 
 #endif // UTILS_H

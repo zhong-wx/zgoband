@@ -26,7 +26,9 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "  bool takeBackReq(string account, string otherSide, i8 seatID)")
   fmt.Fprintln(os.Stderr, "  bool takeBackRespond(string player1, string player2, i8 seatID, bool resp)")
   fmt.Fprintln(os.Stderr, "  void loseReq(string player1, string player2, i32 deskID, i8 seatID)")
-  fmt.Fprintln(os.Stderr, "  void drawReq(string account)")
+  fmt.Fprintln(os.Stderr, "  void drawReq(string account, string otherSide, i8 seatID)")
+  fmt.Fprintln(os.Stderr, "  void drawResponse(string player1, string player2, i32 deskID, i8 seatID, bool resp)")
+  fmt.Fprintln(os.Stderr, "  void sendChatText(string toAccount, string account, string text)")
   fmt.Fprintln(os.Stderr, "  void saveGame(string account)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
@@ -158,29 +160,29 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err63 := (strconv.Atoi(flag.Arg(3)))
-    if err63 != nil {
+    tmp2, err69 := (strconv.Atoi(flag.Arg(3)))
+    if err69 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err64 := (strconv.Atoi(flag.Arg(4)))
-    if err64 != nil {
+    tmp3, err70 := (strconv.Atoi(flag.Arg(4)))
+    if err70 != nil {
       Usage()
       return
     }
     argvalue3 := int8(tmp3)
     value3 := argvalue3
-    tmp4, err65 := (strconv.Atoi(flag.Arg(5)))
-    if err65 != nil {
+    tmp4, err71 := (strconv.Atoi(flag.Arg(5)))
+    if err71 != nil {
       Usage()
       return
     }
     argvalue4 := int8(tmp4)
     value4 := argvalue4
-    tmp5, err66 := (strconv.Atoi(flag.Arg(6)))
-    if err66 != nil {
+    tmp5, err72 := (strconv.Atoi(flag.Arg(6)))
+    if err72 != nil {
       Usage()
       return
     }
@@ -198,8 +200,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err69 := (strconv.Atoi(flag.Arg(3)))
-    if err69 != nil {
+    tmp2, err75 := (strconv.Atoi(flag.Arg(3)))
+    if err75 != nil {
       Usage()
       return
     }
@@ -217,8 +219,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err72 := (strconv.Atoi(flag.Arg(3)))
-    if err72 != nil {
+    tmp2, err78 := (strconv.Atoi(flag.Arg(3)))
+    if err78 != nil {
       Usage()
       return
     }
@@ -238,15 +240,15 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err76 := (strconv.Atoi(flag.Arg(3)))
-    if err76 != nil {
+    tmp2, err82 := (strconv.Atoi(flag.Arg(3)))
+    if err82 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err77 := (strconv.Atoi(flag.Arg(4)))
-    if err77 != nil {
+    tmp3, err83 := (strconv.Atoi(flag.Arg(4)))
+    if err83 != nil {
       Usage()
       return
     }
@@ -256,13 +258,64 @@ func main() {
     fmt.Print("\n")
     break
   case "drawReq":
-    if flag.NArg() - 1 != 1 {
-      fmt.Fprintln(os.Stderr, "DrawReq requires 1 args")
+    if flag.NArg() - 1 != 3 {
+      fmt.Fprintln(os.Stderr, "DrawReq requires 3 args")
       flag.Usage()
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    fmt.Print(client.DrawReq(context.Background(), value0))
+    argvalue1 := flag.Arg(2)
+    value1 := argvalue1
+    tmp2, err86 := (strconv.Atoi(flag.Arg(3)))
+    if err86 != nil {
+      Usage()
+      return
+    }
+    argvalue2 := int8(tmp2)
+    value2 := argvalue2
+    fmt.Print(client.DrawReq(context.Background(), value0, value1, value2))
+    fmt.Print("\n")
+    break
+  case "drawResponse":
+    if flag.NArg() - 1 != 5 {
+      fmt.Fprintln(os.Stderr, "DrawResponse requires 5 args")
+      flag.Usage()
+    }
+    argvalue0 := flag.Arg(1)
+    value0 := argvalue0
+    argvalue1 := flag.Arg(2)
+    value1 := argvalue1
+    tmp2, err89 := (strconv.Atoi(flag.Arg(3)))
+    if err89 != nil {
+      Usage()
+      return
+    }
+    argvalue2 := int32(tmp2)
+    value2 := argvalue2
+    tmp3, err90 := (strconv.Atoi(flag.Arg(4)))
+    if err90 != nil {
+      Usage()
+      return
+    }
+    argvalue3 := int8(tmp3)
+    value3 := argvalue3
+    argvalue4 := flag.Arg(5) == "true"
+    value4 := argvalue4
+    fmt.Print(client.DrawResponse(context.Background(), value0, value1, value2, value3, value4))
+    fmt.Print("\n")
+    break
+  case "sendChatText":
+    if flag.NArg() - 1 != 3 {
+      fmt.Fprintln(os.Stderr, "SendChatText requires 3 args")
+      flag.Usage()
+    }
+    argvalue0 := flag.Arg(1)
+    value0 := argvalue0
+    argvalue1 := flag.Arg(2)
+    value1 := argvalue1
+    argvalue2 := flag.Arg(3)
+    value2 := argvalue2
+    fmt.Print(client.SendChatText(context.Background(), value0, value1, value2))
     fmt.Print("\n")
     break
   case "saveGame":

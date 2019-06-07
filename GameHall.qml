@@ -122,6 +122,28 @@ Item {
         }
     }
 
+    function autoMatch() {
+        var ret = GameHallRPC.autoMatch(rootWindow.selfInfo["account"])
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameHallMsgDialog.text = "网络出现异常，自动匹配失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameHallMsgDialog.text = "服务器出现异常，自动匹配失败，详情："+ret["errInfo"]
+                break
+            }
+            gameHallMsgDialog.visible = true
+            return
+        }
+        if(!ret["isFound"]) {
+            gameHallMsgDialog.text = "自动匹配失败，请稍后再试"
+            gameHallMsgDialog.visible = true
+            return
+        }
+        gotoGameWindow(ret["deskID"], ret["seatID"])
+    }
+
     MessageDialog {
         id: gameHallMsgDialog
         title: "大厅提示"
@@ -254,6 +276,9 @@ Item {
             FlatButton {
                 id: autoMatchBtn
                 text: "自动匹配"
+                onClicked: {
+                    autoMatch()
+                }
             }
             FlatButton {
                 id: backtoHall

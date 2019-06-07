@@ -959,8 +959,23 @@ uint32_t GameHall_autoMatch_result::read(::apache::thrift::protocol::TProtocol* 
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->success.clear();
+            uint32_t _size6;
+            ::apache::thrift::protocol::TType _ktype7;
+            ::apache::thrift::protocol::TType _vtype8;
+            xfer += iprot->readMapBegin(_ktype7, _vtype8, _size6);
+            uint32_t _i10;
+            for (_i10 = 0; _i10 < _size6; ++_i10)
+            {
+              std::string _key11;
+              xfer += iprot->readString(_key11);
+              int32_t& _val12 = this->success[_key11];
+              xfer += iprot->readI32(_val12);
+            }
+            xfer += iprot->readMapEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -985,8 +1000,17 @@ uint32_t GameHall_autoMatch_result::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeStructBegin("GameHall_autoMatch_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
+    {
+      xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->success.size()));
+      std::map<std::string, int32_t> ::const_iterator _iter13;
+      for (_iter13 = this->success.begin(); _iter13 != this->success.end(); ++_iter13)
+      {
+        xfer += oprot->writeString(_iter13->first);
+        xfer += oprot->writeI32(_iter13->second);
+      }
+      xfer += oprot->writeMapEnd();
+    }
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -1021,8 +1045,23 @@ uint32_t GameHall_autoMatch_presult::read(::apache::thrift::protocol::TProtocol*
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size14;
+            ::apache::thrift::protocol::TType _ktype15;
+            ::apache::thrift::protocol::TType _vtype16;
+            xfer += iprot->readMapBegin(_ktype15, _vtype16, _size14);
+            uint32_t _i18;
+            for (_i18 = 0; _i18 < _size14; ++_i18)
+            {
+              std::string _key19;
+              xfer += iprot->readString(_key19);
+              int32_t& _val20 = (*(this->success))[_key19];
+              xfer += iprot->readI32(_val20);
+            }
+            xfer += iprot->readMapEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1352,14 +1391,14 @@ uint32_t GameHall_getSavedGameList_result::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size6;
-            ::apache::thrift::protocol::TType _etype9;
-            xfer += iprot->readListBegin(_etype9, _size6);
-            this->success.resize(_size6);
-            uint32_t _i10;
-            for (_i10 = 0; _i10 < _size6; ++_i10)
+            uint32_t _size21;
+            ::apache::thrift::protocol::TType _etype24;
+            xfer += iprot->readListBegin(_etype24, _size21);
+            this->success.resize(_size21);
+            uint32_t _i25;
+            for (_i25 = 0; _i25 < _size21; ++_i25)
             {
-              xfer += iprot->readString(this->success[_i10]);
+              xfer += iprot->readString(this->success[_i25]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1390,10 +1429,10 @@ uint32_t GameHall_getSavedGameList_result::write(::apache::thrift::protocol::TPr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter11;
-      for (_iter11 = this->success.begin(); _iter11 != this->success.end(); ++_iter11)
+      std::vector<std::string> ::const_iterator _iter26;
+      for (_iter26 = this->success.begin(); _iter26 != this->success.end(); ++_iter26)
       {
-        xfer += oprot->writeString((*_iter11));
+        xfer += oprot->writeString((*_iter26));
       }
       xfer += oprot->writeListEnd();
     }
@@ -1434,14 +1473,14 @@ uint32_t GameHall_getSavedGameList_presult::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size12;
-            ::apache::thrift::protocol::TType _etype15;
-            xfer += iprot->readListBegin(_etype15, _size12);
-            (*(this->success)).resize(_size12);
-            uint32_t _i16;
-            for (_i16 = 0; _i16 < _size12; ++_i16)
+            uint32_t _size27;
+            ::apache::thrift::protocol::TType _etype30;
+            xfer += iprot->readListBegin(_etype30, _size27);
+            (*(this->success)).resize(_size27);
+            uint32_t _i31;
+            for (_i31 = 0; _i31 < _size27; ++_i31)
             {
-              xfer += iprot->readString((*(this->success))[_i16]);
+              xfer += iprot->readString((*(this->success))[_i31]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1550,14 +1589,14 @@ uint32_t GameHall_getDeskList_result::read(::apache::thrift::protocol::TProtocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size17;
-            ::apache::thrift::protocol::TType _etype20;
-            xfer += iprot->readListBegin(_etype20, _size17);
-            this->success.resize(_size17);
-            uint32_t _i21;
-            for (_i21 = 0; _i21 < _size17; ++_i21)
+            uint32_t _size32;
+            ::apache::thrift::protocol::TType _etype35;
+            xfer += iprot->readListBegin(_etype35, _size32);
+            this->success.resize(_size32);
+            uint32_t _i36;
+            for (_i36 = 0; _i36 < _size32; ++_i36)
             {
-              xfer += this->success[_i21].read(iprot);
+              xfer += this->success[_i36].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1588,10 +1627,10 @@ uint32_t GameHall_getDeskList_result::write(::apache::thrift::protocol::TProtoco
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<Desk> ::const_iterator _iter22;
-      for (_iter22 = this->success.begin(); _iter22 != this->success.end(); ++_iter22)
+      std::vector<Desk> ::const_iterator _iter37;
+      for (_iter37 = this->success.begin(); _iter37 != this->success.end(); ++_iter37)
       {
-        xfer += (*_iter22).write(oprot);
+        xfer += (*_iter37).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1632,14 +1671,14 @@ uint32_t GameHall_getDeskList_presult::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size23;
-            ::apache::thrift::protocol::TType _etype26;
-            xfer += iprot->readListBegin(_etype26, _size23);
-            (*(this->success)).resize(_size23);
-            uint32_t _i27;
-            for (_i27 = 0; _i27 < _size23; ++_i27)
+            uint32_t _size38;
+            ::apache::thrift::protocol::TType _etype41;
+            xfer += iprot->readListBegin(_etype41, _size38);
+            (*(this->success)).resize(_size38);
+            uint32_t _i42;
+            for (_i42 = 0; _i42 < _size38; ++_i42)
             {
-              xfer += (*(this->success))[_i27].read(iprot);
+              xfer += (*(this->success))[_i42].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1895,10 +1934,10 @@ int32_t GameHallClient::recv_leaveSeat()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "leaveSeat failed: unknown result");
 }
 
-int32_t GameHallClient::autoMatch(const std::string& account)
+void GameHallClient::autoMatch(std::map<std::string, int32_t> & _return, const std::string& account)
 {
   send_autoMatch(account);
-  return recv_autoMatch();
+  recv_autoMatch(_return);
 }
 
 void GameHallClient::send_autoMatch(const std::string& account)
@@ -1915,7 +1954,7 @@ void GameHallClient::send_autoMatch(const std::string& account)
   oprot_->getTransport()->flush();
 }
 
-int32_t GameHallClient::recv_autoMatch()
+void GameHallClient::recv_autoMatch(std::map<std::string, int32_t> & _return)
 {
 
   int32_t rseqid = 0;
@@ -1940,7 +1979,6 @@ int32_t GameHallClient::recv_autoMatch()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
   GameHall_autoMatch_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -1948,7 +1986,8 @@ int32_t GameHallClient::recv_autoMatch()
   iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "autoMatch failed: unknown result");
 }
@@ -2384,7 +2423,7 @@ void GameHallProcessor::process_autoMatch(int32_t seqid, ::apache::thrift::proto
 
   GameHall_autoMatch_result result;
   try {
-    result.success = iface_->autoMatch(args.account);
+    iface_->autoMatch(result.success, args.account);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -2922,10 +2961,10 @@ int32_t GameHallConcurrentClient::recv_leaveSeat(const int32_t seqid)
   } // end while(true)
 }
 
-int32_t GameHallConcurrentClient::autoMatch(const std::string& account)
+void GameHallConcurrentClient::autoMatch(std::map<std::string, int32_t> & _return, const std::string& account)
 {
   int32_t seqid = send_autoMatch(account);
-  return recv_autoMatch(seqid);
+  recv_autoMatch(_return, seqid);
 }
 
 int32_t GameHallConcurrentClient::send_autoMatch(const std::string& account)
@@ -2946,7 +2985,7 @@ int32_t GameHallConcurrentClient::send_autoMatch(const std::string& account)
   return cseqid;
 }
 
-int32_t GameHallConcurrentClient::recv_autoMatch(const int32_t seqid)
+void GameHallConcurrentClient::recv_autoMatch(std::map<std::string, int32_t> & _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2984,7 +3023,6 @@ int32_t GameHallConcurrentClient::recv_autoMatch(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      int32_t _return;
       GameHall_autoMatch_presult result;
       result.success = &_return;
       result.read(iprot_);
@@ -2992,8 +3030,9 @@ int32_t GameHallConcurrentClient::recv_autoMatch(const int32_t seqid)
       iprot_->getTransport()->readEnd();
 
       if (result.__isset.success) {
+        // _return pointer has now been filled
         sentry.commit();
-        return _return;
+        return;
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "autoMatch failed: unknown result");

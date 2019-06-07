@@ -20,13 +20,29 @@ Rectangle {
             listView.positionViewAtEnd()
         }
     }
-    Component.onCompleted: {
-        addChatData("abc", "test1")
-        addChatData("hcx", "test2")
+
+    function sendText(text) {
+        var ret = GameOperatorRPC.sendChatText(root.other["account"], me, text)
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameWindowMsgDialog.text = "网络出现异常，发送聊天信息失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameWindowMsgDialog.text = "服务器出现异常，发送聊天信息失败，详情："+ret["errInfo"]
+                break
+            }
+            gameWindowMsgDialog.visible = true
+            return
+        }
     }
 
     ListModel {
         id: chatData
+        ListElement{
+            name: ""
+            txt: ""
+        }
     }
     Rectangle {
         border.width: 1
@@ -126,11 +142,16 @@ Rectangle {
             var regex = new RegExp("<p.*>.*</p>")
             var p = regex.exec(html)
             var regex1 = new RegExp("</?p.*?>", "g")
+            if(p === null)
+                return html
             var text = p[0].replace(regex1, "")
             return text
         }
         function addTextEditText() {
+            console.log(textEdit.text)
             addChatData(me, getPLableContent(textEdit.text))
+            console.log(getPLableContent(textEdit.text))
+            sendText(getPLableContent(textEdit.text))
             textEdit.text = ""
         }
     }

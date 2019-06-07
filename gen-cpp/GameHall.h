@@ -25,7 +25,7 @@ class GameHallIf {
   virtual void getSeatInfo(PlayerInfo& _return, const int32_t deskID, const int32_t seatID) = 0;
   virtual void setReady(const std::string& account, const int32_t deskID, const int32_t seatID, const bool isReady) = 0;
   virtual int32_t leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID) = 0;
-  virtual int32_t autoMatch(const std::string& account) = 0;
+  virtual void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account) = 0;
   virtual void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName) = 0;
   virtual void getSavedGameList(std::vector<std::string> & _return, const std::string& account) = 0;
   virtual void getDeskList(std::vector<Desk> & _return) = 0;
@@ -72,9 +72,8 @@ class GameHallNull : virtual public GameHallIf {
     int32_t _return = 0;
     return _return;
   }
-  int32_t autoMatch(const std::string& /* account */) {
-    int32_t _return = 0;
-    return _return;
+  void autoMatch(std::map<std::string, int32_t> & /* _return */, const std::string& /* account */) {
+    return;
   }
   void getSavedGame(std::string& /* _return */, const std::string& /* account */, const std::string& /* savedGameName */) {
     return;
@@ -600,15 +599,15 @@ class GameHall_autoMatch_result {
 
   GameHall_autoMatch_result(const GameHall_autoMatch_result&);
   GameHall_autoMatch_result& operator=(const GameHall_autoMatch_result&);
-  GameHall_autoMatch_result() : success(0) {
+  GameHall_autoMatch_result() {
   }
 
   virtual ~GameHall_autoMatch_result() throw();
-  int32_t success;
+  std::map<std::string, int32_t>  success;
 
   _GameHall_autoMatch_result__isset __isset;
 
-  void __set_success(const int32_t val);
+  void __set_success(const std::map<std::string, int32_t> & val);
 
   bool operator == (const GameHall_autoMatch_result & rhs) const
   {
@@ -637,7 +636,7 @@ class GameHall_autoMatch_presult {
 
 
   virtual ~GameHall_autoMatch_presult() throw();
-  int32_t* success;
+  std::map<std::string, int32_t> * success;
 
   _GameHall_autoMatch_presult__isset __isset;
 
@@ -989,9 +988,9 @@ class GameHallClient : virtual public GameHallIf {
   int32_t leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID);
   void send_leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID);
   int32_t recv_leaveSeat();
-  int32_t autoMatch(const std::string& account);
+  void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   void send_autoMatch(const std::string& account);
-  int32_t recv_autoMatch();
+  void recv_autoMatch(std::map<std::string, int32_t> & _return);
   void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName);
   void send_getSavedGame(const std::string& account, const std::string& savedGameName);
   void recv_getSavedGame(std::string& _return);
@@ -1100,13 +1099,14 @@ class GameHallMultiface : virtual public GameHallIf {
     return ifaces_[i]->leaveSeat(account, deskID, seatID);
   }
 
-  int32_t autoMatch(const std::string& account) {
+  void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->autoMatch(account);
+      ifaces_[i]->autoMatch(_return, account);
     }
-    return ifaces_[i]->autoMatch(account);
+    ifaces_[i]->autoMatch(_return, account);
+    return;
   }
 
   void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName) {
@@ -1181,9 +1181,9 @@ class GameHallConcurrentClient : virtual public GameHallIf {
   int32_t leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID);
   int32_t send_leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID);
   int32_t recv_leaveSeat(const int32_t seqid);
-  int32_t autoMatch(const std::string& account);
+  void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   int32_t send_autoMatch(const std::string& account);
-  int32_t recv_autoMatch(const int32_t seqid);
+  void recv_autoMatch(std::map<std::string, int32_t> & _return, const int32_t seqid);
   void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName);
   int32_t send_getSavedGame(const std::string& account, const std::string& savedGameName);
   void recv_getSavedGame(std::string& _return, const int32_t seqid);

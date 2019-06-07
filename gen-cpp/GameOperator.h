@@ -25,7 +25,9 @@ class GameOperatorIf {
   virtual bool takeBackReq(const std::string& account, const std::string& otherSide, const int8_t seatID) = 0;
   virtual bool takeBackRespond(const std::string& player1, const std::string& player2, const int8_t seatID, const bool resp) = 0;
   virtual void loseReq(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID) = 0;
-  virtual void drawReq(const std::string& account) = 0;
+  virtual void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID) = 0;
+  virtual void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp) = 0;
+  virtual void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text) = 0;
   virtual void saveGame(const std::string& account) = 0;
 };
 
@@ -71,7 +73,13 @@ class GameOperatorNull : virtual public GameOperatorIf {
   void loseReq(const std::string& /* player1 */, const std::string& /* player2 */, const int32_t /* deskID */, const int8_t /* seatID */) {
     return;
   }
-  void drawReq(const std::string& /* account */) {
+  void drawReq(const std::string& /* account */, const std::string& /* otherSide */, const int8_t /* seatID */) {
+    return;
+  }
+  void drawResponse(const std::string& /* player1 */, const std::string& /* player2 */, const int32_t /* deskID */, const int8_t /* seatID */, const bool /* resp */) {
+    return;
+  }
+  void sendChatText(const std::string& /* toAccount */, const std::string& /* account */, const std::string& /* text */) {
     return;
   }
   void saveGame(const std::string& /* account */) {
@@ -577,8 +585,10 @@ class GameOperator_loseReq_presult {
 };
 
 typedef struct _GameOperator_drawReq_args__isset {
-  _GameOperator_drawReq_args__isset() : account(false) {}
+  _GameOperator_drawReq_args__isset() : account(false), otherSide(false), seatID(false) {}
   bool account :1;
+  bool otherSide :1;
+  bool seatID :1;
 } _GameOperator_drawReq_args__isset;
 
 class GameOperator_drawReq_args {
@@ -586,19 +596,29 @@ class GameOperator_drawReq_args {
 
   GameOperator_drawReq_args(const GameOperator_drawReq_args&);
   GameOperator_drawReq_args& operator=(const GameOperator_drawReq_args&);
-  GameOperator_drawReq_args() : account() {
+  GameOperator_drawReq_args() : account(), otherSide(), seatID(0) {
   }
 
   virtual ~GameOperator_drawReq_args() throw();
   std::string account;
+  std::string otherSide;
+  int8_t seatID;
 
   _GameOperator_drawReq_args__isset __isset;
 
   void __set_account(const std::string& val);
 
+  void __set_otherSide(const std::string& val);
+
+  void __set_seatID(const int8_t val);
+
   bool operator == (const GameOperator_drawReq_args & rhs) const
   {
     if (!(account == rhs.account))
+      return false;
+    if (!(otherSide == rhs.otherSide))
+      return false;
+    if (!(seatID == rhs.seatID))
       return false;
     return true;
   }
@@ -620,6 +640,8 @@ class GameOperator_drawReq_pargs {
 
   virtual ~GameOperator_drawReq_pargs() throw();
   const std::string* account;
+  const std::string* otherSide;
+  const int8_t* seatID;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -657,6 +679,220 @@ class GameOperator_drawReq_presult {
 
 
   virtual ~GameOperator_drawReq_presult() throw();
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _GameOperator_drawResponse_args__isset {
+  _GameOperator_drawResponse_args__isset() : player1(false), player2(false), deskID(false), seatID(false), resp(false) {}
+  bool player1 :1;
+  bool player2 :1;
+  bool deskID :1;
+  bool seatID :1;
+  bool resp :1;
+} _GameOperator_drawResponse_args__isset;
+
+class GameOperator_drawResponse_args {
+ public:
+
+  GameOperator_drawResponse_args(const GameOperator_drawResponse_args&);
+  GameOperator_drawResponse_args& operator=(const GameOperator_drawResponse_args&);
+  GameOperator_drawResponse_args() : player1(), player2(), deskID(0), seatID(0), resp(0) {
+  }
+
+  virtual ~GameOperator_drawResponse_args() throw();
+  std::string player1;
+  std::string player2;
+  int32_t deskID;
+  int8_t seatID;
+  bool resp;
+
+  _GameOperator_drawResponse_args__isset __isset;
+
+  void __set_player1(const std::string& val);
+
+  void __set_player2(const std::string& val);
+
+  void __set_deskID(const int32_t val);
+
+  void __set_seatID(const int8_t val);
+
+  void __set_resp(const bool val);
+
+  bool operator == (const GameOperator_drawResponse_args & rhs) const
+  {
+    if (!(player1 == rhs.player1))
+      return false;
+    if (!(player2 == rhs.player2))
+      return false;
+    if (!(deskID == rhs.deskID))
+      return false;
+    if (!(seatID == rhs.seatID))
+      return false;
+    if (!(resp == rhs.resp))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_drawResponse_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_drawResponse_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_drawResponse_pargs {
+ public:
+
+
+  virtual ~GameOperator_drawResponse_pargs() throw();
+  const std::string* player1;
+  const std::string* player2;
+  const int32_t* deskID;
+  const int8_t* seatID;
+  const bool* resp;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_drawResponse_result {
+ public:
+
+  GameOperator_drawResponse_result(const GameOperator_drawResponse_result&);
+  GameOperator_drawResponse_result& operator=(const GameOperator_drawResponse_result&);
+  GameOperator_drawResponse_result() {
+  }
+
+  virtual ~GameOperator_drawResponse_result() throw();
+
+  bool operator == (const GameOperator_drawResponse_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const GameOperator_drawResponse_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_drawResponse_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_drawResponse_presult {
+ public:
+
+
+  virtual ~GameOperator_drawResponse_presult() throw();
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _GameOperator_sendChatText_args__isset {
+  _GameOperator_sendChatText_args__isset() : toAccount(false), account(false), text(false) {}
+  bool toAccount :1;
+  bool account :1;
+  bool text :1;
+} _GameOperator_sendChatText_args__isset;
+
+class GameOperator_sendChatText_args {
+ public:
+
+  GameOperator_sendChatText_args(const GameOperator_sendChatText_args&);
+  GameOperator_sendChatText_args& operator=(const GameOperator_sendChatText_args&);
+  GameOperator_sendChatText_args() : toAccount(), account(), text() {
+  }
+
+  virtual ~GameOperator_sendChatText_args() throw();
+  std::string toAccount;
+  std::string account;
+  std::string text;
+
+  _GameOperator_sendChatText_args__isset __isset;
+
+  void __set_toAccount(const std::string& val);
+
+  void __set_account(const std::string& val);
+
+  void __set_text(const std::string& val);
+
+  bool operator == (const GameOperator_sendChatText_args & rhs) const
+  {
+    if (!(toAccount == rhs.toAccount))
+      return false;
+    if (!(account == rhs.account))
+      return false;
+    if (!(text == rhs.text))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_sendChatText_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_sendChatText_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_sendChatText_pargs {
+ public:
+
+
+  virtual ~GameOperator_sendChatText_pargs() throw();
+  const std::string* toAccount;
+  const std::string* account;
+  const std::string* text;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_sendChatText_result {
+ public:
+
+  GameOperator_sendChatText_result(const GameOperator_sendChatText_result&);
+  GameOperator_sendChatText_result& operator=(const GameOperator_sendChatText_result&);
+  GameOperator_sendChatText_result() {
+  }
+
+  virtual ~GameOperator_sendChatText_result() throw();
+
+  bool operator == (const GameOperator_sendChatText_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const GameOperator_sendChatText_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_sendChatText_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_sendChatText_presult {
+ public:
+
+
+  virtual ~GameOperator_sendChatText_presult() throw();
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -785,9 +1021,15 @@ class GameOperatorClient : virtual public GameOperatorIf {
   void loseReq(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID);
   void send_loseReq(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID);
   void recv_loseReq();
-  void drawReq(const std::string& account);
-  void send_drawReq(const std::string& account);
+  void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID);
+  void send_drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID);
   void recv_drawReq();
+  void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp);
+  void send_drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp);
+  void recv_drawResponse();
+  void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
+  void send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
+  void recv_sendChatText();
   void saveGame(const std::string& account);
   void send_saveGame(const std::string& account);
   void recv_saveGame();
@@ -811,6 +1053,8 @@ class GameOperatorProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_takeBackRespond(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loseReq(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_drawReq(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_drawResponse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sendChatText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   GameOperatorProcessor(::apache::thrift::stdcxx::shared_ptr<GameOperatorIf> iface) :
@@ -820,6 +1064,8 @@ class GameOperatorProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["takeBackRespond"] = &GameOperatorProcessor::process_takeBackRespond;
     processMap_["loseReq"] = &GameOperatorProcessor::process_loseReq;
     processMap_["drawReq"] = &GameOperatorProcessor::process_drawReq;
+    processMap_["drawResponse"] = &GameOperatorProcessor::process_drawResponse;
+    processMap_["sendChatText"] = &GameOperatorProcessor::process_sendChatText;
     processMap_["saveGame"] = &GameOperatorProcessor::process_saveGame;
   }
 
@@ -885,13 +1131,31 @@ class GameOperatorMultiface : virtual public GameOperatorIf {
     ifaces_[i]->loseReq(player1, player2, deskID, seatID);
   }
 
-  void drawReq(const std::string& account) {
+  void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->drawReq(account);
+      ifaces_[i]->drawReq(account, otherSide, seatID);
     }
-    ifaces_[i]->drawReq(account);
+    ifaces_[i]->drawReq(account, otherSide, seatID);
+  }
+
+  void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->drawResponse(player1, player2, deskID, seatID, resp);
+    }
+    ifaces_[i]->drawResponse(player1, player2, deskID, seatID, resp);
+  }
+
+  void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sendChatText(toAccount, account, text);
+    }
+    ifaces_[i]->sendChatText(toAccount, account, text);
   }
 
   void saveGame(const std::string& account) {
@@ -945,9 +1209,15 @@ class GameOperatorConcurrentClient : virtual public GameOperatorIf {
   void loseReq(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID);
   int32_t send_loseReq(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID);
   void recv_loseReq(const int32_t seqid);
-  void drawReq(const std::string& account);
-  int32_t send_drawReq(const std::string& account);
+  void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID);
+  int32_t send_drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID);
   void recv_drawReq(const int32_t seqid);
+  void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp);
+  int32_t send_drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp);
+  void recv_drawResponse(const int32_t seqid);
+  void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
+  int32_t send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
+  void recv_sendChatText(const int32_t seqid);
   void saveGame(const std::string& account);
   int32_t send_saveGame(const std::string& account);
   void recv_saveGame(const int32_t seqid);

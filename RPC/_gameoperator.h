@@ -27,6 +27,9 @@ public:
     Q_INVOKABLE QJsonObject takeBackReq(const QString& account, const QString &otherSide, int seatID);
     Q_INVOKABLE QJsonObject takeBackResp(const QString &player1, const QString &player2, int seatID, bool resp);
     Q_INVOKABLE QJsonObject reqLose(const QString &player1, const QString &player2, int deskID, int seatID);
+    Q_INVOKABLE QJsonObject drawReq(const QString &me, const QString &otherSide, int seatID);
+    Q_INVOKABLE QJsonObject drawResponse(const QString &player1, const QString &player2, int deskID, int seatID, bool resp);
+    Q_INVOKABLE QJsonObject sendChatText(const QString &toAccount, const QString &account, const QString &text);
 };
 
 #endif // _GAMEOPERATOR_H
