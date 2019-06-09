@@ -27,7 +27,7 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "  void setReady(string account, i32 deskID, i32 seatID, bool isReady)")
   fmt.Fprintln(os.Stderr, "  i32 leaveSeat(string account, i32 deskID, i32 seatID)")
   fmt.Fprintln(os.Stderr, "   autoMatch(string account)")
-  fmt.Fprintln(os.Stderr, "  string getSavedGame(string account, string savedGameName)")
+  fmt.Fprintln(os.Stderr, "  string getSavedGame(i32 id)")
   fmt.Fprintln(os.Stderr, "   getSavedGameList(string account)")
   fmt.Fprintln(os.Stderr, "   getDeskList()")
   fmt.Fprintln(os.Stderr)
@@ -258,15 +258,18 @@ func main() {
     fmt.Print("\n")
     break
   case "getSavedGame":
-    if flag.NArg() - 1 != 2 {
-      fmt.Fprintln(os.Stderr, "GetSavedGame requires 2 args")
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "GetSavedGame requires 1 args")
       flag.Usage()
     }
-    argvalue0 := flag.Arg(1)
+    tmp0, err46 := (strconv.Atoi(flag.Arg(1)))
+    if err46 != nil {
+      Usage()
+      return
+    }
+    argvalue0 := int32(tmp0)
     value0 := argvalue0
-    argvalue1 := flag.Arg(2)
-    value1 := argvalue1
-    fmt.Print(client.GetSavedGame(context.Background(), value0, value1))
+    fmt.Print(client.GetSavedGame(context.Background(), value0))
     fmt.Print("\n")
     break
   case "getSavedGameList":

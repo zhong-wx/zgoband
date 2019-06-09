@@ -45,7 +45,7 @@ class GameHallHandler : virtual public GameHallIf {
     printf("autoMatch\n");
   }
 
-  void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName) {
+  void getSavedGame(std::string& _return, const int32_t id) {
     // Your implementation goes here
     printf("getSavedGame\n");
   }

@@ -73,19 +73,19 @@ Item {
                 Text {
                     height: 25
                     width: playersItem.width / 3
-                    horizontalAlignment: Text.AlignVCenter
+                    verticalAlignment: Text.AlignVCenter
                     text: name
                 }
                 Text {
                     height: 25
                     width: playersItem.width / 3
-                    horizontalAlignment: Text.AlignVCenter
+                    verticalAlignment: Text.AlignVCenter
                     text: account
                 }
                 Text {
                     height: 25
                     width: playersItem.width / 3
-                    horizontalAlignment: Text.AlignVCenter
+                    verticalAlignment: Text.AlignVCenter
                     text: {
                         switch(isReady) {
                         case -1:return "状态"

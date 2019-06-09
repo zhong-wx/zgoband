@@ -1461,9 +1461,8 @@ type GameHall interface {
   //  - Account
   AutoMatch(ctx context.Context, account string) (r map[string]int32, err error)
   // Parameters:
-  //  - Account
-  //  - SavedGameName
-  GetSavedGame(ctx context.Context, account string, savedGameName string) (r string, err error)
+  //  - ID
+  GetSavedGame(ctx context.Context, id int32) (r string, err error)
   // Parameters:
   //  - Account
   GetSavedGameList(ctx context.Context, account string) (r []string, err error)
@@ -1572,12 +1571,10 @@ func (p *GameHallClient) AutoMatch(ctx context.Context, account string) (r map[s
 }
 
 // Parameters:
-//  - Account
-//  - SavedGameName
-func (p *GameHallClient) GetSavedGame(ctx context.Context, account string, savedGameName string) (r string, err error) {
+//  - ID
+func (p *GameHallClient) GetSavedGame(ctx context.Context, id int32) (r string, err error) {
   var _args21 GameHallGetSavedGameArgs
-  _args21.Account = account
-  _args21.SavedGameName = savedGameName
+  _args21.ID = id
   var _result22 GameHallGetSavedGameResult
   if err = p.Client_().Call(ctx, "getSavedGame", &_args21, &_result22); err != nil {
     return
@@ -1912,7 +1909,7 @@ func (p *gameHallProcessorGetSavedGame) Process(ctx context.Context, seqId int32
   result := GameHallGetSavedGameResult{}
 var retval string
   var err2 error
-  if retval, err2 = p.handler.GetSavedGame(ctx, args.Account, args.SavedGameName); err2 != nil {
+  if retval, err2 = p.handler.GetSavedGame(ctx, args.ID); err2 != nil {
     x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getSavedGame: " + err2.Error())
     oprot.WriteMessageBegin("getSavedGame", thrift.EXCEPTION, seqId)
     x.Write(oprot)
@@ -3262,11 +3259,10 @@ func (p *GameHallAutoMatchResult) String() string {
 }
 
 // Attributes:
-//  - Account
-//  - SavedGameName
+//  - ID
 type GameHallGetSavedGameArgs struct {
-  Account string `thrift:"account,1" db:"account" json:"account"`
-  SavedGameName string `thrift:"savedGameName,2" db:"savedGameName" json:"savedGameName"`
+  // unused field # 1
+  ID int32 `thrift:"id,2" db:"id" json:"id"`
 }
 
 func NewGameHallGetSavedGameArgs() *GameHallGetSavedGameArgs {
@@ -3274,12 +3270,8 @@ func NewGameHallGetSavedGameArgs() *GameHallGetSavedGameArgs {
 }
 
 
-func (p *GameHallGetSavedGameArgs) GetAccount() string {
-  return p.Account
-}
-
-func (p *GameHallGetSavedGameArgs) GetSavedGameName() string {
-  return p.SavedGameName
+func (p *GameHallGetSavedGameArgs) GetID() int32 {
+  return p.ID
 }
 func (p *GameHallGetSavedGameArgs) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
@@ -3294,18 +3286,8 @@ func (p *GameHallGetSavedGameArgs) Read(iprot thrift.TProtocol) error {
     }
     if fieldTypeId == thrift.STOP { break; }
     switch fieldId {
-    case 1:
-      if fieldTypeId == thrift.STRING {
-        if err := p.ReadField1(iprot); err != nil {
-          return err
-        }
-      } else {
-        if err := iprot.Skip(fieldTypeId); err != nil {
-          return err
-        }
-      }
     case 2:
-      if fieldTypeId == thrift.STRING {
+      if fieldTypeId == thrift.I32 {
         if err := p.ReadField2(iprot); err != nil {
           return err
         }
@@ -3329,20 +3311,11 @@ func (p *GameHallGetSavedGameArgs) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameHallGetSavedGameArgs)  ReadField1(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 1: ", err)
-} else {
-  p.Account = v
-}
-  return nil
-}
-
 func (p *GameHallGetSavedGameArgs)  ReadField2(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
+  if v, err := iprot.ReadI32(); err != nil {
   return thrift.PrependError("error reading field 2: ", err)
 } else {
-  p.SavedGameName = v
+  p.ID = v
 }
   return nil
 }
@@ -3351,7 +3324,6 @@ func (p *GameHallGetSavedGameArgs) Write(oprot thrift.TProtocol) error {
   if err := oprot.WriteStructBegin("getSavedGame_args"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
-    if err := p.writeField1(oprot); err != nil { return err }
     if err := p.writeField2(oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(); err != nil {
@@ -3361,23 +3333,13 @@ func (p *GameHallGetSavedGameArgs) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameHallGetSavedGameArgs) writeField1(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("account", thrift.STRING, 1); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:account: ", p), err) }
-  if err := oprot.WriteString(string(p.Account)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.account (1) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:account: ", p), err) }
-  return err
-}
-
 func (p *GameHallGetSavedGameArgs) writeField2(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("savedGameName", thrift.STRING, 2); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:savedGameName: ", p), err) }
-  if err := oprot.WriteString(string(p.SavedGameName)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.savedGameName (2) field write error: ", p), err) }
+  if err := oprot.WriteFieldBegin("id", thrift.I32, 2); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:id: ", p), err) }
+  if err := oprot.WriteI32(int32(p.ID)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.id (2) field write error: ", p), err) }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:savedGameName: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:id: ", p), err) }
   return err
 }
 
@@ -3913,7 +3875,18 @@ type GameOperator interface {
   SendChatText(ctx context.Context, toAccount string, account string, text string) (err error)
   // Parameters:
   //  - Account
-  SaveGame(ctx context.Context, account string) (err error)
+  //  - SeatID
+  //  - GameName
+  SaveLastGame(ctx context.Context, account string, seatID int8, gameName string) (r int8, err error)
+  // Parameters:
+  //  - Account
+  GetPlayerInfo(ctx context.Context, account string) (r *PlayerInfo, err error)
+  // Parameters:
+  //  - PlayerInfo
+  SavePlayerInfo(ctx context.Context, playerInfo *PlayerInfo) (r bool, err error)
+  // Parameters:
+  //  - Account
+  BlockAccount(ctx context.Context, account string) (err error)
 }
 
 type GameOperatorClient struct {
@@ -3949,23 +3922,23 @@ func (p *GameOperatorClient) Client_() thrift.TClient {
 //  - Row
 //  - Column
 func (p *GameOperatorClient) PutChess(ctx context.Context, player1 string, player2 string, deskID int32, seatID int8, row int8, column int8) (r int8, err error) {
-  var _args49 GameOperatorPutChessArgs
-  _args49.Player1 = player1
-  _args49.Player2 = player2
-  _args49.DeskID = deskID
-  _args49.SeatID = seatID
-  _args49.Row = row
-  _args49.Column = column
-  var _result50 GameOperatorPutChessResult
-  if err = p.Client_().Call(ctx, "putChess", &_args49, &_result50); err != nil {
+  var _args48 GameOperatorPutChessArgs
+  _args48.Player1 = player1
+  _args48.Player2 = player2
+  _args48.DeskID = deskID
+  _args48.SeatID = seatID
+  _args48.Row = row
+  _args48.Column = column
+  var _result49 GameOperatorPutChessResult
+  if err = p.Client_().Call(ctx, "putChess", &_args48, &_result49); err != nil {
     return
   }
   switch {
-  case _result50.E!= nil:
-    return r, _result50.E
+  case _result49.E!= nil:
+    return r, _result49.E
   }
 
-  return _result50.GetSuccess(), nil
+  return _result49.GetSuccess(), nil
 }
 
 // Parameters:
@@ -3973,15 +3946,15 @@ func (p *GameOperatorClient) PutChess(ctx context.Context, player1 string, playe
 //  - OtherSide
 //  - SeatID
 func (p *GameOperatorClient) TakeBackReq(ctx context.Context, account string, otherSide string, seatID int8) (r bool, err error) {
-  var _args51 GameOperatorTakeBackReqArgs
-  _args51.Account = account
-  _args51.OtherSide = otherSide
-  _args51.SeatID = seatID
-  var _result52 GameOperatorTakeBackReqResult
-  if err = p.Client_().Call(ctx, "takeBackReq", &_args51, &_result52); err != nil {
+  var _args50 GameOperatorTakeBackReqArgs
+  _args50.Account = account
+  _args50.OtherSide = otherSide
+  _args50.SeatID = seatID
+  var _result51 GameOperatorTakeBackReqResult
+  if err = p.Client_().Call(ctx, "takeBackReq", &_args50, &_result51); err != nil {
     return
   }
-  return _result52.GetSuccess(), nil
+  return _result51.GetSuccess(), nil
 }
 
 // Parameters:
@@ -3990,16 +3963,16 @@ func (p *GameOperatorClient) TakeBackReq(ctx context.Context, account string, ot
 //  - SeatID
 //  - Resp
 func (p *GameOperatorClient) TakeBackRespond(ctx context.Context, player1 string, player2 string, seatID int8, resp bool) (r bool, err error) {
-  var _args53 GameOperatorTakeBackRespondArgs
-  _args53.Player1 = player1
-  _args53.Player2 = player2
-  _args53.SeatID = seatID
-  _args53.Resp = resp
-  var _result54 GameOperatorTakeBackRespondResult
-  if err = p.Client_().Call(ctx, "takeBackRespond", &_args53, &_result54); err != nil {
+  var _args52 GameOperatorTakeBackRespondArgs
+  _args52.Player1 = player1
+  _args52.Player2 = player2
+  _args52.SeatID = seatID
+  _args52.Resp = resp
+  var _result53 GameOperatorTakeBackRespondResult
+  if err = p.Client_().Call(ctx, "takeBackRespond", &_args52, &_result53); err != nil {
     return
   }
-  return _result54.GetSuccess(), nil
+  return _result53.GetSuccess(), nil
 }
 
 // Parameters:
@@ -4008,13 +3981,13 @@ func (p *GameOperatorClient) TakeBackRespond(ctx context.Context, player1 string
 //  - DeskID
 //  - SeatID
 func (p *GameOperatorClient) LoseReq(ctx context.Context, player1 string, player2 string, deskID int32, seatID int8) (err error) {
-  var _args55 GameOperatorLoseReqArgs
-  _args55.Player1 = player1
-  _args55.Player2 = player2
-  _args55.DeskID = deskID
-  _args55.SeatID = seatID
-  var _result56 GameOperatorLoseReqResult
-  if err = p.Client_().Call(ctx, "loseReq", &_args55, &_result56); err != nil {
+  var _args54 GameOperatorLoseReqArgs
+  _args54.Player1 = player1
+  _args54.Player2 = player2
+  _args54.DeskID = deskID
+  _args54.SeatID = seatID
+  var _result55 GameOperatorLoseReqResult
+  if err = p.Client_().Call(ctx, "loseReq", &_args54, &_result55); err != nil {
     return
   }
   return nil
@@ -4025,12 +3998,12 @@ func (p *GameOperatorClient) LoseReq(ctx context.Context, player1 string, player
 //  - OtherSide
 //  - SeatID
 func (p *GameOperatorClient) DrawReq(ctx context.Context, account string, otherSide string, seatID int8) (err error) {
-  var _args57 GameOperatorDrawReqArgs
-  _args57.Account = account
-  _args57.OtherSide = otherSide
-  _args57.SeatID = seatID
-  var _result58 GameOperatorDrawReqResult
-  if err = p.Client_().Call(ctx, "drawReq", &_args57, &_result58); err != nil {
+  var _args56 GameOperatorDrawReqArgs
+  _args56.Account = account
+  _args56.OtherSide = otherSide
+  _args56.SeatID = seatID
+  var _result57 GameOperatorDrawReqResult
+  if err = p.Client_().Call(ctx, "drawReq", &_args56, &_result57); err != nil {
     return
   }
   return nil
@@ -4043,14 +4016,14 @@ func (p *GameOperatorClient) DrawReq(ctx context.Context, account string, otherS
 //  - SeatID
 //  - Resp
 func (p *GameOperatorClient) DrawResponse(ctx context.Context, player1 string, player2 string, deskID int32, seatID int8, resp bool) (err error) {
-  var _args59 GameOperatorDrawResponseArgs
-  _args59.Player1 = player1
-  _args59.Player2 = player2
-  _args59.DeskID = deskID
-  _args59.SeatID = seatID
-  _args59.Resp = resp
-  var _result60 GameOperatorDrawResponseResult
-  if err = p.Client_().Call(ctx, "drawResponse", &_args59, &_result60); err != nil {
+  var _args58 GameOperatorDrawResponseArgs
+  _args58.Player1 = player1
+  _args58.Player2 = player2
+  _args58.DeskID = deskID
+  _args58.SeatID = seatID
+  _args58.Resp = resp
+  var _result59 GameOperatorDrawResponseResult
+  if err = p.Client_().Call(ctx, "drawResponse", &_args58, &_result59); err != nil {
     return
   }
   return nil
@@ -4061,12 +4034,12 @@ func (p *GameOperatorClient) DrawResponse(ctx context.Context, player1 string, p
 //  - Account
 //  - Text
 func (p *GameOperatorClient) SendChatText(ctx context.Context, toAccount string, account string, text string) (err error) {
-  var _args61 GameOperatorSendChatTextArgs
-  _args61.ToAccount = toAccount
-  _args61.Account = account
-  _args61.Text = text
-  var _result62 GameOperatorSendChatTextResult
-  if err = p.Client_().Call(ctx, "sendChatText", &_args61, &_result62); err != nil {
+  var _args60 GameOperatorSendChatTextArgs
+  _args60.ToAccount = toAccount
+  _args60.Account = account
+  _args60.Text = text
+  var _result61 GameOperatorSendChatTextResult
+  if err = p.Client_().Call(ctx, "sendChatText", &_args60, &_result61); err != nil {
     return
   }
   return nil
@@ -4074,11 +4047,51 @@ func (p *GameOperatorClient) SendChatText(ctx context.Context, toAccount string,
 
 // Parameters:
 //  - Account
-func (p *GameOperatorClient) SaveGame(ctx context.Context, account string) (err error) {
-  var _args63 GameOperatorSaveGameArgs
-  _args63.Account = account
-  var _result64 GameOperatorSaveGameResult
-  if err = p.Client_().Call(ctx, "saveGame", &_args63, &_result64); err != nil {
+//  - SeatID
+//  - GameName
+func (p *GameOperatorClient) SaveLastGame(ctx context.Context, account string, seatID int8, gameName string) (r int8, err error) {
+  var _args62 GameOperatorSaveLastGameArgs
+  _args62.Account = account
+  _args62.SeatID = seatID
+  _args62.GameName = gameName
+  var _result63 GameOperatorSaveLastGameResult
+  if err = p.Client_().Call(ctx, "saveLastGame", &_args62, &_result63); err != nil {
+    return
+  }
+  return _result63.GetSuccess(), nil
+}
+
+// Parameters:
+//  - Account
+func (p *GameOperatorClient) GetPlayerInfo(ctx context.Context, account string) (r *PlayerInfo, err error) {
+  var _args64 GameOperatorGetPlayerInfoArgs
+  _args64.Account = account
+  var _result65 GameOperatorGetPlayerInfoResult
+  if err = p.Client_().Call(ctx, "getPlayerInfo", &_args64, &_result65); err != nil {
+    return
+  }
+  return _result65.GetSuccess(), nil
+}
+
+// Parameters:
+//  - PlayerInfo
+func (p *GameOperatorClient) SavePlayerInfo(ctx context.Context, playerInfo *PlayerInfo) (r bool, err error) {
+  var _args66 GameOperatorSavePlayerInfoArgs
+  _args66.PlayerInfo = playerInfo
+  var _result67 GameOperatorSavePlayerInfoResult
+  if err = p.Client_().Call(ctx, "savePlayerInfo", &_args66, &_result67); err != nil {
+    return
+  }
+  return _result67.GetSuccess(), nil
+}
+
+// Parameters:
+//  - Account
+func (p *GameOperatorClient) BlockAccount(ctx context.Context, account string) (err error) {
+  var _args68 GameOperatorBlockAccountArgs
+  _args68.Account = account
+  var _result69 GameOperatorBlockAccountResult
+  if err = p.Client_().Call(ctx, "blockAccount", &_args68, &_result69); err != nil {
     return
   }
   return nil
@@ -4104,16 +4117,19 @@ func (p *GameOperatorProcessor) ProcessorMap() map[string]thrift.TProcessorFunct
 
 func NewGameOperatorProcessor(handler GameOperator) *GameOperatorProcessor {
 
-  self65 := &GameOperatorProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self65.processorMap["putChess"] = &gameOperatorProcessorPutChess{handler:handler}
-  self65.processorMap["takeBackReq"] = &gameOperatorProcessorTakeBackReq{handler:handler}
-  self65.processorMap["takeBackRespond"] = &gameOperatorProcessorTakeBackRespond{handler:handler}
-  self65.processorMap["loseReq"] = &gameOperatorProcessorLoseReq{handler:handler}
-  self65.processorMap["drawReq"] = &gameOperatorProcessorDrawReq{handler:handler}
-  self65.processorMap["drawResponse"] = &gameOperatorProcessorDrawResponse{handler:handler}
-  self65.processorMap["sendChatText"] = &gameOperatorProcessorSendChatText{handler:handler}
-  self65.processorMap["saveGame"] = &gameOperatorProcessorSaveGame{handler:handler}
-return self65
+  self70 := &GameOperatorProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
+  self70.processorMap["putChess"] = &gameOperatorProcessorPutChess{handler:handler}
+  self70.processorMap["takeBackReq"] = &gameOperatorProcessorTakeBackReq{handler:handler}
+  self70.processorMap["takeBackRespond"] = &gameOperatorProcessorTakeBackRespond{handler:handler}
+  self70.processorMap["loseReq"] = &gameOperatorProcessorLoseReq{handler:handler}
+  self70.processorMap["drawReq"] = &gameOperatorProcessorDrawReq{handler:handler}
+  self70.processorMap["drawResponse"] = &gameOperatorProcessorDrawResponse{handler:handler}
+  self70.processorMap["sendChatText"] = &gameOperatorProcessorSendChatText{handler:handler}
+  self70.processorMap["saveLastGame"] = &gameOperatorProcessorSaveLastGame{handler:handler}
+  self70.processorMap["getPlayerInfo"] = &gameOperatorProcessorGetPlayerInfo{handler:handler}
+  self70.processorMap["savePlayerInfo"] = &gameOperatorProcessorSavePlayerInfo{handler:handler}
+  self70.processorMap["blockAccount"] = &gameOperatorProcessorBlockAccount{handler:handler}
+return self70
 }
 
 func (p *GameOperatorProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -4124,12 +4140,12 @@ func (p *GameOperatorProcessor) Process(ctx context.Context, iprot, oprot thrift
   }
   iprot.Skip(thrift.STRUCT)
   iprot.ReadMessageEnd()
-  x66 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
+  x71 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
   oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-  x66.Write(oprot)
+  x71.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Flush(ctx)
-  return false, x66
+  return false, x71
 
 }
 
@@ -4462,16 +4478,16 @@ func (p *gameOperatorProcessorSendChatText) Process(ctx context.Context, seqId i
   return true, err
 }
 
-type gameOperatorProcessorSaveGame struct {
+type gameOperatorProcessorSaveLastGame struct {
   handler GameOperator
 }
 
-func (p *gameOperatorProcessorSaveGame) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-  args := GameOperatorSaveGameArgs{}
+func (p *gameOperatorProcessorSaveLastGame) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := GameOperatorSaveLastGameArgs{}
   if err = args.Read(iprot); err != nil {
     iprot.ReadMessageEnd()
     x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-    oprot.WriteMessageBegin("saveGame", thrift.EXCEPTION, seqId)
+    oprot.WriteMessageBegin("saveLastGame", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush(ctx)
@@ -4479,17 +4495,161 @@ func (p *gameOperatorProcessorSaveGame) Process(ctx context.Context, seqId int32
   }
 
   iprot.ReadMessageEnd()
-  result := GameOperatorSaveGameResult{}
+  result := GameOperatorSaveLastGameResult{}
+var retval int8
   var err2 error
-  if err2 = p.handler.SaveGame(ctx, args.Account); err2 != nil {
-    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing saveGame: " + err2.Error())
-    oprot.WriteMessageBegin("saveGame", thrift.EXCEPTION, seqId)
+  if retval, err2 = p.handler.SaveLastGame(ctx, args.Account, args.SeatID, args.GameName); err2 != nil {
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing saveLastGame: " + err2.Error())
+    oprot.WriteMessageBegin("saveLastGame", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return true, err2
+  } else {
+    result.Success = &retval
+}
+  if err2 = oprot.WriteMessageBegin("saveLastGame", thrift.REPLY, seqId); err2 != nil {
+    err = err2
+  }
+  if err2 = result.Write(oprot); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+    err = err2
+  }
+  if err != nil {
+    return
+  }
+  return true, err
+}
+
+type gameOperatorProcessorGetPlayerInfo struct {
+  handler GameOperator
+}
+
+func (p *gameOperatorProcessorGetPlayerInfo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := GameOperatorGetPlayerInfoArgs{}
+  if err = args.Read(iprot); err != nil {
+    iprot.ReadMessageEnd()
+    x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+    oprot.WriteMessageBegin("getPlayerInfo", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return false, err
+  }
+
+  iprot.ReadMessageEnd()
+  result := GameOperatorGetPlayerInfoResult{}
+var retval *PlayerInfo
+  var err2 error
+  if retval, err2 = p.handler.GetPlayerInfo(ctx, args.Account); err2 != nil {
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPlayerInfo: " + err2.Error())
+    oprot.WriteMessageBegin("getPlayerInfo", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return true, err2
+  } else {
+    result.Success = retval
+}
+  if err2 = oprot.WriteMessageBegin("getPlayerInfo", thrift.REPLY, seqId); err2 != nil {
+    err = err2
+  }
+  if err2 = result.Write(oprot); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+    err = err2
+  }
+  if err != nil {
+    return
+  }
+  return true, err
+}
+
+type gameOperatorProcessorSavePlayerInfo struct {
+  handler GameOperator
+}
+
+func (p *gameOperatorProcessorSavePlayerInfo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := GameOperatorSavePlayerInfoArgs{}
+  if err = args.Read(iprot); err != nil {
+    iprot.ReadMessageEnd()
+    x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+    oprot.WriteMessageBegin("savePlayerInfo", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return false, err
+  }
+
+  iprot.ReadMessageEnd()
+  result := GameOperatorSavePlayerInfoResult{}
+var retval bool
+  var err2 error
+  if retval, err2 = p.handler.SavePlayerInfo(ctx, args.PlayerInfo); err2 != nil {
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing savePlayerInfo: " + err2.Error())
+    oprot.WriteMessageBegin("savePlayerInfo", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return true, err2
+  } else {
+    result.Success = &retval
+}
+  if err2 = oprot.WriteMessageBegin("savePlayerInfo", thrift.REPLY, seqId); err2 != nil {
+    err = err2
+  }
+  if err2 = result.Write(oprot); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+    err = err2
+  }
+  if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+    err = err2
+  }
+  if err != nil {
+    return
+  }
+  return true, err
+}
+
+type gameOperatorProcessorBlockAccount struct {
+  handler GameOperator
+}
+
+func (p *gameOperatorProcessorBlockAccount) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := GameOperatorBlockAccountArgs{}
+  if err = args.Read(iprot); err != nil {
+    iprot.ReadMessageEnd()
+    x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+    oprot.WriteMessageBegin("blockAccount", thrift.EXCEPTION, seqId)
+    x.Write(oprot)
+    oprot.WriteMessageEnd()
+    oprot.Flush(ctx)
+    return false, err
+  }
+
+  iprot.ReadMessageEnd()
+  result := GameOperatorBlockAccountResult{}
+  var err2 error
+  if err2 = p.handler.BlockAccount(ctx, args.Account); err2 != nil {
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing blockAccount: " + err2.Error())
+    oprot.WriteMessageBegin("blockAccount", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush(ctx)
     return true, err2
   }
-  if err2 = oprot.WriteMessageBegin("saveGame", thrift.REPLY, seqId); err2 != nil {
+  if err2 = oprot.WriteMessageBegin("blockAccount", thrift.REPLY, seqId); err2 != nil {
     err = err2
   }
   if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -6463,19 +6623,285 @@ func (p *GameOperatorSendChatTextResult) String() string {
 
 // Attributes:
 //  - Account
-type GameOperatorSaveGameArgs struct {
+//  - SeatID
+//  - GameName
+type GameOperatorSaveLastGameArgs struct {
+  Account string `thrift:"account,1" db:"account" json:"account"`
+  // unused field # 2
+  SeatID int8 `thrift:"seatID,3" db:"seatID" json:"seatID"`
+  GameName string `thrift:"gameName,4" db:"gameName" json:"gameName"`
+}
+
+func NewGameOperatorSaveLastGameArgs() *GameOperatorSaveLastGameArgs {
+  return &GameOperatorSaveLastGameArgs{}
+}
+
+
+func (p *GameOperatorSaveLastGameArgs) GetAccount() string {
+  return p.Account
+}
+
+func (p *GameOperatorSaveLastGameArgs) GetSeatID() int8 {
+  return p.SeatID
+}
+
+func (p *GameOperatorSaveLastGameArgs) GetGameName() string {
+  return p.GameName
+}
+func (p *GameOperatorSaveLastGameArgs) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField1(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 3:
+      if fieldTypeId == thrift.BYTE {
+        if err := p.ReadField3(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 4:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField4(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameArgs)  ReadField1(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.Account = v
+}
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameArgs)  ReadField3(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadByte(); err != nil {
+  return thrift.PrependError("error reading field 3: ", err)
+} else {
+  temp := int8(v)
+  p.SeatID = temp
+}
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameArgs)  ReadField4(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 4: ", err)
+} else {
+  p.GameName = v
+}
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("saveLastGame_args"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(oprot); err != nil { return err }
+    if err := p.writeField3(oprot); err != nil { return err }
+    if err := p.writeField4(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameArgs) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("account", thrift.STRING, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:account: ", p), err) }
+  if err := oprot.WriteString(string(p.Account)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.account (1) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:account: ", p), err) }
+  return err
+}
+
+func (p *GameOperatorSaveLastGameArgs) writeField3(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("seatID", thrift.BYTE, 3); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:seatID: ", p), err) }
+  if err := oprot.WriteByte(int8(p.SeatID)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.seatID (3) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 3:seatID: ", p), err) }
+  return err
+}
+
+func (p *GameOperatorSaveLastGameArgs) writeField4(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("gameName", thrift.STRING, 4); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:gameName: ", p), err) }
+  if err := oprot.WriteString(string(p.GameName)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.gameName (4) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 4:gameName: ", p), err) }
+  return err
+}
+
+func (p *GameOperatorSaveLastGameArgs) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorSaveLastGameArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type GameOperatorSaveLastGameResult struct {
+  Success *int8 `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewGameOperatorSaveLastGameResult() *GameOperatorSaveLastGameResult {
+  return &GameOperatorSaveLastGameResult{}
+}
+
+var GameOperatorSaveLastGameResult_Success_DEFAULT int8
+func (p *GameOperatorSaveLastGameResult) GetSuccess() int8 {
+  if !p.IsSetSuccess() {
+    return GameOperatorSaveLastGameResult_Success_DEFAULT
+  }
+return *p.Success
+}
+func (p *GameOperatorSaveLastGameResult) IsSetSuccess() bool {
+  return p.Success != nil
+}
+
+func (p *GameOperatorSaveLastGameResult) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 0:
+      if fieldTypeId == thrift.BYTE {
+        if err := p.ReadField0(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameResult)  ReadField0(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadByte(); err != nil {
+  return thrift.PrependError("error reading field 0: ", err)
+} else {
+  temp := int8(v)
+  p.Success = &temp
+}
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("saveLastGame_result"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField0(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorSaveLastGameResult) writeField0(oprot thrift.TProtocol) (err error) {
+  if p.IsSetSuccess() {
+    if err := oprot.WriteFieldBegin("success", thrift.BYTE, 0); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
+    if err := oprot.WriteByte(int8(*p.Success)); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T.success (0) field write error: ", p), err) }
+    if err := oprot.WriteFieldEnd(); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err) }
+  }
+  return err
+}
+
+func (p *GameOperatorSaveLastGameResult) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorSaveLastGameResult(%+v)", *p)
+}
+
+// Attributes:
+//  - Account
+type GameOperatorGetPlayerInfoArgs struct {
   Account string `thrift:"account,1" db:"account" json:"account"`
 }
 
-func NewGameOperatorSaveGameArgs() *GameOperatorSaveGameArgs {
-  return &GameOperatorSaveGameArgs{}
+func NewGameOperatorGetPlayerInfoArgs() *GameOperatorGetPlayerInfoArgs {
+  return &GameOperatorGetPlayerInfoArgs{}
 }
 
 
-func (p *GameOperatorSaveGameArgs) GetAccount() string {
+func (p *GameOperatorGetPlayerInfoArgs) GetAccount() string {
   return p.Account
 }
-func (p *GameOperatorSaveGameArgs) Read(iprot thrift.TProtocol) error {
+func (p *GameOperatorGetPlayerInfoArgs) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -6513,7 +6939,7 @@ func (p *GameOperatorSaveGameArgs) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameOperatorSaveGameArgs)  ReadField1(iprot thrift.TProtocol) error {
+func (p *GameOperatorGetPlayerInfoArgs)  ReadField1(iprot thrift.TProtocol) error {
   if v, err := iprot.ReadString(); err != nil {
   return thrift.PrependError("error reading field 1: ", err)
 } else {
@@ -6522,8 +6948,8 @@ func (p *GameOperatorSaveGameArgs)  ReadField1(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameOperatorSaveGameArgs) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("saveGame_args"); err != nil {
+func (p *GameOperatorGetPlayerInfoArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("getPlayerInfo_args"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField1(oprot); err != nil { return err }
@@ -6535,7 +6961,7 @@ func (p *GameOperatorSaveGameArgs) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameOperatorSaveGameArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *GameOperatorGetPlayerInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
   if err := oprot.WriteFieldBegin("account", thrift.STRING, 1); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:account: ", p), err) }
   if err := oprot.WriteString(string(p.Account)); err != nil {
@@ -6545,21 +6971,410 @@ func (p *GameOperatorSaveGameArgs) writeField1(oprot thrift.TProtocol) (err erro
   return err
 }
 
-func (p *GameOperatorSaveGameArgs) String() string {
+func (p *GameOperatorGetPlayerInfoArgs) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("GameOperatorSaveGameArgs(%+v)", *p)
+  return fmt.Sprintf("GameOperatorGetPlayerInfoArgs(%+v)", *p)
 }
 
-type GameOperatorSaveGameResult struct {
+// Attributes:
+//  - Success
+type GameOperatorGetPlayerInfoResult struct {
+  Success *PlayerInfo `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewGameOperatorSaveGameResult() *GameOperatorSaveGameResult {
-  return &GameOperatorSaveGameResult{}
+func NewGameOperatorGetPlayerInfoResult() *GameOperatorGetPlayerInfoResult {
+  return &GameOperatorGetPlayerInfoResult{}
 }
 
-func (p *GameOperatorSaveGameResult) Read(iprot thrift.TProtocol) error {
+var GameOperatorGetPlayerInfoResult_Success_DEFAULT *PlayerInfo
+func (p *GameOperatorGetPlayerInfoResult) GetSuccess() *PlayerInfo {
+  if !p.IsSetSuccess() {
+    return GameOperatorGetPlayerInfoResult_Success_DEFAULT
+  }
+return p.Success
+}
+func (p *GameOperatorGetPlayerInfoResult) IsSetSuccess() bool {
+  return p.Success != nil
+}
+
+func (p *GameOperatorGetPlayerInfoResult) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 0:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField0(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorGetPlayerInfoResult)  ReadField0(iprot thrift.TProtocol) error {
+  p.Success = &PlayerInfo{}
+  if err := p.Success.Read(iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorGetPlayerInfoResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("getPlayerInfo_result"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField0(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorGetPlayerInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+  if p.IsSetSuccess() {
+    if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
+    if err := p.Success.Write(oprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+    }
+    if err := oprot.WriteFieldEnd(); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err) }
+  }
+  return err
+}
+
+func (p *GameOperatorGetPlayerInfoResult) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorGetPlayerInfoResult(%+v)", *p)
+}
+
+// Attributes:
+//  - PlayerInfo
+type GameOperatorSavePlayerInfoArgs struct {
+  PlayerInfo *PlayerInfo `thrift:"playerInfo,1" db:"playerInfo" json:"playerInfo"`
+}
+
+func NewGameOperatorSavePlayerInfoArgs() *GameOperatorSavePlayerInfoArgs {
+  return &GameOperatorSavePlayerInfoArgs{}
+}
+
+var GameOperatorSavePlayerInfoArgs_PlayerInfo_DEFAULT *PlayerInfo
+func (p *GameOperatorSavePlayerInfoArgs) GetPlayerInfo() *PlayerInfo {
+  if !p.IsSetPlayerInfo() {
+    return GameOperatorSavePlayerInfoArgs_PlayerInfo_DEFAULT
+  }
+return p.PlayerInfo
+}
+func (p *GameOperatorSavePlayerInfoArgs) IsSetPlayerInfo() bool {
+  return p.PlayerInfo != nil
+}
+
+func (p *GameOperatorSavePlayerInfoArgs) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRUCT {
+        if err := p.ReadField1(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoArgs)  ReadField1(iprot thrift.TProtocol) error {
+  p.PlayerInfo = &PlayerInfo{}
+  if err := p.PlayerInfo.Read(iprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.PlayerInfo), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("savePlayerInfo_args"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("playerInfo", thrift.STRUCT, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:playerInfo: ", p), err) }
+  if err := p.PlayerInfo.Write(oprot); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.PlayerInfo), err)
+  }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:playerInfo: ", p), err) }
+  return err
+}
+
+func (p *GameOperatorSavePlayerInfoArgs) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorSavePlayerInfoArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type GameOperatorSavePlayerInfoResult struct {
+  Success *bool `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewGameOperatorSavePlayerInfoResult() *GameOperatorSavePlayerInfoResult {
+  return &GameOperatorSavePlayerInfoResult{}
+}
+
+var GameOperatorSavePlayerInfoResult_Success_DEFAULT bool
+func (p *GameOperatorSavePlayerInfoResult) GetSuccess() bool {
+  if !p.IsSetSuccess() {
+    return GameOperatorSavePlayerInfoResult_Success_DEFAULT
+  }
+return *p.Success
+}
+func (p *GameOperatorSavePlayerInfoResult) IsSetSuccess() bool {
+  return p.Success != nil
+}
+
+func (p *GameOperatorSavePlayerInfoResult) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 0:
+      if fieldTypeId == thrift.BOOL {
+        if err := p.ReadField0(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoResult)  ReadField0(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadBool(); err != nil {
+  return thrift.PrependError("error reading field 0: ", err)
+} else {
+  p.Success = &v
+}
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("savePlayerInfo_result"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField0(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorSavePlayerInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+  if p.IsSetSuccess() {
+    if err := oprot.WriteFieldBegin("success", thrift.BOOL, 0); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
+    if err := oprot.WriteBool(bool(*p.Success)); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T.success (0) field write error: ", p), err) }
+    if err := oprot.WriteFieldEnd(); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err) }
+  }
+  return err
+}
+
+func (p *GameOperatorSavePlayerInfoResult) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorSavePlayerInfoResult(%+v)", *p)
+}
+
+// Attributes:
+//  - Account
+type GameOperatorBlockAccountArgs struct {
+  Account string `thrift:"account,1" db:"account" json:"account"`
+}
+
+func NewGameOperatorBlockAccountArgs() *GameOperatorBlockAccountArgs {
+  return &GameOperatorBlockAccountArgs{}
+}
+
+
+func (p *GameOperatorBlockAccountArgs) GetAccount() string {
+  return p.Account
+}
+func (p *GameOperatorBlockAccountArgs) Read(iprot thrift.TProtocol) error {
+  if _, err := iprot.ReadStructBegin(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+  }
+
+
+  for {
+    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+    if err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+    }
+    if fieldTypeId == thrift.STOP { break; }
+    switch fieldId {
+    case 1:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField1(iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(fieldTypeId); err != nil {
+          return err
+        }
+      }
+    default:
+      if err := iprot.Skip(fieldTypeId); err != nil {
+        return err
+      }
+    }
+    if err := iprot.ReadFieldEnd(); err != nil {
+      return err
+    }
+  }
+  if err := iprot.ReadStructEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+  }
+  return nil
+}
+
+func (p *GameOperatorBlockAccountArgs)  ReadField1(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.Account = v
+}
+  return nil
+}
+
+func (p *GameOperatorBlockAccountArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("blockAccount_args"); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
+  if p != nil {
+    if err := p.writeField1(oprot); err != nil { return err }
+  }
+  if err := oprot.WriteFieldStop(); err != nil {
+    return thrift.PrependError("write field stop error: ", err) }
+  if err := oprot.WriteStructEnd(); err != nil {
+    return thrift.PrependError("write struct stop error: ", err) }
+  return nil
+}
+
+func (p *GameOperatorBlockAccountArgs) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("account", thrift.STRING, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:account: ", p), err) }
+  if err := oprot.WriteString(string(p.Account)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.account (1) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:account: ", p), err) }
+  return err
+}
+
+func (p *GameOperatorBlockAccountArgs) String() string {
+  if p == nil {
+    return "<nil>"
+  }
+  return fmt.Sprintf("GameOperatorBlockAccountArgs(%+v)", *p)
+}
+
+type GameOperatorBlockAccountResult struct {
+}
+
+func NewGameOperatorBlockAccountResult() *GameOperatorBlockAccountResult {
+  return &GameOperatorBlockAccountResult{}
+}
+
+func (p *GameOperatorBlockAccountResult) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -6584,8 +7399,8 @@ func (p *GameOperatorSaveGameResult) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameOperatorSaveGameResult) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("saveGame_result"); err != nil {
+func (p *GameOperatorBlockAccountResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("blockAccount_result"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
   }
@@ -6596,11 +7411,11 @@ func (p *GameOperatorSaveGameResult) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *GameOperatorSaveGameResult) String() string {
+func (p *GameOperatorBlockAccountResult) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("GameOperatorSaveGameResult(%+v)", *p)
+  return fmt.Sprintf("GameOperatorBlockAccountResult(%+v)", *p)
 }
 
 

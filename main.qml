@@ -8,7 +8,6 @@ Window {
     width: gameWindow.width
     height: gameWindow.height
     visible: true
-
     property var selfInfo
 
     function recvJsonObj(jsonObj) {
@@ -59,6 +58,11 @@ Window {
         console.log(err)
     }
 
+    ManagerWindow {
+        id: managerWindow
+        anchors.fill: parent
+        visible: false
+    }
     GameWindow {
         id: gameWindow
         visible: false
@@ -127,6 +131,7 @@ Window {
                 onClicked: {
                     rootRect.visible = false
                     gameWindow.visible = true
+                    gameWindow.resetGameWindow()
                 }
             }
             FlatButton {

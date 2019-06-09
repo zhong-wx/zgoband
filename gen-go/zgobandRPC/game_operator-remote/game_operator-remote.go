@@ -29,7 +29,10 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "  void drawReq(string account, string otherSide, i8 seatID)")
   fmt.Fprintln(os.Stderr, "  void drawResponse(string player1, string player2, i32 deskID, i8 seatID, bool resp)")
   fmt.Fprintln(os.Stderr, "  void sendChatText(string toAccount, string account, string text)")
-  fmt.Fprintln(os.Stderr, "  void saveGame(string account)")
+  fmt.Fprintln(os.Stderr, "  i8 saveLastGame(string account, i8 seatID, string gameName)")
+  fmt.Fprintln(os.Stderr, "  PlayerInfo getPlayerInfo(string account)")
+  fmt.Fprintln(os.Stderr, "  bool savePlayerInfo(PlayerInfo playerInfo)")
+  fmt.Fprintln(os.Stderr, "  void blockAccount(string account)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
 }
@@ -160,29 +163,29 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err69 := (strconv.Atoi(flag.Arg(3)))
-    if err69 != nil {
+    tmp2, err74 := (strconv.Atoi(flag.Arg(3)))
+    if err74 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err70 := (strconv.Atoi(flag.Arg(4)))
-    if err70 != nil {
+    tmp3, err75 := (strconv.Atoi(flag.Arg(4)))
+    if err75 != nil {
       Usage()
       return
     }
     argvalue3 := int8(tmp3)
     value3 := argvalue3
-    tmp4, err71 := (strconv.Atoi(flag.Arg(5)))
-    if err71 != nil {
+    tmp4, err76 := (strconv.Atoi(flag.Arg(5)))
+    if err76 != nil {
       Usage()
       return
     }
     argvalue4 := int8(tmp4)
     value4 := argvalue4
-    tmp5, err72 := (strconv.Atoi(flag.Arg(6)))
-    if err72 != nil {
+    tmp5, err77 := (strconv.Atoi(flag.Arg(6)))
+    if err77 != nil {
       Usage()
       return
     }
@@ -200,8 +203,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err75 := (strconv.Atoi(flag.Arg(3)))
-    if err75 != nil {
+    tmp2, err80 := (strconv.Atoi(flag.Arg(3)))
+    if err80 != nil {
       Usage()
       return
     }
@@ -219,8 +222,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err78 := (strconv.Atoi(flag.Arg(3)))
-    if err78 != nil {
+    tmp2, err83 := (strconv.Atoi(flag.Arg(3)))
+    if err83 != nil {
       Usage()
       return
     }
@@ -240,15 +243,15 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err82 := (strconv.Atoi(flag.Arg(3)))
-    if err82 != nil {
+    tmp2, err87 := (strconv.Atoi(flag.Arg(3)))
+    if err87 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err83 := (strconv.Atoi(flag.Arg(4)))
-    if err83 != nil {
+    tmp3, err88 := (strconv.Atoi(flag.Arg(4)))
+    if err88 != nil {
       Usage()
       return
     }
@@ -266,8 +269,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err86 := (strconv.Atoi(flag.Arg(3)))
-    if err86 != nil {
+    tmp2, err91 := (strconv.Atoi(flag.Arg(3)))
+    if err91 != nil {
       Usage()
       return
     }
@@ -285,15 +288,15 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err89 := (strconv.Atoi(flag.Arg(3)))
-    if err89 != nil {
+    tmp2, err94 := (strconv.Atoi(flag.Arg(3)))
+    if err94 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err90 := (strconv.Atoi(flag.Arg(4)))
-    if err90 != nil {
+    tmp3, err95 := (strconv.Atoi(flag.Arg(4)))
+    if err95 != nil {
       Usage()
       return
     }
@@ -318,14 +321,68 @@ func main() {
     fmt.Print(client.SendChatText(context.Background(), value0, value1, value2))
     fmt.Print("\n")
     break
-  case "saveGame":
-    if flag.NArg() - 1 != 1 {
-      fmt.Fprintln(os.Stderr, "SaveGame requires 1 args")
+  case "saveLastGame":
+    if flag.NArg() - 1 != 3 {
+      fmt.Fprintln(os.Stderr, "SaveLastGame requires 3 args")
       flag.Usage()
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    fmt.Print(client.SaveGame(context.Background(), value0))
+    tmp1, err101 := (strconv.Atoi(flag.Arg(2)))
+    if err101 != nil {
+      Usage()
+      return
+    }
+    argvalue1 := int8(tmp1)
+    value1 := argvalue1
+    argvalue2 := flag.Arg(3)
+    value2 := argvalue2
+    fmt.Print(client.SaveLastGame(context.Background(), value0, value1, value2))
+    fmt.Print("\n")
+    break
+  case "getPlayerInfo":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "GetPlayerInfo requires 1 args")
+      flag.Usage()
+    }
+    argvalue0 := flag.Arg(1)
+    value0 := argvalue0
+    fmt.Print(client.GetPlayerInfo(context.Background(), value0))
+    fmt.Print("\n")
+    break
+  case "savePlayerInfo":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "SavePlayerInfo requires 1 args")
+      flag.Usage()
+    }
+    arg104 := flag.Arg(1)
+    mbTrans105 := thrift.NewTMemoryBufferLen(len(arg104))
+    defer mbTrans105.Close()
+    _, err106 := mbTrans105.WriteString(arg104)
+    if err106 != nil {
+      Usage()
+      return
+    }
+    factory107 := thrift.NewTJSONProtocolFactory()
+    jsProt108 := factory107.GetProtocol(mbTrans105)
+    argvalue0 := zgobandRPC.NewPlayerInfo()
+    err109 := argvalue0.Read(jsProt108)
+    if err109 != nil {
+      Usage()
+      return
+    }
+    value0 := argvalue0
+    fmt.Print(client.SavePlayerInfo(context.Background(), value0))
+    fmt.Print("\n")
+    break
+  case "blockAccount":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "BlockAccount requires 1 args")
+      flag.Usage()
+    }
+    argvalue0 := flag.Arg(1)
+    value0 := argvalue0
+    fmt.Print(client.BlockAccount(context.Background(), value0))
     fmt.Print("\n")
     break
   case "":

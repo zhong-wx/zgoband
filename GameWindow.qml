@@ -10,6 +10,11 @@ Rectangle {
     width: 20 + chessboard.width + rightItem.width
     height: leftItem.height
 
+    function showGetReadyBtn() {
+        getReadyBtn.clickable = true
+        getReadyBtn.type = FlatGlobal.typePrimary
+    }
+
     property int gameType: 1
     // player in seat 1
     property var player1
@@ -37,9 +42,26 @@ Rectangle {
     // the other side
     property bool isReady2: false
 
+    property var gameProcess
+    property int step: -1
 
-    onIsReady2Changed: {
-        console.log("isReady2 change：", isReady2)
+    onVisibleChanged: {
+        if(gameType === 3) {
+            lastStep.visible = true
+            nextStep.visible = true
+            getReadyBtn.visible = false
+            takeBackBtn.visible = false
+            wantDrawBtn.visible = false
+            giveUpBtn.visible = false
+            quitBtn.visible = true
+        } else if(gameType === 1) {
+            getReadyBtn.visible = true
+            quitBtn.visible = true
+            lastStep.visible = false
+            takeBackBtn.visible = false
+            wantDrawBtn.visible = false
+            saveGameBtn.visible = false
+        }
     }
 
     onGameTypeChanged: {
@@ -51,7 +73,29 @@ Rectangle {
             wantDrawBtn.visible = false
             giveUpBtn.visible = false
             quitBtn.visible = true
+        } else if(gameType === 1) {
+            getReadyBtn.visible = true
+            quitBtn.visible = true
+            lastStep.visible = false
+            takeBackBtn.visible = false
+            wantDrawBtn.visible = false
+            saveGameBtn.visible = false
+        } else if(gameType === 2) {
+            lastStep.visible = false
+            nextStep.visible = false
+
+            giveUpBtn.visible = true
+            getReadyBtn.visible = true
+            quitBtn.visible = true
+            takeBackBtn.visible = true
+            wantDrawBtn.visible = true
+            saveGameBtn.visible = true
         }
+    }
+
+    function showMessageDialog(text) {
+        gameWindowMsgDialog.text = text
+        gameWindowMsgDialog.visible = true
     }
 
     function resetGameWindow() {
@@ -107,14 +151,15 @@ Rectangle {
         }
     }
 
-    function setStatus(gameType, deskID, seatID) {
+    function setStatus(gameType, deskID, seatID, gameProcess) {
         root.gameType = gameType
         if(gameType === 2) {
             root.deskID = deskID
             root.seatID = seatID
+        } else if (gameType === 3) {
+            root.gameProcess = gameProcess
         }
     }
-
     // 从座位离开
     function removeTheOtherSide(deskID, seatID) {
         if(deskID !== root.deskID || seatID === root.seatID)
@@ -234,6 +279,7 @@ Rectangle {
         // 1 mean human with computor game, 2 mean human with human
         if(gameType == 1) {
             player1Timer.timerStart()
+            chessboard.reset()
             chessboard.inYourTurn = true
             getReadyBtn.disable()
         } else if(gameType == 2) {
@@ -326,6 +372,11 @@ Rectangle {
         player2Timer.reset()
     }
 
+    function showGameHall() {
+        root.visible = false
+        gameHall.visible = true
+    }
+
     function leaveSit() {
         var result = GameHallRPC.leaveSeat(me["account"], deskID, seatID)
         if(result["failType"] !== 0) {
@@ -343,8 +394,7 @@ Rectangle {
         // 逃跑
         if(isReady1 && isReady2)
             gameEnd(-1, 3)
-        root.visible = false
-        gameHall.visible = true
+        showGameHall()
     }
 
     function requestTackBack() {
@@ -417,6 +467,34 @@ Rectangle {
             gameEnd(-1, 2)
     }
 
+    function saveGame(gameName) {
+        var ret = GameOperatorRPC.saveLastGame(me["account"], root.seatID, gameName)
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameWindowMsgDialog.text = "网络出现异常，保存失败失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameWindowMsgDialog.text = "服务器出现异常，保存失败失败，详情："+ret["errInfo"]
+                break
+            }
+            gameWindowMsgDialog.visible = true
+            return
+        }
+        if(ret["ret"] === -1) {
+            gameWindowMsgDialog.text = "还未进行一局游戏，保存失败"
+            gameWindow.visible = true
+            return
+        }
+        var date = new Date()
+        var day = date.getDate()
+        var month = date.getMonth()
+        var hour = date.getHours()
+        var minute = date.getMinutes()
+        var savedTime = month.toString() + "月"+ day.toString() + "日 " + hour.toString() + ":" + minute.toString()
+        gameHall.addSavedGame(ret["ret"], gameName, savedTime)
+    }
+
     MessageDialog {
         id: gameWindowMsgDialog
         title: "游戏提示"
@@ -462,6 +540,21 @@ Rectangle {
             leaveSit()
         }
     }
+    MessageDialog {
+        id: saveGameMessageDialog
+        title: "保存棋局"
+        text: "输入棋局名字"
+        width: 400
+        height: 200
+        FlatTextField {
+            id: gameNameInput
+            width: 200
+            height: 25
+            placeholderText: "请输入棋局名字"
+        }
+        standardButtons: StandardButton.OK | StandardButton.Cancel
+        onAccepted: saveGame(gameNameInput.text)
+    }
 
     MessageDialog {
         id: reqLoseMessageDialog
@@ -486,6 +579,12 @@ Rectangle {
             playerInfoRec.updatePlayerInfo(-1, me["account"])
             playerInfoRec.updatePlayerInfo(1, other["account"])
             gameEnd(root.seatID===1?2:1, 1)
+        }
+    }
+    SaveGameDialog {
+        id: saveGameDialog
+        onSave: {
+            saveGame(name)
         }
     }
 
@@ -579,11 +678,37 @@ Rectangle {
                 id: lastStep
                 text: "上一步"
                 visible: false
+                type: root.step>-1?FlatGlobal.typePrimary:FlatGlobal.typeDisabled
+                onClicked: {
+                    if (root.step>-1) {
+                        var pos = root.gameProcess[root.step]
+                        chessboard.takeBack(pos.Row, pos.Column)
+                        root.step--
+
+                        var lastPos
+                        if(root.step > 0)
+                            lastPos = root.gameProcess[root.step]
+                        else {
+                            lastPos = {"Row":-1, "Column":-1}
+                        }
+
+
+                        chessboard.setLastPos(lastPos.Row, lastPos.Column)
+                    }
+                }
             }
             FlatButton {
                 id: nextStep
                 text: "下一步"
                 visible: false
+                type: root.step+1<gameProcess.length?FlatGlobal.typePrimary:FlatGlobal.typeDisabled
+                onClicked: {
+                    if(step+1 < gameProcess.length) {
+                        var pos = root.gameProcess[root.step+1]
+                        chessboard.player2PutAPiece(pos.Row, pos.Column)
+                        root.step++
+                    }
+                }
             }
             FlatButton {
                 id: getReadyBtn
@@ -628,7 +753,20 @@ Rectangle {
                 id: giveUpBtn
                 text: "认输"
                 onClicked: {
-                    reqLoseMessageDialog.open()
+                    if (isReady1 && isReady2) {
+                        reqLoseMessageDialog.open()
+                    }
+                }
+            }
+            FlatButton {
+                id: saveGameBtn
+                text: "保存"
+                type: isReady1&&isReady2?FlatGlobal.typeDisabled:FlatGlobal.typePrimary
+                onClicked: {
+                    if(isReady1&&isReady2) {
+                        return
+                    }
+                    saveGameDialog.visible = true
                 }
             }
             FlatButton {
@@ -637,8 +775,10 @@ Rectangle {
                 onClicked: {
                     if(gameType === 1) {
                         gotoMainWindow()
-                    } else if(gameType === 2) {
+                    } else if(gameType === 2){
                         gotoGameHall()
+                    } else {
+                        showGameHall()
                     }
                 }
             }

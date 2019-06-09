@@ -32,6 +32,8 @@ public:
     Q_INVOKABLE QJsonObject setReady(const QString &account, int deskID, int seatID, bool isReady);
     Q_INVOKABLE QJsonObject getSeatInfo(int deskID, int seatID);
     Q_INVOKABLE QJsonObject autoMatch(const QString &account);
+    Q_INVOKABLE QJsonObject getSavedGame(int id);
+    Q_INVOKABLE QJsonObject getSavedGameList(const QString &account);
 signals:
 
 public slots:

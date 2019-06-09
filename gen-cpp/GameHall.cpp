@@ -1105,18 +1105,10 @@ uint32_t GameHall_getSavedGame_args::read(::apache::thrift::protocol::TProtocol*
     }
     switch (fid)
     {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->account);
-          this->__isset.account = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->savedGameName);
-          this->__isset.savedGameName = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id);
+          this->__isset.id = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1138,12 +1130,8 @@ uint32_t GameHall_getSavedGame_args::write(::apache::thrift::protocol::TProtocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("GameHall_getSavedGame_args");
 
-  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->account);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("savedGameName", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->savedGameName);
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->id);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1161,12 +1149,8 @@ uint32_t GameHall_getSavedGame_pargs::write(::apache::thrift::protocol::TProtoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("GameHall_getSavedGame_pargs");
 
-  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->account)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("savedGameName", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->savedGameName)));
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->id)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1992,20 +1976,19 @@ void GameHallClient::recv_autoMatch(std::map<std::string, int32_t> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "autoMatch failed: unknown result");
 }
 
-void GameHallClient::getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName)
+void GameHallClient::getSavedGame(std::string& _return, const int32_t id)
 {
-  send_getSavedGame(account, savedGameName);
+  send_getSavedGame(id);
   recv_getSavedGame(_return);
 }
 
-void GameHallClient::send_getSavedGame(const std::string& account, const std::string& savedGameName)
+void GameHallClient::send_getSavedGame(const int32_t id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getSavedGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
   GameHall_getSavedGame_pargs args;
-  args.account = &account;
-  args.savedGameName = &savedGameName;
+  args.id = &id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2477,7 +2460,7 @@ void GameHallProcessor::process_getSavedGame(int32_t seqid, ::apache::thrift::pr
 
   GameHall_getSavedGame_result result;
   try {
-    iface_->getSavedGame(result.success, args.account, args.savedGameName);
+    iface_->getSavedGame(result.success, args.id);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -3045,21 +3028,20 @@ void GameHallConcurrentClient::recv_autoMatch(std::map<std::string, int32_t> & _
   } // end while(true)
 }
 
-void GameHallConcurrentClient::getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName)
+void GameHallConcurrentClient::getSavedGame(std::string& _return, const int32_t id)
 {
-  int32_t seqid = send_getSavedGame(account, savedGameName);
+  int32_t seqid = send_getSavedGame(id);
   recv_getSavedGame(_return, seqid);
 }
 
-int32_t GameHallConcurrentClient::send_getSavedGame(const std::string& account, const std::string& savedGameName)
+int32_t GameHallConcurrentClient::send_getSavedGame(const int32_t id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("getSavedGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
   GameHall_getSavedGame_pargs args;
-  args.account = &account;
-  args.savedGameName = &savedGameName;
+  args.id = &id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

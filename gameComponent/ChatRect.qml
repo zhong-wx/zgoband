@@ -149,7 +149,7 @@ Rectangle {
         }
         function addTextEditText() {
             console.log(textEdit.text)
-            addChatData(me, getPLableContent(textEdit.text))
+            addChatData("我", getPLableContent(textEdit.text))
             console.log(getPLableContent(textEdit.text))
             sendText(getPLableContent(textEdit.text))
             textEdit.text = ""

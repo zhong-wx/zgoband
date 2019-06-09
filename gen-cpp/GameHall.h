@@ -26,7 +26,7 @@ class GameHallIf {
   virtual void setReady(const std::string& account, const int32_t deskID, const int32_t seatID, const bool isReady) = 0;
   virtual int32_t leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID) = 0;
   virtual void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account) = 0;
-  virtual void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName) = 0;
+  virtual void getSavedGame(std::string& _return, const int32_t id) = 0;
   virtual void getSavedGameList(std::vector<std::string> & _return, const std::string& account) = 0;
   virtual void getDeskList(std::vector<Desk> & _return) = 0;
 };
@@ -75,7 +75,7 @@ class GameHallNull : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & /* _return */, const std::string& /* account */) {
     return;
   }
-  void getSavedGame(std::string& /* _return */, const std::string& /* account */, const std::string& /* savedGameName */) {
+  void getSavedGame(std::string& /* _return */, const int32_t /* id */) {
     return;
   }
   void getSavedGameList(std::vector<std::string> & /* _return */, const std::string& /* account */) {
@@ -645,9 +645,8 @@ class GameHall_autoMatch_presult {
 };
 
 typedef struct _GameHall_getSavedGame_args__isset {
-  _GameHall_getSavedGame_args__isset() : account(false), savedGameName(false) {}
-  bool account :1;
-  bool savedGameName :1;
+  _GameHall_getSavedGame_args__isset() : id(false) {}
+  bool id :1;
 } _GameHall_getSavedGame_args__isset;
 
 class GameHall_getSavedGame_args {
@@ -655,24 +654,19 @@ class GameHall_getSavedGame_args {
 
   GameHall_getSavedGame_args(const GameHall_getSavedGame_args&);
   GameHall_getSavedGame_args& operator=(const GameHall_getSavedGame_args&);
-  GameHall_getSavedGame_args() : account(), savedGameName() {
+  GameHall_getSavedGame_args() : id(0) {
   }
 
   virtual ~GameHall_getSavedGame_args() throw();
-  std::string account;
-  std::string savedGameName;
+  int32_t id;
 
   _GameHall_getSavedGame_args__isset __isset;
 
-  void __set_account(const std::string& val);
-
-  void __set_savedGameName(const std::string& val);
+  void __set_id(const int32_t val);
 
   bool operator == (const GameHall_getSavedGame_args & rhs) const
   {
-    if (!(account == rhs.account))
-      return false;
-    if (!(savedGameName == rhs.savedGameName))
+    if (!(id == rhs.id))
       return false;
     return true;
   }
@@ -693,8 +687,7 @@ class GameHall_getSavedGame_pargs {
 
 
   virtual ~GameHall_getSavedGame_pargs() throw();
-  const std::string* account;
-  const std::string* savedGameName;
+  const int32_t* id;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -991,8 +984,8 @@ class GameHallClient : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   void send_autoMatch(const std::string& account);
   void recv_autoMatch(std::map<std::string, int32_t> & _return);
-  void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName);
-  void send_getSavedGame(const std::string& account, const std::string& savedGameName);
+  void getSavedGame(std::string& _return, const int32_t id);
+  void send_getSavedGame(const int32_t id);
   void recv_getSavedGame(std::string& _return);
   void getSavedGameList(std::vector<std::string> & _return, const std::string& account);
   void send_getSavedGameList(const std::string& account);
@@ -1109,13 +1102,13 @@ class GameHallMultiface : virtual public GameHallIf {
     return;
   }
 
-  void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName) {
+  void getSavedGame(std::string& _return, const int32_t id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getSavedGame(_return, account, savedGameName);
+      ifaces_[i]->getSavedGame(_return, id);
     }
-    ifaces_[i]->getSavedGame(_return, account, savedGameName);
+    ifaces_[i]->getSavedGame(_return, id);
     return;
   }
 
@@ -1184,8 +1177,8 @@ class GameHallConcurrentClient : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   int32_t send_autoMatch(const std::string& account);
   void recv_autoMatch(std::map<std::string, int32_t> & _return, const int32_t seqid);
-  void getSavedGame(std::string& _return, const std::string& account, const std::string& savedGameName);
-  int32_t send_getSavedGame(const std::string& account, const std::string& savedGameName);
+  void getSavedGame(std::string& _return, const int32_t id);
+  int32_t send_getSavedGame(const int32_t id);
   void recv_getSavedGame(std::string& _return, const int32_t seqid);
   void getSavedGameList(std::vector<std::string> & _return, const std::string& account);
   int32_t send_getSavedGameList(const std::string& account);

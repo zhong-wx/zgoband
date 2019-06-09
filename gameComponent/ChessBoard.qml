@@ -26,11 +26,7 @@ Item {
 
     signal clicked(int line, int column)
 
-    Component.onCompleted: {
-        for(var i=0; i<226; i++) {
-            noClick[i] = false
-        }
-
+    function resetChessBoardDataStruct() {
         chessBoard = new Array
         for(var i=1; i<=15; i++) {
             chessBoard[i] = new Array
@@ -38,6 +34,14 @@ Item {
                 chessBoard[i][j] = 0
             }
         }
+    }
+
+    Component.onCompleted: {
+        for(var i=0; i<226; i++) {
+            noClick[i] = false
+        }
+
+        resetChessBoardDataStruct()
     }
 
     Timer {
@@ -59,6 +63,7 @@ Item {
         lastClickCellPoint = null
         lastMouseCellPoint = null
         pieceCanvas.isBlack = true
+        resetChessBoardDataStruct()
     }
 
     function checkWiner(line, column) {
@@ -122,7 +127,7 @@ Item {
             columnIndex++
         }
         lineIndex = line + 1
-        columnIndex = columnIndex - 1
+        columnIndex = column - 1
         while(lineIndex<=15 && columnIndex>=1 && chessBoard[lineIndex][columnIndex]===which) {
             repeatCount++
             lineIndex++
@@ -147,9 +152,11 @@ Item {
         noClick[number] = true
 
         if(root.gameType===1 && checkWiner(row, column)) {
-            var title = "本局游戏结束"
-            var message = "本局"
-            root.parent.showOkMessageDialog()
+            var text = "本局游戏电脑获得胜利"
+            root.showMessageDialog(text)
+            resetChessBoardDataStruct()
+            root.showGetReadyBtn()
+            return
         } else if(root.gameType===2 && result > 0) {
             root.gameEnd(root.seatID===1?2:1, result)
         }
@@ -167,6 +174,10 @@ Item {
 
         chessBoard[row][column] = player1
         if(root.gameType===1 && checkWiner(row, column)) {
+            var text = "本局游戏你获得胜利"
+            root.showMessageDialog(text)
+            root.showGetReadyBtn()
+            reset()
             return
         } else if(root.gameType != 3) {
             chessBoardRoot.clicked(row, column)

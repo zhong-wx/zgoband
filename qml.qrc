@@ -84,5 +84,8 @@
         <file>resouces/person.png</file>
         <file>LoginWindow.qml</file>
         <file>RegisterWindow.qml</file>
+        <file>test.qml</file>
+        <file>gameComponent/SaveGameDialog.qml</file>
+        <file>ManagerWindow.qml</file>
     </qresource>
 </RCC>

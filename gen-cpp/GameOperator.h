@@ -28,7 +28,10 @@ class GameOperatorIf {
   virtual void drawReq(const std::string& account, const std::string& otherSide, const int8_t seatID) = 0;
   virtual void drawResponse(const std::string& player1, const std::string& player2, const int32_t deskID, const int8_t seatID, const bool resp) = 0;
   virtual void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text) = 0;
-  virtual void saveGame(const std::string& account) = 0;
+  virtual int8_t saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName) = 0;
+  virtual void getPlayerInfo(PlayerInfo& _return, const std::string& account) = 0;
+  virtual bool savePlayerInfo(const PlayerInfo& playerInfo) = 0;
+  virtual void blockAccount(const std::string& account) = 0;
 };
 
 class GameOperatorIfFactory {
@@ -82,7 +85,18 @@ class GameOperatorNull : virtual public GameOperatorIf {
   void sendChatText(const std::string& /* toAccount */, const std::string& /* account */, const std::string& /* text */) {
     return;
   }
-  void saveGame(const std::string& /* account */) {
+  int8_t saveLastGame(const std::string& /* account */, const int8_t /* seatID */, const std::string& /* gameName */) {
+    int8_t _return = 0;
+    return _return;
+  }
+  void getPlayerInfo(PlayerInfo& /* _return */, const std::string& /* account */) {
+    return;
+  }
+  bool savePlayerInfo(const PlayerInfo& /* playerInfo */) {
+    bool _return = false;
+    return _return;
+  }
+  void blockAccount(const std::string& /* account */) {
     return;
   }
 };
@@ -898,37 +912,49 @@ class GameOperator_sendChatText_presult {
 
 };
 
-typedef struct _GameOperator_saveGame_args__isset {
-  _GameOperator_saveGame_args__isset() : account(false) {}
+typedef struct _GameOperator_saveLastGame_args__isset {
+  _GameOperator_saveLastGame_args__isset() : account(false), seatID(false), gameName(false) {}
   bool account :1;
-} _GameOperator_saveGame_args__isset;
+  bool seatID :1;
+  bool gameName :1;
+} _GameOperator_saveLastGame_args__isset;
 
-class GameOperator_saveGame_args {
+class GameOperator_saveLastGame_args {
  public:
 
-  GameOperator_saveGame_args(const GameOperator_saveGame_args&);
-  GameOperator_saveGame_args& operator=(const GameOperator_saveGame_args&);
-  GameOperator_saveGame_args() : account() {
+  GameOperator_saveLastGame_args(const GameOperator_saveLastGame_args&);
+  GameOperator_saveLastGame_args& operator=(const GameOperator_saveLastGame_args&);
+  GameOperator_saveLastGame_args() : account(), seatID(0), gameName() {
   }
 
-  virtual ~GameOperator_saveGame_args() throw();
+  virtual ~GameOperator_saveLastGame_args() throw();
   std::string account;
+  int8_t seatID;
+  std::string gameName;
 
-  _GameOperator_saveGame_args__isset __isset;
+  _GameOperator_saveLastGame_args__isset __isset;
 
   void __set_account(const std::string& val);
 
-  bool operator == (const GameOperator_saveGame_args & rhs) const
+  void __set_seatID(const int8_t val);
+
+  void __set_gameName(const std::string& val);
+
+  bool operator == (const GameOperator_saveLastGame_args & rhs) const
   {
     if (!(account == rhs.account))
       return false;
+    if (!(seatID == rhs.seatID))
+      return false;
+    if (!(gameName == rhs.gameName))
+      return false;
     return true;
   }
-  bool operator != (const GameOperator_saveGame_args &rhs) const {
+  bool operator != (const GameOperator_saveLastGame_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const GameOperator_saveGame_args & ) const;
+  bool operator < (const GameOperator_saveLastGame_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -936,11 +962,325 @@ class GameOperator_saveGame_args {
 };
 
 
-class GameOperator_saveGame_pargs {
+class GameOperator_saveLastGame_pargs {
  public:
 
 
-  virtual ~GameOperator_saveGame_pargs() throw();
+  virtual ~GameOperator_saveLastGame_pargs() throw();
+  const std::string* account;
+  const int8_t* seatID;
+  const std::string* gameName;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_saveLastGame_result__isset {
+  _GameOperator_saveLastGame_result__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_saveLastGame_result__isset;
+
+class GameOperator_saveLastGame_result {
+ public:
+
+  GameOperator_saveLastGame_result(const GameOperator_saveLastGame_result&);
+  GameOperator_saveLastGame_result& operator=(const GameOperator_saveLastGame_result&);
+  GameOperator_saveLastGame_result() : success(0) {
+  }
+
+  virtual ~GameOperator_saveLastGame_result() throw();
+  int8_t success;
+
+  _GameOperator_saveLastGame_result__isset __isset;
+
+  void __set_success(const int8_t val);
+
+  bool operator == (const GameOperator_saveLastGame_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_saveLastGame_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_saveLastGame_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_saveLastGame_presult__isset {
+  _GameOperator_saveLastGame_presult__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_saveLastGame_presult__isset;
+
+class GameOperator_saveLastGame_presult {
+ public:
+
+
+  virtual ~GameOperator_saveLastGame_presult() throw();
+  int8_t* success;
+
+  _GameOperator_saveLastGame_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _GameOperator_getPlayerInfo_args__isset {
+  _GameOperator_getPlayerInfo_args__isset() : account(false) {}
+  bool account :1;
+} _GameOperator_getPlayerInfo_args__isset;
+
+class GameOperator_getPlayerInfo_args {
+ public:
+
+  GameOperator_getPlayerInfo_args(const GameOperator_getPlayerInfo_args&);
+  GameOperator_getPlayerInfo_args& operator=(const GameOperator_getPlayerInfo_args&);
+  GameOperator_getPlayerInfo_args() : account() {
+  }
+
+  virtual ~GameOperator_getPlayerInfo_args() throw();
+  std::string account;
+
+  _GameOperator_getPlayerInfo_args__isset __isset;
+
+  void __set_account(const std::string& val);
+
+  bool operator == (const GameOperator_getPlayerInfo_args & rhs) const
+  {
+    if (!(account == rhs.account))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_getPlayerInfo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_getPlayerInfo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_getPlayerInfo_pargs {
+ public:
+
+
+  virtual ~GameOperator_getPlayerInfo_pargs() throw();
+  const std::string* account;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_getPlayerInfo_result__isset {
+  _GameOperator_getPlayerInfo_result__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_getPlayerInfo_result__isset;
+
+class GameOperator_getPlayerInfo_result {
+ public:
+
+  GameOperator_getPlayerInfo_result(const GameOperator_getPlayerInfo_result&);
+  GameOperator_getPlayerInfo_result& operator=(const GameOperator_getPlayerInfo_result&);
+  GameOperator_getPlayerInfo_result() {
+  }
+
+  virtual ~GameOperator_getPlayerInfo_result() throw();
+  PlayerInfo success;
+
+  _GameOperator_getPlayerInfo_result__isset __isset;
+
+  void __set_success(const PlayerInfo& val);
+
+  bool operator == (const GameOperator_getPlayerInfo_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_getPlayerInfo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_getPlayerInfo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_getPlayerInfo_presult__isset {
+  _GameOperator_getPlayerInfo_presult__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_getPlayerInfo_presult__isset;
+
+class GameOperator_getPlayerInfo_presult {
+ public:
+
+
+  virtual ~GameOperator_getPlayerInfo_presult() throw();
+  PlayerInfo* success;
+
+  _GameOperator_getPlayerInfo_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _GameOperator_savePlayerInfo_args__isset {
+  _GameOperator_savePlayerInfo_args__isset() : playerInfo(false) {}
+  bool playerInfo :1;
+} _GameOperator_savePlayerInfo_args__isset;
+
+class GameOperator_savePlayerInfo_args {
+ public:
+
+  GameOperator_savePlayerInfo_args(const GameOperator_savePlayerInfo_args&);
+  GameOperator_savePlayerInfo_args& operator=(const GameOperator_savePlayerInfo_args&);
+  GameOperator_savePlayerInfo_args() {
+  }
+
+  virtual ~GameOperator_savePlayerInfo_args() throw();
+  PlayerInfo playerInfo;
+
+  _GameOperator_savePlayerInfo_args__isset __isset;
+
+  void __set_playerInfo(const PlayerInfo& val);
+
+  bool operator == (const GameOperator_savePlayerInfo_args & rhs) const
+  {
+    if (!(playerInfo == rhs.playerInfo))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_savePlayerInfo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_savePlayerInfo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_savePlayerInfo_pargs {
+ public:
+
+
+  virtual ~GameOperator_savePlayerInfo_pargs() throw();
+  const PlayerInfo* playerInfo;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_savePlayerInfo_result__isset {
+  _GameOperator_savePlayerInfo_result__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_savePlayerInfo_result__isset;
+
+class GameOperator_savePlayerInfo_result {
+ public:
+
+  GameOperator_savePlayerInfo_result(const GameOperator_savePlayerInfo_result&);
+  GameOperator_savePlayerInfo_result& operator=(const GameOperator_savePlayerInfo_result&);
+  GameOperator_savePlayerInfo_result() : success(0) {
+  }
+
+  virtual ~GameOperator_savePlayerInfo_result() throw();
+  bool success;
+
+  _GameOperator_savePlayerInfo_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const GameOperator_savePlayerInfo_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_savePlayerInfo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_savePlayerInfo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameOperator_savePlayerInfo_presult__isset {
+  _GameOperator_savePlayerInfo_presult__isset() : success(false) {}
+  bool success :1;
+} _GameOperator_savePlayerInfo_presult__isset;
+
+class GameOperator_savePlayerInfo_presult {
+ public:
+
+
+  virtual ~GameOperator_savePlayerInfo_presult() throw();
+  bool* success;
+
+  _GameOperator_savePlayerInfo_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _GameOperator_blockAccount_args__isset {
+  _GameOperator_blockAccount_args__isset() : account(false) {}
+  bool account :1;
+} _GameOperator_blockAccount_args__isset;
+
+class GameOperator_blockAccount_args {
+ public:
+
+  GameOperator_blockAccount_args(const GameOperator_blockAccount_args&);
+  GameOperator_blockAccount_args& operator=(const GameOperator_blockAccount_args&);
+  GameOperator_blockAccount_args() : account() {
+  }
+
+  virtual ~GameOperator_blockAccount_args() throw();
+  std::string account;
+
+  _GameOperator_blockAccount_args__isset __isset;
+
+  void __set_account(const std::string& val);
+
+  bool operator == (const GameOperator_blockAccount_args & rhs) const
+  {
+    if (!(account == rhs.account))
+      return false;
+    return true;
+  }
+  bool operator != (const GameOperator_blockAccount_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameOperator_blockAccount_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameOperator_blockAccount_pargs {
+ public:
+
+
+  virtual ~GameOperator_blockAccount_pargs() throw();
   const std::string* account;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -948,25 +1288,25 @@ class GameOperator_saveGame_pargs {
 };
 
 
-class GameOperator_saveGame_result {
+class GameOperator_blockAccount_result {
  public:
 
-  GameOperator_saveGame_result(const GameOperator_saveGame_result&);
-  GameOperator_saveGame_result& operator=(const GameOperator_saveGame_result&);
-  GameOperator_saveGame_result() {
+  GameOperator_blockAccount_result(const GameOperator_blockAccount_result&);
+  GameOperator_blockAccount_result& operator=(const GameOperator_blockAccount_result&);
+  GameOperator_blockAccount_result() {
   }
 
-  virtual ~GameOperator_saveGame_result() throw();
+  virtual ~GameOperator_blockAccount_result() throw();
 
-  bool operator == (const GameOperator_saveGame_result & /* rhs */) const
+  bool operator == (const GameOperator_blockAccount_result & /* rhs */) const
   {
     return true;
   }
-  bool operator != (const GameOperator_saveGame_result &rhs) const {
+  bool operator != (const GameOperator_blockAccount_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const GameOperator_saveGame_result & ) const;
+  bool operator < (const GameOperator_blockAccount_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -974,11 +1314,11 @@ class GameOperator_saveGame_result {
 };
 
 
-class GameOperator_saveGame_presult {
+class GameOperator_blockAccount_presult {
  public:
 
 
-  virtual ~GameOperator_saveGame_presult() throw();
+  virtual ~GameOperator_blockAccount_presult() throw();
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1030,9 +1370,18 @@ class GameOperatorClient : virtual public GameOperatorIf {
   void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
   void send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
   void recv_sendChatText();
-  void saveGame(const std::string& account);
-  void send_saveGame(const std::string& account);
-  void recv_saveGame();
+  int8_t saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName);
+  void send_saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName);
+  int8_t recv_saveLastGame();
+  void getPlayerInfo(PlayerInfo& _return, const std::string& account);
+  void send_getPlayerInfo(const std::string& account);
+  void recv_getPlayerInfo(PlayerInfo& _return);
+  bool savePlayerInfo(const PlayerInfo& playerInfo);
+  void send_savePlayerInfo(const PlayerInfo& playerInfo);
+  bool recv_savePlayerInfo();
+  void blockAccount(const std::string& account);
+  void send_blockAccount(const std::string& account);
+  void recv_blockAccount();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1055,7 +1404,10 @@ class GameOperatorProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_drawReq(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_drawResponse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sendChatText(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_saveGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveLastGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getPlayerInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_savePlayerInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_blockAccount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   GameOperatorProcessor(::apache::thrift::stdcxx::shared_ptr<GameOperatorIf> iface) :
     iface_(iface) {
@@ -1066,7 +1418,10 @@ class GameOperatorProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["drawReq"] = &GameOperatorProcessor::process_drawReq;
     processMap_["drawResponse"] = &GameOperatorProcessor::process_drawResponse;
     processMap_["sendChatText"] = &GameOperatorProcessor::process_sendChatText;
-    processMap_["saveGame"] = &GameOperatorProcessor::process_saveGame;
+    processMap_["saveLastGame"] = &GameOperatorProcessor::process_saveLastGame;
+    processMap_["getPlayerInfo"] = &GameOperatorProcessor::process_getPlayerInfo;
+    processMap_["savePlayerInfo"] = &GameOperatorProcessor::process_savePlayerInfo;
+    processMap_["blockAccount"] = &GameOperatorProcessor::process_blockAccount;
   }
 
   virtual ~GameOperatorProcessor() {}
@@ -1158,13 +1513,41 @@ class GameOperatorMultiface : virtual public GameOperatorIf {
     ifaces_[i]->sendChatText(toAccount, account, text);
   }
 
-  void saveGame(const std::string& account) {
+  int8_t saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveGame(account);
+      ifaces_[i]->saveLastGame(account, seatID, gameName);
     }
-    ifaces_[i]->saveGame(account);
+    return ifaces_[i]->saveLastGame(account, seatID, gameName);
+  }
+
+  void getPlayerInfo(PlayerInfo& _return, const std::string& account) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getPlayerInfo(_return, account);
+    }
+    ifaces_[i]->getPlayerInfo(_return, account);
+    return;
+  }
+
+  bool savePlayerInfo(const PlayerInfo& playerInfo) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->savePlayerInfo(playerInfo);
+    }
+    return ifaces_[i]->savePlayerInfo(playerInfo);
+  }
+
+  void blockAccount(const std::string& account) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->blockAccount(account);
+    }
+    ifaces_[i]->blockAccount(account);
   }
 
 };
@@ -1218,9 +1601,18 @@ class GameOperatorConcurrentClient : virtual public GameOperatorIf {
   void sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
   int32_t send_sendChatText(const std::string& toAccount, const std::string& account, const std::string& text);
   void recv_sendChatText(const int32_t seqid);
-  void saveGame(const std::string& account);
-  int32_t send_saveGame(const std::string& account);
-  void recv_saveGame(const int32_t seqid);
+  int8_t saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName);
+  int32_t send_saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName);
+  int8_t recv_saveLastGame(const int32_t seqid);
+  void getPlayerInfo(PlayerInfo& _return, const std::string& account);
+  int32_t send_getPlayerInfo(const std::string& account);
+  void recv_getPlayerInfo(PlayerInfo& _return, const int32_t seqid);
+  bool savePlayerInfo(const PlayerInfo& playerInfo);
+  int32_t send_savePlayerInfo(const PlayerInfo& playerInfo);
+  bool recv_savePlayerInfo(const int32_t seqid);
+  void blockAccount(const std::string& account);
+  int32_t send_blockAccount(const std::string& account);
+  void recv_blockAccount(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

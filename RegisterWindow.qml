@@ -80,6 +80,7 @@ Item {
         Row {
             Text{
                 text: "账号"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {
@@ -90,26 +91,31 @@ Item {
         Row {
             Text{
                 text: "密码"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {
                 id: passwdInput
+                echoMode: TextInput.Password
                 placeholderText: "请输入密码"
             }
         }
         Row {
             Text{
                 text: "密码"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {
                 id: passwdInputAgain
+                echoMode: TextInput.Password
                 placeholderText: "请再次输入密码"
             }
         }
         Row {
             Text{
                 text: "昵称"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {

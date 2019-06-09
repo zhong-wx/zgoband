@@ -55,9 +55,24 @@ class GameOperatorHandler : virtual public GameOperatorIf {
     printf("sendChatText\n");
   }
 
-  void saveGame(const std::string& account) {
+  int8_t saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName) {
     // Your implementation goes here
-    printf("saveGame\n");
+    printf("saveLastGame\n");
+  }
+
+  void getPlayerInfo(PlayerInfo& _return, const std::string& account) {
+    // Your implementation goes here
+    printf("getPlayerInfo\n");
+  }
+
+  bool savePlayerInfo(const PlayerInfo& playerInfo) {
+    // Your implementation goes here
+    printf("savePlayerInfo\n");
+  }
+
+  void blockAccount(const std::string& account) {
+    // Your implementation goes here
+    printf("blockAccount\n");
   }
 
 };

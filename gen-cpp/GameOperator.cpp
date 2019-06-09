@@ -1550,11 +1550,230 @@ uint32_t GameOperator_sendChatText_presult::read(::apache::thrift::protocol::TPr
 }
 
 
-GameOperator_saveGame_args::~GameOperator_saveGame_args() throw() {
+GameOperator_saveLastGame_args::~GameOperator_saveLastGame_args() throw() {
 }
 
 
-uint32_t GameOperator_saveGame_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t GameOperator_saveLastGame_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->account);
+          this->__isset.account = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->seatID);
+          this->__isset.seatID = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->gameName);
+          this->__isset.gameName = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_saveLastGame_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_saveLastGame_args");
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->account);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 3);
+  xfer += oprot->writeByte(this->seatID);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("gameName", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString(this->gameName);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_saveLastGame_pargs::~GameOperator_saveLastGame_pargs() throw() {
+}
+
+
+uint32_t GameOperator_saveLastGame_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_saveLastGame_pargs");
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->account)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seatID", ::apache::thrift::protocol::T_BYTE, 3);
+  xfer += oprot->writeByte((*(this->seatID)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("gameName", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString((*(this->gameName)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_saveLastGame_result::~GameOperator_saveLastGame_result() throw() {
+}
+
+
+uint32_t GameOperator_saveLastGame_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_saveLastGame_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameOperator_saveLastGame_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BYTE, 0);
+    xfer += oprot->writeByte(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_saveLastGame_presult::~GameOperator_saveLastGame_presult() throw() {
+}
+
+
+uint32_t GameOperator_saveLastGame_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+GameOperator_getPlayerInfo_args::~GameOperator_getPlayerInfo_args() throw() {
+}
+
+
+uint32_t GameOperator_getPlayerInfo_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1595,10 +1814,10 @@ uint32_t GameOperator_saveGame_args::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-uint32_t GameOperator_saveGame_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t GameOperator_getPlayerInfo_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("GameOperator_saveGame_args");
+  xfer += oprot->writeStructBegin("GameOperator_getPlayerInfo_args");
 
   xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->account);
@@ -1610,14 +1829,14 @@ uint32_t GameOperator_saveGame_args::write(::apache::thrift::protocol::TProtocol
 }
 
 
-GameOperator_saveGame_pargs::~GameOperator_saveGame_pargs() throw() {
+GameOperator_getPlayerInfo_pargs::~GameOperator_getPlayerInfo_pargs() throw() {
 }
 
 
-uint32_t GameOperator_saveGame_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t GameOperator_getPlayerInfo_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("GameOperator_saveGame_pargs");
+  xfer += oprot->writeStructBegin("GameOperator_getPlayerInfo_pargs");
 
   xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->account)));
@@ -1629,11 +1848,385 @@ uint32_t GameOperator_saveGame_pargs::write(::apache::thrift::protocol::TProtoco
 }
 
 
-GameOperator_saveGame_result::~GameOperator_saveGame_result() throw() {
+GameOperator_getPlayerInfo_result::~GameOperator_getPlayerInfo_result() throw() {
 }
 
 
-uint32_t GameOperator_saveGame_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t GameOperator_getPlayerInfo_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_getPlayerInfo_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameOperator_getPlayerInfo_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_getPlayerInfo_presult::~GameOperator_getPlayerInfo_presult() throw() {
+}
+
+
+uint32_t GameOperator_getPlayerInfo_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+GameOperator_savePlayerInfo_args::~GameOperator_savePlayerInfo_args() throw() {
+}
+
+
+uint32_t GameOperator_savePlayerInfo_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->playerInfo.read(iprot);
+          this->__isset.playerInfo = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_savePlayerInfo_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_savePlayerInfo_args");
+
+  xfer += oprot->writeFieldBegin("playerInfo", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->playerInfo.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_savePlayerInfo_pargs::~GameOperator_savePlayerInfo_pargs() throw() {
+}
+
+
+uint32_t GameOperator_savePlayerInfo_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_savePlayerInfo_pargs");
+
+  xfer += oprot->writeFieldBegin("playerInfo", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->playerInfo)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_savePlayerInfo_result::~GameOperator_savePlayerInfo_result() throw() {
+}
+
+
+uint32_t GameOperator_savePlayerInfo_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_savePlayerInfo_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameOperator_savePlayerInfo_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_savePlayerInfo_presult::~GameOperator_savePlayerInfo_presult() throw() {
+}
+
+
+uint32_t GameOperator_savePlayerInfo_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+GameOperator_blockAccount_args::~GameOperator_blockAccount_args() throw() {
+}
+
+
+uint32_t GameOperator_blockAccount_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->account);
+          this->__isset.account = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameOperator_blockAccount_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_blockAccount_args");
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->account);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_blockAccount_pargs::~GameOperator_blockAccount_pargs() throw() {
+}
+
+
+uint32_t GameOperator_blockAccount_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameOperator_blockAccount_pargs");
+
+  xfer += oprot->writeFieldBegin("account", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->account)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameOperator_blockAccount_result::~GameOperator_blockAccount_result() throw() {
+}
+
+
+uint32_t GameOperator_blockAccount_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1661,11 +2254,11 @@ uint32_t GameOperator_saveGame_result::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t GameOperator_saveGame_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t GameOperator_blockAccount_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("GameOperator_saveGame_result");
+  xfer += oprot->writeStructBegin("GameOperator_blockAccount_result");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -1673,11 +2266,11 @@ uint32_t GameOperator_saveGame_result::write(::apache::thrift::protocol::TProtoc
 }
 
 
-GameOperator_saveGame_presult::~GameOperator_saveGame_presult() throw() {
+GameOperator_blockAccount_presult::~GameOperator_blockAccount_presult() throw() {
 }
 
 
-uint32_t GameOperator_saveGame_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t GameOperator_blockAccount_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2115,19 +2708,21 @@ void GameOperatorClient::recv_sendChatText()
   return;
 }
 
-void GameOperatorClient::saveGame(const std::string& account)
+int8_t GameOperatorClient::saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName)
 {
-  send_saveGame(account);
-  recv_saveGame();
+  send_saveLastGame(account, seatID, gameName);
+  return recv_saveLastGame();
 }
 
-void GameOperatorClient::send_saveGame(const std::string& account)
+void GameOperatorClient::send_saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("saveGame", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("saveLastGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  GameOperator_saveGame_pargs args;
+  GameOperator_saveLastGame_pargs args;
   args.account = &account;
+  args.seatID = &seatID;
+  args.gameName = &gameName;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2135,7 +2730,7 @@ void GameOperatorClient::send_saveGame(const std::string& account)
   oprot_->getTransport()->flush();
 }
 
-void GameOperatorClient::recv_saveGame()
+int8_t GameOperatorClient::recv_saveLastGame()
 {
 
   int32_t rseqid = 0;
@@ -2155,12 +2750,186 @@ void GameOperatorClient::recv_saveGame()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("saveGame") != 0) {
+  if (fname.compare("saveLastGame") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  GameOperator_saveGame_presult result;
+  int8_t _return;
+  GameOperator_saveLastGame_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "saveLastGame failed: unknown result");
+}
+
+void GameOperatorClient::getPlayerInfo(PlayerInfo& _return, const std::string& account)
+{
+  send_getPlayerInfo(account);
+  recv_getPlayerInfo(_return);
+}
+
+void GameOperatorClient::send_getPlayerInfo(const std::string& account)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("getPlayerInfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_getPlayerInfo_pargs args;
+  args.account = &account;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void GameOperatorClient::recv_getPlayerInfo(PlayerInfo& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getPlayerInfo") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  GameOperator_getPlayerInfo_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getPlayerInfo failed: unknown result");
+}
+
+bool GameOperatorClient::savePlayerInfo(const PlayerInfo& playerInfo)
+{
+  send_savePlayerInfo(playerInfo);
+  return recv_savePlayerInfo();
+}
+
+void GameOperatorClient::send_savePlayerInfo(const PlayerInfo& playerInfo)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("savePlayerInfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_savePlayerInfo_pargs args;
+  args.playerInfo = &playerInfo;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool GameOperatorClient::recv_savePlayerInfo()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("savePlayerInfo") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  GameOperator_savePlayerInfo_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePlayerInfo failed: unknown result");
+}
+
+void GameOperatorClient::blockAccount(const std::string& account)
+{
+  send_blockAccount(account);
+  recv_blockAccount();
+}
+
+void GameOperatorClient::send_blockAccount(const std::string& account)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("blockAccount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_blockAccount_pargs args;
+  args.account = &account;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void GameOperatorClient::recv_blockAccount()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("blockAccount") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  GameOperator_blockAccount_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -2564,37 +3333,38 @@ void GameOperatorProcessor::process_sendChatText(int32_t seqid, ::apache::thrift
   }
 }
 
-void GameOperatorProcessor::process_saveGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void GameOperatorProcessor::process_saveLastGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("GameOperator.saveGame", callContext);
+    ctx = this->eventHandler_->getContext("GameOperator.saveLastGame", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.saveGame");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.saveLastGame");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "GameOperator.saveGame");
+    this->eventHandler_->preRead(ctx, "GameOperator.saveLastGame");
   }
 
-  GameOperator_saveGame_args args;
+  GameOperator_saveLastGame_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "GameOperator.saveGame", bytes);
+    this->eventHandler_->postRead(ctx, "GameOperator.saveLastGame", bytes);
   }
 
-  GameOperator_saveGame_result result;
+  GameOperator_saveLastGame_result result;
   try {
-    iface_->saveGame(args.account);
+    result.success = iface_->saveLastGame(args.account, args.seatID, args.gameName);
+    result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "GameOperator.saveGame");
+      this->eventHandler_->handlerError(ctx, "GameOperator.saveLastGame");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("saveGame", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("saveLastGame", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -2603,17 +3373,178 @@ void GameOperatorProcessor::process_saveGame(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "GameOperator.saveGame");
+    this->eventHandler_->preWrite(ctx, "GameOperator.saveLastGame");
   }
 
-  oprot->writeMessageBegin("saveGame", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("saveLastGame", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "GameOperator.saveGame", bytes);
+    this->eventHandler_->postWrite(ctx, "GameOperator.saveLastGame", bytes);
+  }
+}
+
+void GameOperatorProcessor::process_getPlayerInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameOperator.getPlayerInfo", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.getPlayerInfo");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameOperator.getPlayerInfo");
+  }
+
+  GameOperator_getPlayerInfo_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameOperator.getPlayerInfo", bytes);
+  }
+
+  GameOperator_getPlayerInfo_result result;
+  try {
+    iface_->getPlayerInfo(result.success, args.account);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameOperator.getPlayerInfo");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("getPlayerInfo", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameOperator.getPlayerInfo");
+  }
+
+  oprot->writeMessageBegin("getPlayerInfo", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameOperator.getPlayerInfo", bytes);
+  }
+}
+
+void GameOperatorProcessor::process_savePlayerInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameOperator.savePlayerInfo", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.savePlayerInfo");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameOperator.savePlayerInfo");
+  }
+
+  GameOperator_savePlayerInfo_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameOperator.savePlayerInfo", bytes);
+  }
+
+  GameOperator_savePlayerInfo_result result;
+  try {
+    result.success = iface_->savePlayerInfo(args.playerInfo);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameOperator.savePlayerInfo");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("savePlayerInfo", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameOperator.savePlayerInfo");
+  }
+
+  oprot->writeMessageBegin("savePlayerInfo", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameOperator.savePlayerInfo", bytes);
+  }
+}
+
+void GameOperatorProcessor::process_blockAccount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameOperator.blockAccount", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameOperator.blockAccount");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameOperator.blockAccount");
+  }
+
+  GameOperator_blockAccount_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameOperator.blockAccount", bytes);
+  }
+
+  GameOperator_blockAccount_result result;
+  try {
+    iface_->blockAccount(args.account);
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameOperator.blockAccount");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("blockAccount", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameOperator.blockAccount");
+  }
+
+  oprot->writeMessageBegin("blockAccount", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameOperator.blockAccount", bytes);
   }
 }
 
@@ -3213,20 +4144,22 @@ void GameOperatorConcurrentClient::recv_sendChatText(const int32_t seqid)
   } // end while(true)
 }
 
-void GameOperatorConcurrentClient::saveGame(const std::string& account)
+int8_t GameOperatorConcurrentClient::saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName)
 {
-  int32_t seqid = send_saveGame(account);
-  recv_saveGame(seqid);
+  int32_t seqid = send_saveLastGame(account, seatID, gameName);
+  return recv_saveLastGame(seqid);
 }
 
-int32_t GameOperatorConcurrentClient::send_saveGame(const std::string& account)
+int32_t GameOperatorConcurrentClient::send_saveLastGame(const std::string& account, const int8_t seatID, const std::string& gameName)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("saveGame", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("saveLastGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  GameOperator_saveGame_pargs args;
+  GameOperator_saveLastGame_pargs args;
   args.account = &account;
+  args.seatID = &seatID;
+  args.gameName = &gameName;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -3237,7 +4170,7 @@ int32_t GameOperatorConcurrentClient::send_saveGame(const std::string& account)
   return cseqid;
 }
 
-void GameOperatorConcurrentClient::recv_saveGame(const int32_t seqid)
+int8_t GameOperatorConcurrentClient::recv_saveLastGame(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -3266,7 +4199,7 @@ void GameOperatorConcurrentClient::recv_saveGame(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("saveGame") != 0) {
+      if (fname.compare("saveLastGame") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -3275,7 +4208,259 @@ void GameOperatorConcurrentClient::recv_saveGame(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      GameOperator_saveGame_presult result;
+      int8_t _return;
+      GameOperator_saveLastGame_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "saveLastGame failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void GameOperatorConcurrentClient::getPlayerInfo(PlayerInfo& _return, const std::string& account)
+{
+  int32_t seqid = send_getPlayerInfo(account);
+  recv_getPlayerInfo(_return, seqid);
+}
+
+int32_t GameOperatorConcurrentClient::send_getPlayerInfo(const std::string& account)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("getPlayerInfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_getPlayerInfo_pargs args;
+  args.account = &account;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void GameOperatorConcurrentClient::recv_getPlayerInfo(PlayerInfo& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getPlayerInfo") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      GameOperator_getPlayerInfo_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getPlayerInfo failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+bool GameOperatorConcurrentClient::savePlayerInfo(const PlayerInfo& playerInfo)
+{
+  int32_t seqid = send_savePlayerInfo(playerInfo);
+  return recv_savePlayerInfo(seqid);
+}
+
+int32_t GameOperatorConcurrentClient::send_savePlayerInfo(const PlayerInfo& playerInfo)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("savePlayerInfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_savePlayerInfo_pargs args;
+  args.playerInfo = &playerInfo;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool GameOperatorConcurrentClient::recv_savePlayerInfo(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("savePlayerInfo") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      GameOperator_savePlayerInfo_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePlayerInfo failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void GameOperatorConcurrentClient::blockAccount(const std::string& account)
+{
+  int32_t seqid = send_blockAccount(account);
+  recv_blockAccount(seqid);
+}
+
+int32_t GameOperatorConcurrentClient::send_blockAccount(const std::string& account)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("blockAccount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameOperator_blockAccount_pargs args;
+  args.account = &account;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void GameOperatorConcurrentClient::recv_blockAccount(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("blockAccount") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      GameOperator_blockAccount_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

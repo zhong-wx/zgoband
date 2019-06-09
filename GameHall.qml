@@ -10,6 +10,7 @@ Item {
     onVisibleChanged: {
         if(visible) {
             updateDeskList()
+            updateSavedGameList()
             var playerInfo = rootWindow.selfInfo
             detailPlayerInfo.addPlayerInfo(playerInfo["account"], playerInfo["nickname"]
                                            , playerInfo["score"], playerInfo["winRound"]
@@ -48,6 +49,33 @@ Item {
 
         for(var t=lastDeskID+1; t<=100; t++) {
             deskListModel.append({"deskID":t, "player1":"", "player2":"","isReady1":false,"isReady2":false})
+        }
+    }
+
+    function updateSavedGameList() {
+        if(gameSavedModel.count > 1)
+            gameSavedModel.remove(1, gameSavedModel.count-1)
+        var ret = GameHallRPC.getSavedGameList(rootWindow.selfInfo["account"])
+        if(ret["failType"] !== 0) {
+            switch(ret["failType"]) {
+            case -1:
+                gameHallMsgDialog.text = "网络出现异常，获取保存棋局列表失败，详情："+ret["errInfo"]
+                break
+            case -2:
+                gameHallMsgDialog.text = "服务器出现异常，获取保存棋局列表失败，详情："+ret["errInfo"]
+                break
+            case -3:
+                gameHallMsgDialog.text = "客户端出现异常，获取保存棋局列表失败，详情："+ret["errInfo"]
+                break;
+            }
+            gameHallMsgDialog.visible = true
+            return
+        }
+
+        var savedGameList = ret["savedGameList"];
+        for(var i=0; i<savedGameList.length; i++) {
+            var savedGame = savedGameList[i]
+            gameSavedModel.append({"gameID":savedGame.id, "name":savedGame.name, "savedTime":savedGame.saveTime})
         }
     }
 
@@ -144,6 +172,11 @@ Item {
         gotoGameWindow(ret["deskID"], ret["seatID"])
     }
 
+    function addSavedGame(id, name, savedTime) {
+        console.log("addSavedGame:", JSON.stringify({"gameID":id, "name":name, "savedTime":savedTime}))
+        gameSavedModel.append({"gameID":id, "name":name, "savedTime":savedTime})
+    }
+
     MessageDialog {
         id: gameHallMsgDialog
         title: "大厅提示"
@@ -162,6 +195,7 @@ Item {
     ListModel {
         id: gameSavedModel
         ListElement {
+            gameID: -1
             name: "棋局保存名字"
             savedTime: "棋局保存时间"
         }
@@ -273,17 +307,20 @@ Item {
         anchors.topMargin: 5
 
         Row {
+            spacing: 30
             FlatButton {
                 id: autoMatchBtn
-                text: "自动匹配"
+                text: "匹配"
                 onClicked: {
                     autoMatch()
                 }
             }
             FlatButton {
                 id: backtoHall
-                text: "回到大厅"
+                text: "返回"
                 onClicked: {
+                    gameHallItem.visible = false
+                    rootRect.visible = true
                 }
             }
         }
@@ -296,25 +333,72 @@ Item {
 
 
         ListView {
-            id: gameSavedBtn
+            id: gameSavedListView
             model: gameSavedModel
             height: 250
-            width: 100//gameHallItem.width - deskListScrollView - 10
-            delegate: Row {
-                spacing: 10
-                Text {
-                    width: 90
-                    text: name
+            width: 170//gameHallItem.width - deskListScrollView - 10
+            highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+            delegate: MouseArea {
+                height: 25
+                width: parent.width
+                onClicked: {
+                   ListView.view.currentIndex = index
                 }
-                Text {
-                    width: 90
-                    text: savedTime
+                Row {
+                    spacing: 10
+                    Text {
+                        width: 80
+                        height: 25
+                        text: name
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Text {
+                        height: 25
+                        text: savedTime
+                        verticalAlignment: Text.AlignVCenter
+                    }
                 }
             }
         }
-        FlatButton {
-            id: viewGameSavedBtn
-            text: "查看保存棋局"
+        Row {
+            spacing: 30
+            FlatButton {
+                id: lookGameSavedBtn
+                text: "查看"
+                onClicked: {
+                    //var gameProcess = {"process":[{"Row":8,"Column":9},{"Row":8,"Column":10},{"Row":8,"Column":11}]}
+                    //gameWindow.setStatus(3, 0, 0, gameProcess)
+                    //gameHallItem.visible = false
+                    //gameWindow.visible = true
+                    var id = gameSavedModel.get(gameSavedListView.currentIndex).gameID
+                    var ret = GameHallRPC.getSavedGame(id)
+                    if(ret["failType"] !== 0) {
+                        switch(ret["failType"]) {
+                        case -1:
+                            gameHallMsgDialog.text = "网络出现异常，自动匹配失败，详情："+ret["errInfo"]
+                            break
+                        case -2:
+                            gameHallMsgDialog.text = "服务器出现异常，自动匹配失败，详情："+ret["errInfo"]
+                            break
+                        case -3:
+                            gameHallMsgDialog.text = "应用程序发生异常，详情："+ret["errInfo"]
+                        }
+                        gameHallMsgDialog.visible = true
+                        return
+                    }
+                    gameWindow.resetGameWindow()
+                    gameWindow.setStatus(3, 0, 0, ret["record"]["process"])
+                    gameHallItem.visible = false
+                    gameWindow.visible = true
+                }
+            }
+            FlatButton {
+                id: delGameSavedBtn
+                text: "删除"
+                onClicked: {
+
+                }
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window 2.0
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.3
 import FlatUI 2.0
 
@@ -65,10 +67,17 @@ Item {
             return
         }
 
+        if(tabPositionGroup.current === manager) {
+            logingItem.visible = false
+            managerWindow.visible = true
+            return
+        }
+
         playerInfo["playerInfo"]["account"] = accountInput.text
         logined(playerInfo["playerInfo"])
         reset()
         goBack()
+
     }
 
     MessageDialog {
@@ -76,11 +85,28 @@ Item {
         title: "登录提示"
     }
     Column {
+        RowLayout {
+            ExclusiveGroup { id: tabPositionGroup }
+            FlatRadio {
+                id: player
+                text: qsTr("玩家")
+                exclusiveGroup: tabPositionGroup
+                checked: true
+                Layout.minimumWidth: 100
+            }
+            FlatRadio {
+                id: manager
+                text: qsTr("管理员")
+                exclusiveGroup: tabPositionGroup
+                Layout.minimumWidth: 100
+            }
+        }
         anchors.centerIn: parent
         spacing: 15
         Row {
             Text{
                 text: "账号"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {
@@ -91,10 +117,12 @@ Item {
         Row {
             Text{
                 text: "密码"
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
             }
             FlatTextField {
                 id: passwdInput
+                echoMode: TextInput.Password
                 placeholderText: "请输入密码"
             }
         }
