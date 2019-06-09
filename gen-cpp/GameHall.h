@@ -26,9 +26,10 @@ class GameHallIf {
   virtual void setReady(const std::string& account, const int32_t deskID, const int32_t seatID, const bool isReady) = 0;
   virtual int32_t leaveSeat(const std::string& account, const int32_t deskID, const int32_t seatID) = 0;
   virtual void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account) = 0;
+  virtual void getDeskList(std::vector<Desk> & _return) = 0;
   virtual void getSavedGame(std::string& _return, const int32_t id) = 0;
   virtual void getSavedGameList(std::vector<std::string> & _return, const std::string& account) = 0;
-  virtual void getDeskList(std::vector<Desk> & _return) = 0;
+  virtual void delSavedGame(const int32_t id) = 0;
 };
 
 class GameHallIfFactory {
@@ -75,13 +76,16 @@ class GameHallNull : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & /* _return */, const std::string& /* account */) {
     return;
   }
+  void getDeskList(std::vector<Desk> & /* _return */) {
+    return;
+  }
   void getSavedGame(std::string& /* _return */, const int32_t /* id */) {
     return;
   }
   void getSavedGameList(std::vector<std::string> & /* _return */, const std::string& /* account */) {
     return;
   }
-  void getDeskList(std::vector<Desk> & /* _return */) {
+  void delSavedGame(const int32_t /* id */) {
     return;
   }
 };
@@ -644,6 +648,98 @@ class GameHall_autoMatch_presult {
 
 };
 
+
+class GameHall_getDeskList_args {
+ public:
+
+  GameHall_getDeskList_args(const GameHall_getDeskList_args&);
+  GameHall_getDeskList_args& operator=(const GameHall_getDeskList_args&);
+  GameHall_getDeskList_args() {
+  }
+
+  virtual ~GameHall_getDeskList_args() throw();
+
+  bool operator == (const GameHall_getDeskList_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const GameHall_getDeskList_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameHall_getDeskList_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameHall_getDeskList_pargs {
+ public:
+
+
+  virtual ~GameHall_getDeskList_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameHall_getDeskList_result__isset {
+  _GameHall_getDeskList_result__isset() : success(false) {}
+  bool success :1;
+} _GameHall_getDeskList_result__isset;
+
+class GameHall_getDeskList_result {
+ public:
+
+  GameHall_getDeskList_result(const GameHall_getDeskList_result&);
+  GameHall_getDeskList_result& operator=(const GameHall_getDeskList_result&);
+  GameHall_getDeskList_result() {
+  }
+
+  virtual ~GameHall_getDeskList_result() throw();
+  std::vector<Desk>  success;
+
+  _GameHall_getDeskList_result__isset __isset;
+
+  void __set_success(const std::vector<Desk> & val);
+
+  bool operator == (const GameHall_getDeskList_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const GameHall_getDeskList_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameHall_getDeskList_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _GameHall_getDeskList_presult__isset {
+  _GameHall_getDeskList_presult__isset() : success(false) {}
+  bool success :1;
+} _GameHall_getDeskList_presult__isset;
+
+class GameHall_getDeskList_presult {
+ public:
+
+
+  virtual ~GameHall_getDeskList_presult() throw();
+  std::vector<Desk> * success;
+
+  _GameHall_getDeskList_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _GameHall_getSavedGame_args__isset {
   _GameHall_getSavedGame_args__isset() : id(false) {}
   bool id :1;
@@ -852,93 +948,87 @@ class GameHall_getSavedGameList_presult {
 
 };
 
+typedef struct _GameHall_delSavedGame_args__isset {
+  _GameHall_delSavedGame_args__isset() : id(false) {}
+  bool id :1;
+} _GameHall_delSavedGame_args__isset;
 
-class GameHall_getDeskList_args {
+class GameHall_delSavedGame_args {
  public:
 
-  GameHall_getDeskList_args(const GameHall_getDeskList_args&);
-  GameHall_getDeskList_args& operator=(const GameHall_getDeskList_args&);
-  GameHall_getDeskList_args() {
+  GameHall_delSavedGame_args(const GameHall_delSavedGame_args&);
+  GameHall_delSavedGame_args& operator=(const GameHall_delSavedGame_args&);
+  GameHall_delSavedGame_args() : id(0) {
   }
 
-  virtual ~GameHall_getDeskList_args() throw();
+  virtual ~GameHall_delSavedGame_args() throw();
+  int32_t id;
 
-  bool operator == (const GameHall_getDeskList_args & /* rhs */) const
+  _GameHall_delSavedGame_args__isset __isset;
+
+  void __set_id(const int32_t val);
+
+  bool operator == (const GameHall_delSavedGame_args & rhs) const
   {
-    return true;
-  }
-  bool operator != (const GameHall_getDeskList_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const GameHall_getDeskList_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class GameHall_getDeskList_pargs {
- public:
-
-
-  virtual ~GameHall_getDeskList_pargs() throw();
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _GameHall_getDeskList_result__isset {
-  _GameHall_getDeskList_result__isset() : success(false) {}
-  bool success :1;
-} _GameHall_getDeskList_result__isset;
-
-class GameHall_getDeskList_result {
- public:
-
-  GameHall_getDeskList_result(const GameHall_getDeskList_result&);
-  GameHall_getDeskList_result& operator=(const GameHall_getDeskList_result&);
-  GameHall_getDeskList_result() {
-  }
-
-  virtual ~GameHall_getDeskList_result() throw();
-  std::vector<Desk>  success;
-
-  _GameHall_getDeskList_result__isset __isset;
-
-  void __set_success(const std::vector<Desk> & val);
-
-  bool operator == (const GameHall_getDeskList_result & rhs) const
-  {
-    if (!(success == rhs.success))
+    if (!(id == rhs.id))
       return false;
     return true;
   }
-  bool operator != (const GameHall_getDeskList_result &rhs) const {
+  bool operator != (const GameHall_delSavedGame_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const GameHall_getDeskList_result & ) const;
+  bool operator < (const GameHall_delSavedGame_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _GameHall_getDeskList_presult__isset {
-  _GameHall_getDeskList_presult__isset() : success(false) {}
-  bool success :1;
-} _GameHall_getDeskList_presult__isset;
 
-class GameHall_getDeskList_presult {
+class GameHall_delSavedGame_pargs {
  public:
 
 
-  virtual ~GameHall_getDeskList_presult() throw();
-  std::vector<Desk> * success;
+  virtual ~GameHall_delSavedGame_pargs() throw();
+  const int32_t* id;
 
-  _GameHall_getDeskList_presult__isset __isset;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameHall_delSavedGame_result {
+ public:
+
+  GameHall_delSavedGame_result(const GameHall_delSavedGame_result&);
+  GameHall_delSavedGame_result& operator=(const GameHall_delSavedGame_result&);
+  GameHall_delSavedGame_result() {
+  }
+
+  virtual ~GameHall_delSavedGame_result() throw();
+
+  bool operator == (const GameHall_delSavedGame_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const GameHall_delSavedGame_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const GameHall_delSavedGame_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class GameHall_delSavedGame_presult {
+ public:
+
+
+  virtual ~GameHall_delSavedGame_presult() throw();
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -984,15 +1074,18 @@ class GameHallClient : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   void send_autoMatch(const std::string& account);
   void recv_autoMatch(std::map<std::string, int32_t> & _return);
+  void getDeskList(std::vector<Desk> & _return);
+  void send_getDeskList();
+  void recv_getDeskList(std::vector<Desk> & _return);
   void getSavedGame(std::string& _return, const int32_t id);
   void send_getSavedGame(const int32_t id);
   void recv_getSavedGame(std::string& _return);
   void getSavedGameList(std::vector<std::string> & _return, const std::string& account);
   void send_getSavedGameList(const std::string& account);
   void recv_getSavedGameList(std::vector<std::string> & _return);
-  void getDeskList(std::vector<Desk> & _return);
-  void send_getDeskList();
-  void recv_getDeskList(std::vector<Desk> & _return);
+  void delSavedGame(const int32_t id);
+  void send_delSavedGame(const int32_t id);
+  void recv_delSavedGame();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1013,9 +1106,10 @@ class GameHallProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_setReady(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_leaveSeat(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_autoMatch(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getDeskList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getSavedGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getSavedGameList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_getDeskList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_delSavedGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   GameHallProcessor(::apache::thrift::stdcxx::shared_ptr<GameHallIf> iface) :
     iface_(iface) {
@@ -1024,9 +1118,10 @@ class GameHallProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["setReady"] = &GameHallProcessor::process_setReady;
     processMap_["leaveSeat"] = &GameHallProcessor::process_leaveSeat;
     processMap_["autoMatch"] = &GameHallProcessor::process_autoMatch;
+    processMap_["getDeskList"] = &GameHallProcessor::process_getDeskList;
     processMap_["getSavedGame"] = &GameHallProcessor::process_getSavedGame;
     processMap_["getSavedGameList"] = &GameHallProcessor::process_getSavedGameList;
-    processMap_["getDeskList"] = &GameHallProcessor::process_getDeskList;
+    processMap_["delSavedGame"] = &GameHallProcessor::process_delSavedGame;
   }
 
   virtual ~GameHallProcessor() {}
@@ -1102,6 +1197,16 @@ class GameHallMultiface : virtual public GameHallIf {
     return;
   }
 
+  void getDeskList(std::vector<Desk> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getDeskList(_return);
+    }
+    ifaces_[i]->getDeskList(_return);
+    return;
+  }
+
   void getSavedGame(std::string& _return, const int32_t id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1122,14 +1227,13 @@ class GameHallMultiface : virtual public GameHallIf {
     return;
   }
 
-  void getDeskList(std::vector<Desk> & _return) {
+  void delSavedGame(const int32_t id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getDeskList(_return);
+      ifaces_[i]->delSavedGame(id);
     }
-    ifaces_[i]->getDeskList(_return);
-    return;
+    ifaces_[i]->delSavedGame(id);
   }
 
 };
@@ -1177,15 +1281,18 @@ class GameHallConcurrentClient : virtual public GameHallIf {
   void autoMatch(std::map<std::string, int32_t> & _return, const std::string& account);
   int32_t send_autoMatch(const std::string& account);
   void recv_autoMatch(std::map<std::string, int32_t> & _return, const int32_t seqid);
+  void getDeskList(std::vector<Desk> & _return);
+  int32_t send_getDeskList();
+  void recv_getDeskList(std::vector<Desk> & _return, const int32_t seqid);
   void getSavedGame(std::string& _return, const int32_t id);
   int32_t send_getSavedGame(const int32_t id);
   void recv_getSavedGame(std::string& _return, const int32_t seqid);
   void getSavedGameList(std::vector<std::string> & _return, const std::string& account);
   int32_t send_getSavedGameList(const std::string& account);
   void recv_getSavedGameList(std::vector<std::string> & _return, const int32_t seqid);
-  void getDeskList(std::vector<Desk> & _return);
-  int32_t send_getDeskList();
-  void recv_getDeskList(std::vector<Desk> & _return, const int32_t seqid);
+  void delSavedGame(const int32_t id);
+  int32_t send_delSavedGame(const int32_t id);
+  void recv_delSavedGame(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

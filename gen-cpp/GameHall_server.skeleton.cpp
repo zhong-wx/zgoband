@@ -45,6 +45,11 @@ class GameHallHandler : virtual public GameHallIf {
     printf("autoMatch\n");
   }
 
+  void getDeskList(std::vector<Desk> & _return) {
+    // Your implementation goes here
+    printf("getDeskList\n");
+  }
+
   void getSavedGame(std::string& _return, const int32_t id) {
     // Your implementation goes here
     printf("getSavedGame\n");
@@ -55,9 +60,9 @@ class GameHallHandler : virtual public GameHallIf {
     printf("getSavedGameList\n");
   }
 
-  void getDeskList(std::vector<Desk> & _return) {
+  void delSavedGame(const int32_t id) {
     // Your implementation goes here
-    printf("getDeskList\n");
+    printf("delSavedGame\n");
   }
 
 };

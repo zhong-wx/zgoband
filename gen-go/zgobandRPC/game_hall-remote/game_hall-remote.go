@@ -27,9 +27,10 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "  void setReady(string account, i32 deskID, i32 seatID, bool isReady)")
   fmt.Fprintln(os.Stderr, "  i32 leaveSeat(string account, i32 deskID, i32 seatID)")
   fmt.Fprintln(os.Stderr, "   autoMatch(string account)")
+  fmt.Fprintln(os.Stderr, "   getDeskList()")
   fmt.Fprintln(os.Stderr, "  string getSavedGame(i32 id)")
   fmt.Fprintln(os.Stderr, "   getSavedGameList(string account)")
-  fmt.Fprintln(os.Stderr, "   getDeskList()")
+  fmt.Fprintln(os.Stderr, "  void delSavedGame(i32 id)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
 }
@@ -158,15 +159,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err34 := (strconv.Atoi(flag.Arg(2)))
-    if err34 != nil {
+    tmp1, err36 := (strconv.Atoi(flag.Arg(2)))
+    if err36 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err35 := (strconv.Atoi(flag.Arg(3)))
-    if err35 != nil {
+    tmp2, err37 := (strconv.Atoi(flag.Arg(3)))
+    if err37 != nil {
       Usage()
       return
     }
@@ -180,15 +181,15 @@ func main() {
       fmt.Fprintln(os.Stderr, "GetSeatInfo requires 2 args")
       flag.Usage()
     }
-    tmp0, err36 := (strconv.Atoi(flag.Arg(1)))
-    if err36 != nil {
+    tmp0, err38 := (strconv.Atoi(flag.Arg(1)))
+    if err38 != nil {
       Usage()
       return
     }
     argvalue0 := int32(tmp0)
     value0 := argvalue0
-    tmp1, err37 := (strconv.Atoi(flag.Arg(2)))
-    if err37 != nil {
+    tmp1, err39 := (strconv.Atoi(flag.Arg(2)))
+    if err39 != nil {
       Usage()
       return
     }
@@ -204,15 +205,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err39 := (strconv.Atoi(flag.Arg(2)))
-    if err39 != nil {
+    tmp1, err41 := (strconv.Atoi(flag.Arg(2)))
+    if err41 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err40 := (strconv.Atoi(flag.Arg(3)))
-    if err40 != nil {
+    tmp2, err42 := (strconv.Atoi(flag.Arg(3)))
+    if err42 != nil {
       Usage()
       return
     }
@@ -230,15 +231,15 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err43 := (strconv.Atoi(flag.Arg(2)))
-    if err43 != nil {
+    tmp1, err45 := (strconv.Atoi(flag.Arg(2)))
+    if err45 != nil {
       Usage()
       return
     }
     argvalue1 := int32(tmp1)
     value1 := argvalue1
-    tmp2, err44 := (strconv.Atoi(flag.Arg(3)))
-    if err44 != nil {
+    tmp2, err46 := (strconv.Atoi(flag.Arg(3)))
+    if err46 != nil {
       Usage()
       return
     }
@@ -257,13 +258,21 @@ func main() {
     fmt.Print(client.AutoMatch(context.Background(), value0))
     fmt.Print("\n")
     break
+  case "getDeskList":
+    if flag.NArg() - 1 != 0 {
+      fmt.Fprintln(os.Stderr, "GetDeskList requires 0 args")
+      flag.Usage()
+    }
+    fmt.Print(client.GetDeskList(context.Background()))
+    fmt.Print("\n")
+    break
   case "getSavedGame":
     if flag.NArg() - 1 != 1 {
       fmt.Fprintln(os.Stderr, "GetSavedGame requires 1 args")
       flag.Usage()
     }
-    tmp0, err46 := (strconv.Atoi(flag.Arg(1)))
-    if err46 != nil {
+    tmp0, err48 := (strconv.Atoi(flag.Arg(1)))
+    if err48 != nil {
       Usage()
       return
     }
@@ -282,12 +291,19 @@ func main() {
     fmt.Print(client.GetSavedGameList(context.Background(), value0))
     fmt.Print("\n")
     break
-  case "getDeskList":
-    if flag.NArg() - 1 != 0 {
-      fmt.Fprintln(os.Stderr, "GetDeskList requires 0 args")
+  case "delSavedGame":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "DelSavedGame requires 1 args")
       flag.Usage()
     }
-    fmt.Print(client.GetDeskList(context.Background()))
+    tmp0, err50 := (strconv.Atoi(flag.Arg(1)))
+    if err50 != nil {
+      Usage()
+      return
+    }
+    argvalue0 := int32(tmp0)
+    value0 := argvalue0
+    fmt.Print(client.DelSavedGame(context.Background(), value0))
     fmt.Print("\n")
     break
   case "":

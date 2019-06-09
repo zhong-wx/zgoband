@@ -163,29 +163,29 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err74 := (strconv.Atoi(flag.Arg(3)))
-    if err74 != nil {
+    tmp2, err77 := (strconv.Atoi(flag.Arg(3)))
+    if err77 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err75 := (strconv.Atoi(flag.Arg(4)))
-    if err75 != nil {
+    tmp3, err78 := (strconv.Atoi(flag.Arg(4)))
+    if err78 != nil {
       Usage()
       return
     }
     argvalue3 := int8(tmp3)
     value3 := argvalue3
-    tmp4, err76 := (strconv.Atoi(flag.Arg(5)))
-    if err76 != nil {
+    tmp4, err79 := (strconv.Atoi(flag.Arg(5)))
+    if err79 != nil {
       Usage()
       return
     }
     argvalue4 := int8(tmp4)
     value4 := argvalue4
-    tmp5, err77 := (strconv.Atoi(flag.Arg(6)))
-    if err77 != nil {
+    tmp5, err80 := (strconv.Atoi(flag.Arg(6)))
+    if err80 != nil {
       Usage()
       return
     }
@@ -203,8 +203,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err80 := (strconv.Atoi(flag.Arg(3)))
-    if err80 != nil {
+    tmp2, err83 := (strconv.Atoi(flag.Arg(3)))
+    if err83 != nil {
       Usage()
       return
     }
@@ -222,8 +222,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err83 := (strconv.Atoi(flag.Arg(3)))
-    if err83 != nil {
+    tmp2, err86 := (strconv.Atoi(flag.Arg(3)))
+    if err86 != nil {
       Usage()
       return
     }
@@ -243,15 +243,15 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err87 := (strconv.Atoi(flag.Arg(3)))
-    if err87 != nil {
+    tmp2, err90 := (strconv.Atoi(flag.Arg(3)))
+    if err90 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err88 := (strconv.Atoi(flag.Arg(4)))
-    if err88 != nil {
+    tmp3, err91 := (strconv.Atoi(flag.Arg(4)))
+    if err91 != nil {
       Usage()
       return
     }
@@ -269,8 +269,8 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err91 := (strconv.Atoi(flag.Arg(3)))
-    if err91 != nil {
+    tmp2, err94 := (strconv.Atoi(flag.Arg(3)))
+    if err94 != nil {
       Usage()
       return
     }
@@ -288,15 +288,15 @@ func main() {
     value0 := argvalue0
     argvalue1 := flag.Arg(2)
     value1 := argvalue1
-    tmp2, err94 := (strconv.Atoi(flag.Arg(3)))
-    if err94 != nil {
+    tmp2, err97 := (strconv.Atoi(flag.Arg(3)))
+    if err97 != nil {
       Usage()
       return
     }
     argvalue2 := int32(tmp2)
     value2 := argvalue2
-    tmp3, err95 := (strconv.Atoi(flag.Arg(4)))
-    if err95 != nil {
+    tmp3, err98 := (strconv.Atoi(flag.Arg(4)))
+    if err98 != nil {
       Usage()
       return
     }
@@ -328,8 +328,8 @@ func main() {
     }
     argvalue0 := flag.Arg(1)
     value0 := argvalue0
-    tmp1, err101 := (strconv.Atoi(flag.Arg(2)))
-    if err101 != nil {
+    tmp1, err104 := (strconv.Atoi(flag.Arg(2)))
+    if err104 != nil {
       Usage()
       return
     }
@@ -355,19 +355,19 @@ func main() {
       fmt.Fprintln(os.Stderr, "SavePlayerInfo requires 1 args")
       flag.Usage()
     }
-    arg104 := flag.Arg(1)
-    mbTrans105 := thrift.NewTMemoryBufferLen(len(arg104))
-    defer mbTrans105.Close()
-    _, err106 := mbTrans105.WriteString(arg104)
-    if err106 != nil {
+    arg107 := flag.Arg(1)
+    mbTrans108 := thrift.NewTMemoryBufferLen(len(arg107))
+    defer mbTrans108.Close()
+    _, err109 := mbTrans108.WriteString(arg107)
+    if err109 != nil {
       Usage()
       return
     }
-    factory107 := thrift.NewTJSONProtocolFactory()
-    jsProt108 := factory107.GetProtocol(mbTrans105)
+    factory110 := thrift.NewTJSONProtocolFactory()
+    jsProt111 := factory110.GetProtocol(mbTrans108)
     argvalue0 := zgobandRPC.NewPlayerInfo()
-    err109 := argvalue0.Read(jsProt108)
-    if err109 != nil {
+    err112 := argvalue0.Read(jsProt111)
+    if err112 != nil {
       Usage()
       return
     }

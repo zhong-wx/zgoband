@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE QJsonObject autoMatch(const QString &account);
     Q_INVOKABLE QJsonObject getSavedGame(int id);
     Q_INVOKABLE QJsonObject getSavedGameList(const QString &account);
+    Q_INVOKABLE QJsonObject delSavedGame(int id);
 signals:
 
 public slots:

@@ -251,3 +251,25 @@ QJsonObject GameHall::getSavedGameList(const QString &account) {
     jo["savedGameList"] = ja;
     return jo;
 }
+
+
+QJsonObject GameHall::delSavedGame(int id) {
+    int failType = 0;
+    QString errInfo = "";
+    try {
+        transport->open();
+        client->delSavedGame(id);
+        transport->close();
+    } catch(TTransportException e) {
+        failType = -1;
+        errInfo = e.what();
+    } catch(TApplicationException e) {
+        failType = -2;
+        errInfo = e.what();
+    }
+
+    QJsonObject jo;
+    jo["failType"] = failType;
+    jo["errInfo"] = errInfo;
+    return jo;
+}

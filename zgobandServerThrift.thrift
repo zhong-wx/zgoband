@@ -31,12 +31,13 @@ service GameHall {
     void setReady(1:string account, 2:i32 deskID, 3:i32 seatID, 4:bool isReady),
     i32 leaveSeat(1:string account, 2:i32 deskID, 3:i32 seatID),
     map<string, i32> autoMatch(1:string account),
+    list<Desk> getDeskList(),
 
     //return json string
     string getSavedGame(2:i32 id),
     //return list of json string
     list<string> getSavedGameList(1:string account),
-    list<Desk> getDeskList()
+    void delSavedGame(1:i32 id)
 }
 
 exception InvalidOperation {

@@ -396,7 +396,22 @@ Item {
                 id: delGameSavedBtn
                 text: "删除"
                 onClicked: {
-
+                    var index = gameSavedListView.currentIndex
+                    var id = parseInt(gameSavedModel.get(index).gameID)
+                    var ret = GameHallRPC.delSavedGame(id)
+                    if(ret["failType"] !== 0) {
+                        switch(ret["failType"]) {
+                        case -1:
+                            gameHallMsgDialog.text = "网络出现异常，自动匹配失败，详情："+ret["errInfo"]
+                            break
+                        case -2:
+                            gameHallMsgDialog.text = "服务器出现异常，自动匹配失败，详情："+ret["errInfo"]
+                            break
+                        }
+                        gameHallMsgDialog.visible = true
+                        return
+                    }
+                    gameSavedModel.remove(index)
                 }
             }
         }

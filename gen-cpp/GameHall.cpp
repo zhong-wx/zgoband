@@ -1080,6 +1080,204 @@ uint32_t GameHall_autoMatch_presult::read(::apache::thrift::protocol::TProtocol*
 }
 
 
+GameHall_getDeskList_args::~GameHall_getDeskList_args() throw() {
+}
+
+
+uint32_t GameHall_getDeskList_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameHall_getDeskList_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameHall_getDeskList_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameHall_getDeskList_pargs::~GameHall_getDeskList_pargs() throw() {
+}
+
+
+uint32_t GameHall_getDeskList_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameHall_getDeskList_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameHall_getDeskList_result::~GameHall_getDeskList_result() throw() {
+}
+
+
+uint32_t GameHall_getDeskList_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size21;
+            ::apache::thrift::protocol::TType _etype24;
+            xfer += iprot->readListBegin(_etype24, _size21);
+            this->success.resize(_size21);
+            uint32_t _i25;
+            for (_i25 = 0; _i25 < _size21; ++_i25)
+            {
+              xfer += this->success[_i25].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameHall_getDeskList_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("GameHall_getDeskList_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
+      std::vector<Desk> ::const_iterator _iter26;
+      for (_iter26 = this->success.begin(); _iter26 != this->success.end(); ++_iter26)
+      {
+        xfer += (*_iter26).write(oprot);
+      }
+      xfer += oprot->writeListEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameHall_getDeskList_presult::~GameHall_getDeskList_presult() throw() {
+}
+
+
+uint32_t GameHall_getDeskList_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size27;
+            ::apache::thrift::protocol::TType _etype30;
+            xfer += iprot->readListBegin(_etype30, _size27);
+            (*(this->success)).resize(_size27);
+            uint32_t _i31;
+            for (_i31 = 0; _i31 < _size27; ++_i31)
+            {
+              xfer += (*(this->success))[_i31].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 GameHall_getSavedGame_args::~GameHall_getSavedGame_args() throw() {
 }
 
@@ -1375,14 +1573,14 @@ uint32_t GameHall_getSavedGameList_result::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size21;
-            ::apache::thrift::protocol::TType _etype24;
-            xfer += iprot->readListBegin(_etype24, _size21);
-            this->success.resize(_size21);
-            uint32_t _i25;
-            for (_i25 = 0; _i25 < _size21; ++_i25)
+            uint32_t _size32;
+            ::apache::thrift::protocol::TType _etype35;
+            xfer += iprot->readListBegin(_etype35, _size32);
+            this->success.resize(_size32);
+            uint32_t _i36;
+            for (_i36 = 0; _i36 < _size32; ++_i36)
             {
-              xfer += iprot->readString(this->success[_i25]);
+              xfer += iprot->readString(this->success[_i36]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1413,10 +1611,10 @@ uint32_t GameHall_getSavedGameList_result::write(::apache::thrift::protocol::TPr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter26;
-      for (_iter26 = this->success.begin(); _iter26 != this->success.end(); ++_iter26)
+      std::vector<std::string> ::const_iterator _iter37;
+      for (_iter37 = this->success.begin(); _iter37 != this->success.end(); ++_iter37)
       {
-        xfer += oprot->writeString((*_iter26));
+        xfer += oprot->writeString((*_iter37));
       }
       xfer += oprot->writeListEnd();
     }
@@ -1457,14 +1655,14 @@ uint32_t GameHall_getSavedGameList_presult::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size27;
-            ::apache::thrift::protocol::TType _etype30;
-            xfer += iprot->readListBegin(_etype30, _size27);
-            (*(this->success)).resize(_size27);
-            uint32_t _i31;
-            for (_i31 = 0; _i31 < _size27; ++_i31)
+            uint32_t _size38;
+            ::apache::thrift::protocol::TType _etype41;
+            xfer += iprot->readListBegin(_etype41, _size38);
+            (*(this->success)).resize(_size38);
+            uint32_t _i42;
+            for (_i42 = 0; _i42 < _size38; ++_i42)
             {
-              xfer += iprot->readString((*(this->success))[_i31]);
+              xfer += iprot->readString((*(this->success))[_i42]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1486,11 +1684,90 @@ uint32_t GameHall_getSavedGameList_presult::read(::apache::thrift::protocol::TPr
 }
 
 
-GameHall_getDeskList_args::~GameHall_getDeskList_args() throw() {
+GameHall_delSavedGame_args::~GameHall_delSavedGame_args() throw() {
 }
 
 
-uint32_t GameHall_getDeskList_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t GameHall_delSavedGame_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t GameHall_delSavedGame_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameHall_delSavedGame_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameHall_delSavedGame_pargs::~GameHall_delSavedGame_pargs() throw() {
+}
+
+
+uint32_t GameHall_delSavedGame_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("GameHall_delSavedGame_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+GameHall_delSavedGame_result::~GameHall_delSavedGame_result() throw() {
+}
+
+
+uint32_t GameHall_delSavedGame_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1518,10 +1795,11 @@ uint32_t GameHall_getDeskList_args::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-uint32_t GameHall_getDeskList_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t GameHall_delSavedGame_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
   uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("GameHall_getDeskList_args");
+
+  xfer += oprot->writeStructBegin("GameHall_delSavedGame_result");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -1529,26 +1807,11 @@ uint32_t GameHall_getDeskList_args::write(::apache::thrift::protocol::TProtocol*
 }
 
 
-GameHall_getDeskList_pargs::~GameHall_getDeskList_pargs() throw() {
+GameHall_delSavedGame_presult::~GameHall_delSavedGame_presult() throw() {
 }
 
 
-uint32_t GameHall_getDeskList_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("GameHall_getDeskList_pargs");
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-GameHall_getDeskList_result::~GameHall_getDeskList_result() throw() {
-}
-
-
-uint32_t GameHall_getDeskList_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t GameHall_delSavedGame_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1567,114 +1830,7 @@ uint32_t GameHall_getDeskList_result::read(::apache::thrift::protocol::TProtocol
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_LIST) {
-          {
-            this->success.clear();
-            uint32_t _size32;
-            ::apache::thrift::protocol::TType _etype35;
-            xfer += iprot->readListBegin(_etype35, _size32);
-            this->success.resize(_size32);
-            uint32_t _i36;
-            for (_i36 = 0; _i36 < _size32; ++_i36)
-            {
-              xfer += this->success[_i36].read(iprot);
-            }
-            xfer += iprot->readListEnd();
-          }
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t GameHall_getDeskList_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("GameHall_getDeskList_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
-    {
-      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<Desk> ::const_iterator _iter37;
-      for (_iter37 = this->success.begin(); _iter37 != this->success.end(); ++_iter37)
-      {
-        xfer += (*_iter37).write(oprot);
-      }
-      xfer += oprot->writeListEnd();
-    }
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-GameHall_getDeskList_presult::~GameHall_getDeskList_presult() throw() {
-}
-
-
-uint32_t GameHall_getDeskList_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_LIST) {
-          {
-            (*(this->success)).clear();
-            uint32_t _size38;
-            ::apache::thrift::protocol::TType _etype41;
-            xfer += iprot->readListBegin(_etype41, _size38);
-            (*(this->success)).resize(_size38);
-            uint32_t _i42;
-            for (_i42 = 0; _i42 < _size38; ++_i42)
-            {
-              xfer += (*(this->success))[_i42].read(iprot);
-            }
-            xfer += iprot->readListEnd();
-          }
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
+    xfer += iprot->skip(ftype);
     xfer += iprot->readFieldEnd();
   }
 
@@ -1976,6 +2132,63 @@ void GameHallClient::recv_autoMatch(std::map<std::string, int32_t> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "autoMatch failed: unknown result");
 }
 
+void GameHallClient::getDeskList(std::vector<Desk> & _return)
+{
+  send_getDeskList();
+  recv_getDeskList(_return);
+}
+
+void GameHallClient::send_getDeskList()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameHall_getDeskList_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void GameHallClient::recv_getDeskList(std::vector<Desk> & _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getDeskList") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  GameHall_getDeskList_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getDeskList failed: unknown result");
+}
+
 void GameHallClient::getSavedGame(std::string& _return, const int32_t id)
 {
   send_getSavedGame(id);
@@ -2092,18 +2305,19 @@ void GameHallClient::recv_getSavedGameList(std::vector<std::string> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getSavedGameList failed: unknown result");
 }
 
-void GameHallClient::getDeskList(std::vector<Desk> & _return)
+void GameHallClient::delSavedGame(const int32_t id)
 {
-  send_getDeskList();
-  recv_getDeskList(_return);
+  send_delSavedGame(id);
+  recv_delSavedGame();
 }
 
-void GameHallClient::send_getDeskList()
+void GameHallClient::send_delSavedGame(const int32_t id)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("delSavedGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  GameHall_getDeskList_pargs args;
+  GameHall_delSavedGame_pargs args;
+  args.id = &id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2111,7 +2325,7 @@ void GameHallClient::send_getDeskList()
   oprot_->getTransport()->flush();
 }
 
-void GameHallClient::recv_getDeskList(std::vector<Desk> & _return)
+void GameHallClient::recv_delSavedGame()
 {
 
   int32_t rseqid = 0;
@@ -2131,22 +2345,17 @@ void GameHallClient::recv_getDeskList(std::vector<Desk> & _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("getDeskList") != 0) {
+  if (fname.compare("delSavedGame") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  GameHall_getDeskList_presult result;
-  result.success = &_return;
+  GameHall_delSavedGame_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getDeskList failed: unknown result");
+  return;
 }
 
 bool GameHallProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -2437,6 +2646,60 @@ void GameHallProcessor::process_autoMatch(int32_t seqid, ::apache::thrift::proto
   }
 }
 
+void GameHallProcessor::process_getDeskList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("GameHall.getDeskList", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameHall.getDeskList");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "GameHall.getDeskList");
+  }
+
+  GameHall_getDeskList_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "GameHall.getDeskList", bytes);
+  }
+
+  GameHall_getDeskList_result result;
+  try {
+    iface_->getDeskList(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "GameHall.getDeskList");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "GameHall.getDeskList");
+  }
+
+  oprot->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "GameHall.getDeskList", bytes);
+  }
+}
+
 void GameHallProcessor::process_getSavedGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
@@ -2545,38 +2808,37 @@ void GameHallProcessor::process_getSavedGameList(int32_t seqid, ::apache::thrift
   }
 }
 
-void GameHallProcessor::process_getDeskList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void GameHallProcessor::process_delSavedGame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("GameHall.getDeskList", callContext);
+    ctx = this->eventHandler_->getContext("GameHall.delSavedGame", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameHall.getDeskList");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "GameHall.delSavedGame");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "GameHall.getDeskList");
+    this->eventHandler_->preRead(ctx, "GameHall.delSavedGame");
   }
 
-  GameHall_getDeskList_args args;
+  GameHall_delSavedGame_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "GameHall.getDeskList", bytes);
+    this->eventHandler_->postRead(ctx, "GameHall.delSavedGame", bytes);
   }
 
-  GameHall_getDeskList_result result;
+  GameHall_delSavedGame_result result;
   try {
-    iface_->getDeskList(result.success);
-    result.__isset.success = true;
+    iface_->delSavedGame(args.id);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "GameHall.getDeskList");
+      this->eventHandler_->handlerError(ctx, "GameHall.delSavedGame");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("delSavedGame", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -2585,17 +2847,17 @@ void GameHallProcessor::process_getDeskList(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "GameHall.getDeskList");
+    this->eventHandler_->preWrite(ctx, "GameHall.delSavedGame");
   }
 
-  oprot->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("delSavedGame", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "GameHall.getDeskList", bytes);
+    this->eventHandler_->postWrite(ctx, "GameHall.delSavedGame", bytes);
   }
 }
 
@@ -3028,6 +3290,89 @@ void GameHallConcurrentClient::recv_autoMatch(std::map<std::string, int32_t> & _
   } // end while(true)
 }
 
+void GameHallConcurrentClient::getDeskList(std::vector<Desk> & _return)
+{
+  int32_t seqid = send_getDeskList();
+  recv_getDeskList(_return, seqid);
+}
+
+int32_t GameHallConcurrentClient::send_getDeskList()
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  GameHall_getDeskList_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void GameHallConcurrentClient::recv_getDeskList(std::vector<Desk> & _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getDeskList") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      GameHall_getDeskList_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getDeskList failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
 void GameHallConcurrentClient::getSavedGame(std::string& _return, const int32_t id)
 {
   int32_t seqid = send_getSavedGame(id);
@@ -3196,19 +3541,20 @@ void GameHallConcurrentClient::recv_getSavedGameList(std::vector<std::string> & 
   } // end while(true)
 }
 
-void GameHallConcurrentClient::getDeskList(std::vector<Desk> & _return)
+void GameHallConcurrentClient::delSavedGame(const int32_t id)
 {
-  int32_t seqid = send_getDeskList();
-  recv_getDeskList(_return, seqid);
+  int32_t seqid = send_delSavedGame(id);
+  recv_delSavedGame(seqid);
 }
 
-int32_t GameHallConcurrentClient::send_getDeskList()
+int32_t GameHallConcurrentClient::send_delSavedGame(const int32_t id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("getDeskList", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("delSavedGame", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  GameHall_getDeskList_pargs args;
+  GameHall_delSavedGame_pargs args;
+  args.id = &id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -3219,7 +3565,7 @@ int32_t GameHallConcurrentClient::send_getDeskList()
   return cseqid;
 }
 
-void GameHallConcurrentClient::recv_getDeskList(std::vector<Desk> & _return, const int32_t seqid)
+void GameHallConcurrentClient::recv_delSavedGame(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -3248,7 +3594,7 @@ void GameHallConcurrentClient::recv_getDeskList(std::vector<Desk> & _return, con
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("getDeskList") != 0) {
+      if (fname.compare("delSavedGame") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -3257,19 +3603,13 @@ void GameHallConcurrentClient::recv_getDeskList(std::vector<Desk> & _return, con
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      GameHall_getDeskList_presult result;
-      result.success = &_return;
+      GameHall_delSavedGame_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
 
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getDeskList failed: unknown result");
+      sentry.commit();
+      return;
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);
